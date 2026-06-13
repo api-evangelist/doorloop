@@ -1,0 +1,97 @@
+name: DoorLoop FinOps
+description: >-
+  Financial operations profile for DoorLoop API usage. API access is gated
+  behind the Premium plan ($209/month billed yearly, $239/month billed
+  monthly). All plans charge $3/unit/month beyond the base plan minimum.
+  Cost management centers on plan selection, unit count, and optional add-ons
+  such as eSignatures and ACH transactions.
+url: https://www.doorloop.com/pricing
+created: "2026-06-13"
+modified: "2026-06-13"
+apiAccessCost:
+  plan: Premium
+  basePrice: 209.00
+  billingCycle: monthly (billed yearly)
+  basePriceMonthly: 239.00
+  currency: USD
+  notes: >-
+    API access is only available on the Premium plan. The base price covers the
+    platform subscription. Additional per-unit fees of $3/unit/month apply
+    beyond the plan base. Properties exceeding 300 units require custom
+    enterprise pricing.
+
+costDrivers:
+  - name: Unit Count
+    description: >-
+      All plans charge $3 per unit per month. As portfolio size grows, per-unit
+      costs add directly to the monthly bill. The base plan fee covers a
+      minimum unit threshold.
+    type: usage
+    unit: per unit per month
+    price: 3.00
+    currency: USD
+
+  - name: eSignature (Starter plan)
+    description: >-
+      eSignature documents on the Starter plan are charged at $3 per document.
+    type: usage
+    unit: per document
+    price: 3.00
+    currency: USD
+    plan: Starter
+
+  - name: eSignature (Pro plan)
+    description: >-
+      eSignature documents on the Pro plan are charged at $1 per document.
+    type: usage
+    unit: per document
+    price: 1.00
+    currency: USD
+    plan: Pro
+
+  - name: eSignature (Premium plan)
+    description: >-
+      eSignature documents on the Premium plan are included at no additional
+      cost (unlimited free eSignatures).
+    type: included
+    price: 0.00
+    currency: USD
+    plan: Premium
+
+  - name: Incoming ACH Payments (Premium)
+    description: >-
+      Incoming ACH payments are free on the Premium plan. Lower tiers may incur
+      transaction fees for ACH payment processing.
+    type: included
+    price: 0.00
+    currency: USD
+    plan: Premium
+
+savings:
+  - name: Yearly Billing Discount
+    description: >-
+      Choosing yearly billing over monthly billing saves up to 25% on plan
+      costs. For Premium, this represents $30/month savings ($239 vs $209).
+    discount: 25
+    discountType: percentage
+    billingCycle: yearly
+
+costOptimization:
+  - Opt for yearly billing to save up to 25% on subscription costs
+  - API access requires Premium plan; evaluate whether API use cases justify the
+    upgrade from Pro
+  - Use OData query parameters to filter API responses and avoid pulling excess
+    data that might drive processing costs
+  - Use Zapier integration (included in Premium) for simple workflow automation
+    before building custom API integrations
+  - For portfolios under 300 units, the $209/month Premium base covers API
+    access; above 300 units, negotiate enterprise pricing
+
+enterprisePricing:
+  threshold: 300
+  unit: units
+  description: >-
+    Portfolios exceeding 300 units require a custom demo to determine pricing.
+    Contact DoorLoop sales for enterprise pricing that includes all Premium
+    features with custom support and configuration.
+  contactUrl: https://www.doorloop.com/pricing

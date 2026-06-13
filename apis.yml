@@ -1,0 +1,73 @@
+aid: doorloop
+name: DoorLoop
+description: >-
+  DoorLoop is property management software with a REST API for managing
+  properties, units, leases, rent collection, maintenance requests, accounting,
+  and tenant communication. The API provides two-way access to read and write
+  data across nearly every DoorLoop feature, with predictable resource-oriented
+  URLs, JSON-encoded request and response bodies, and standard HTTP response
+  codes. API access is included on the Premium plan.
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: >-
+  https://raw.githubusercontent.com/api-evangelist/doorloop/refs/heads/main/apis.yml
+created: "2026-06-13"
+modified: "2026-06-13"
+specificationVersion: "0.19"
+tags:
+  - Property Management
+  - Real Estate
+  - Leases
+  - Rent Collection
+  - Maintenance
+  - Accounting
+  - Tenant Communication
+apis:
+  - aid: doorloop:doorloop-api
+    name: DoorLoop API
+    description: >-
+      REST API for DoorLoop property management software. Provides access to
+      properties, units, leases, tenants, rent collection, maintenance requests,
+      accounting, and tenant communication. Authenticated via API keys managed
+      under Zapier & API Keys in company settings. Returns JSON-encoded
+      responses and supports OData queries for filtering and pagination.
+    image: >-
+      https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://api.doorloop.com/reference/introduction
+    baseURL: https://api.doorloop.com
+    tags:
+      - Property Management
+      - Real Estate
+      - Leases
+      - Tenants
+      - Accounting
+    properties:
+      - type: Documentation
+        url: https://api.doorloop.com/reference/introduction
+      - type: Authentication
+        url: https://api.doorloop.com/reference/authentication
+common:
+  - type: Website
+    url: https://www.doorloop.com
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: GitHubOrg
+    url: https://github.com/mezbahalam/doorloop
+  - type: LinkedIn
+    url: https://linkedin.com/company/doorloop/
+  - type: Blog
+    url: https://www.doorloop.com/blogs/doorloop
+  - type: Pricing
+    url: https://www.doorloop.com/pricing
+  - type: StatusPage
+    url: https://status.doorloop.com
+  - type: X
+    url: https://x.com/doorloopapp
+  - type: Plans
+    url: plans/doorloop-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/doorloop-rate-limits.yml
+  - type: FinOps
+    url: finops/doorloop-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

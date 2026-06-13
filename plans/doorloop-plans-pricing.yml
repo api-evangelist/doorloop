@@ -1,0 +1,116 @@
+name: DoorLoop Plans and Pricing
+description: >-
+  DoorLoop offers three tiered pricing plans for property management software.
+  API access is only available on the Premium plan. All plans are priced per
+  unit with a minimum base fee, and yearly billing provides up to 25% savings
+  over monthly billing. Pricing scales at $3/unit beyond plan minimums.
+url: https://www.doorloop.com/pricing
+created: "2026-06-13"
+modified: "2026-06-13"
+plans:
+  - name: Starter
+    description: >-
+      Entry-level plan for small landlords and property managers. Covers core
+      property management: rent collection, tenant portal, maintenance
+      management, two-way SMS communication, basic accounting and reporting,
+      rental applications and screening, and lease management.
+    url: https://www.doorloop.com/pricing
+    price: 69.00
+    unit: month
+    billing: yearly
+    priceMonthly: 99.00
+    unitLimit: 10
+    pricePerUnit: 3.00
+    currency: USD
+    features:
+      - Online rent and fee payments
+      - Tenant portal
+      - Maintenance management
+      - Two-way SMS communication
+      - Basic accounting and reporting
+      - Rental applications and screening
+      - Lease management
+      - Cash payments via Western Union
+      - eSignature at $3 per document
+    apiAccess: false
+
+  - name: Pro
+    description: >-
+      Mid-tier plan for growing portfolios. Includes everything in Starter plus
+      AI assistant, workflows automation, advanced accounting, live bank connect,
+      QuickBooks sync, tenant announcements, outgoing payments, 1099 forms,
+      budgeting tools, property listings, user access roles, and priority
+      support.
+    url: https://www.doorloop.com/pricing
+    price: 149.00
+    unit: month
+    billing: yearly
+    priceMonthly: 189.00
+    pricePerUnit: 3.00
+    currency: USD
+    features:
+      - Everything in Starter
+      - AI assistant and unlimited AI inspections
+      - Workflows automation
+      - Advanced accounting and reporting
+      - Live bank connect and QuickBooks sync
+      - Tenant announcements
+      - Advanced maintenance management
+      - Outgoing payments and 1099 forms
+      - Budgeting tools
+      - Property listings
+      - User access roles
+      - Calendar and comprehensive reports
+      - eSignature at $1 per document
+      - Email, chat, phone, and Zoom support
+    apiAccess: false
+
+  - name: Premium
+    description: >-
+      Full-featured plan for professional property managers. Includes everything
+      in Pro plus VIP priority support, free incoming ACH payments, personalized
+      websites, Zapier integration, free unlimited eSignatures, unlimited users,
+      unlimited data storage, advanced dashboards, full API access, CAM
+      reconciliation, audit logs, and affordable housing reporting.
+    url: https://www.doorloop.com/pricing
+    price: 209.00
+    unit: month
+    billing: yearly
+    priceMonthly: 239.00
+    pricePerUnit: 3.00
+    currency: USD
+    features:
+      - Everything in Pro
+      - VIP priority support
+      - Free incoming ACH payments
+      - Free personalized websites
+      - Zapier integration
+      - Free unlimited eSignatures
+      - Free business verification
+      - Custom convenience fees
+      - Unlimited users
+      - Unlimited data storage
+      - Advanced dashboards
+      - Full API access
+      - CAM reconciliation
+      - Audit logs
+      - Affordable housing reporting
+    apiAccess: true
+
+  - name: Enterprise
+    description: >-
+      Custom pricing plan for portfolios exceeding 300 units. Requires a demo
+      to determine pricing. Includes all Premium features with enterprise-level
+      support and custom configuration.
+    url: https://www.doorloop.com/pricing
+    price: custom
+    unit: month
+    billing: yearly
+    minimumUnits: 300
+    currency: USD
+    features:
+      - Everything in Premium
+      - Custom pricing
+      - Dedicated account management
+      - Enterprise-level support
+    apiAccess: true

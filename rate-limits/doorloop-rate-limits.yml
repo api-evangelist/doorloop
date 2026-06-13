@@ -1,0 +1,34 @@
+name: DoorLoop API Rate Limits
+description: >-
+  DoorLoop does not publicly document specific rate limit thresholds for its
+  REST API. The API is available exclusively on the Premium plan. Rate limit
+  details are not published in the public API reference documentation at
+  api.doorloop.com. Users experiencing rate limit issues should contact
+  DoorLoop support through the Help Center.
+url: https://api.doorloop.com/reference/introduction
+created: "2026-06-13"
+modified: "2026-06-13"
+rateLimits:
+  - name: API Rate Limits
+    description: >-
+      DoorLoop has not publicly disclosed specific rate limit values for API
+      requests. The API supports OData queries for filtering and pagination,
+      which can help manage data retrieval efficiently and reduce total request
+      volume.
+    documented: false
+    notes: >-
+      Contact DoorLoop support at support.doorloop.com for rate limit
+      information specific to your account and use case. Enterprise customers
+      with large portfolios (300+ units) may have custom limits negotiated as
+      part of their plan.
+headers:
+  description: >-
+    No publicly documented rate limit response headers. Standard HTTP 429 Too
+    Many Requests responses are likely returned when limits are exceeded.
+  knownHeaders: []
+guidance:
+  - Use OData query parameters to filter results and minimize unnecessary requests
+  - Implement exponential backoff when receiving 429 responses
+  - Cache responses where appropriate to reduce repeated API calls
+  - Contact support@doorloop.com for rate limit specifics before building
+    high-volume integrations
