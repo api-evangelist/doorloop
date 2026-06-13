@@ -1,0 +1,52 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "DoorLoop",
+  "url": "https://www.doorloop.com",
+  "description": "DoorLoop is property management software with a REST API for managing properties, units, leases, rent collection, maintenance requests, accounting, and tenant communication.",
+  "logo": "https://files.readme.io/2a28d89-small-Square_-_Blue_Background_-_Only_Emblem_No_Text.png",
+  "sameAs": [
+    "https://www.linkedin.com/company/doorloop/",
+    "https://x.com/doorloopapp",
+    "https://github.com/mezbahalam/doorloop"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "url": "https://support.doorloop.com",
+    "contactType": "customer support"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "DoorLoop API",
+    "description": "REST API for DoorLoop property management software. Provides access to properties, units, leases, tenants, rent collection, maintenance requests, accounting, and tenant communication.",
+    "url": "https://api.doorloop.com/reference/introduction"
+  },
+  "knowsAbout": [
+    "Property Management",
+    "Real Estate",
+    "Leases",
+    "Rent Collection",
+    "Maintenance",
+    "Accounting",
+    "Tenant Communication"
+  ],
+  "subjectOf": [
+    {
+      "@type": "WebAPI",
+      "name": "DoorLoop API",
+      "description": "REST API for DoorLoop property management software. Provides access to properties, units, leases, tenants, rent collection, maintenance requests, accounting, and tenant communication. Authenticated via API keys managed under Zapier & API Keys in company settings.",
+      "url": "https://api.doorloop.com/reference/introduction",
+      "documentation": "https://api.doorloop.com/reference/introduction",
+      "termsOfService": "https://www.doorloop.com/pricing",
+      "provider": {
+        "@type": "Organization",
+        "name": "DoorLoop",
+        "url": "https://www.doorloop.com"
+      },
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://app.doorloop.com/api"
+      }
+    }
+  ]
+}
