@@ -73,7 +73,7 @@
       "category": "Press Releases"
     },
     {
-      "title": "DoorLoop Upgrades Rental Applications & Screening—Easier, Faster, Smarter",
+      "title": "DoorLoop Upgrades Rental Applications & Screening\u2014Easier, Faster, Smarter",
       "url": "https://www.doorloop.com/blog/doorloop-upgrades-rental-applications",
       "category": "Press Releases"
     },
@@ -227,5 +227,17 @@
       "url": "https://www.doorloop.com/blog/reviews-award-2021",
       "category": "Press Releases"
     }
-  ]
+  ],
+  "repo": "doorloop",
+  "feeds": [
+    {
+      "source": "https://linkedin.com/company/doorloop/",
+      "feed_url": "https://linkedin.com/company/doorloop/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-06-14T20:42:17Z"
 }
