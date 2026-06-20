@@ -7,7 +7,7 @@ description: >-
   data across nearly every DoorLoop feature, with predictable resource-oriented
   URLs, JSON-encoded request and response bodies, and standard HTTP response
   codes. API access is included on the Premium plan.
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: >-
   https://raw.githubusercontent.com/api-evangelist/doorloop/refs/heads/main/apis.yml
 created: "2026-06-13"
@@ -31,7 +31,7 @@ apis:
       under Zapier & API Keys in company settings. Returns JSON-encoded
       responses and supports OData queries for filtering and pagination.
     image: >-
-      https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+      https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://api.doorloop.com/reference/introduction
     baseURL: https://api.doorloop.com
     tags:
