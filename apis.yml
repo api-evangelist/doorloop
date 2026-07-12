@@ -46,6 +46,10 @@ apis:
       - type: Authentication
         url: https://api.doorloop.com/reference/authentication
 common:
+  - type: VulnerabilityDisclosure
+    url: security/doorloop-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/doorloop-domain-security.yml
   - type: Website
     url: https://www.doorloop.com
   - type: Documentation
