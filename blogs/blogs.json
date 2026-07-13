@@ -231,13 +231,11 @@
   "repo": "doorloop",
   "feeds": [
     {
-      "source": "https://www.doorloop.com/blogs/doorloop",
-      "feed_url": "",
-      "saved": 0,
-      "method": "agent-scrape"
+      "source": "https://linkedin.com/company/doorloop/",
+      "error": "HTTPError"
     }
   ],
   "post_count": 0,
-  "fetched": "2026-06-27T12:38:12Z",
-  "agent_pulled": "2026-06-27"
+  "fetched": "2026-07-11T11:50:51Z",
+  "agent_pulled": "2026-07-04"
 }
