@@ -27,6 +27,14 @@ modified: "2026-06-13"
 specificationVersion: '0.23'
 tags:
   - Property Management
+  - Real-Estate
+  - Leases
+  - Rent Collection
+  - Maintenance
+  - Accounting
+  - Tenant Communication
+tags_raw:
+  - Property Management
   - Real Estate
   - Leases
   - Rent Collection
@@ -47,6 +55,12 @@ apis:
     humanURL: https://api.doorloop.com/reference/introduction
     baseURL: https://api.doorloop.com
     tags:
+      - Property Management
+      - Real-Estate
+      - Leases
+      - Tenants
+      - Accounting
+    tags_raw:
       - Property Management
       - Real Estate
       - Leases
