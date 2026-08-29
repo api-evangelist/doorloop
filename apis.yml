@@ -7,6 +7,17 @@ description: >-
   data across nearly every DoorLoop feature, with predictable resource-oriented
   URLs, JSON-encoded request and response bodies, and standard HTTP response
   codes. API access is included on the Premium plan.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: paid
   onboarding: unknown
