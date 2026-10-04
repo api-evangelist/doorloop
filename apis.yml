@@ -36,9 +36,12 @@ url: >-
 created: "2026-06-13"
 modified: "2026-06-13"
 specificationVersion: '0.23'
+x-docs-platform: readme
+x-docs-platform-confidence: high
+x-docs-platform-checked: 2026-09-25
 tags:
   - Property Management
-  - Real-Estate
+  - Real Estate
   - Leases
   - Rent Collection
   - Maintenance
@@ -52,6 +55,7 @@ tags_raw:
   - Maintenance
   - Accounting
   - Tenant Communication
+  - Real-Estate
 apis:
   - aid: doorloop:doorloop-api
     name: DoorLoop API
@@ -67,7 +71,7 @@ apis:
     baseURL: https://api.doorloop.com
     tags:
       - Property Management
-      - Real-Estate
+      - Real Estate
       - Leases
       - Tenants
       - Accounting
@@ -77,6 +81,7 @@ apis:
       - Leases
       - Tenants
       - Accounting
+      - Real-Estate
     properties:
       - type: Documentation
         url: https://api.doorloop.com/reference/introduction
