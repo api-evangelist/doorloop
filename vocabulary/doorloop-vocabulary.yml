@@ -1,0 +1,304 @@
+generated: '2026-10-14'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/doorloop-api-reference-openapi.yml
+vocabulary:
+  name: DoorLoop Domain Vocabulary
+  description: 'Terms declared by DoorLoop''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-14'
+  terms:
+  - term: address
+    definition: 'Object declared by the contract with fields: street1, street2, city, zip, country, lat, lng.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/address
+  - term: unit
+    definition: 'Object declared by the contract with fields: id, active, address, addressSameAsProperty, name, beds, baths, size, marketRent,
+      property, pictures, description. (3 more)'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/unit
+  - term: picture
+    definition: 'Object declared by the contract with fields: rank, url.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/picture
+  - term: fullLeaseCreateLine
+    definition: 'Object declared by the contract with fields: account, amount, memo.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/fullLeaseCreateLine
+  - term: fullLeaseCreateOneTime
+    definition: 'Object declared by the contract with fields: date, lines.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/fullLeaseCreateOneTime
+  - term: fullLeaseCreateSigningOneTime
+    definition: 'Object declared by the contract with fields: date, chargeTiming, lines.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/fullLeaseCreateSigningOneTime
+  - term: fullLeaseCreateRecurring
+    definition: 'Object declared by the contract with fields: frequency, start, end, lines.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/fullLeaseCreateRecurring
+  - term: fullLeaseCreateRent
+    definition: 'Object declared by the contract with fields: frequency, start, end, lines.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/fullLeaseCreateRent
+  - term: fullLeaseCreateNewTenant
+    definition: Creates a tenant inline, inside the same transaction. De-duplicated by email within the company - the address is matched case-insensitively
+      against existing tenants and stored trimmed and lowercased.
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/fullLeaseCreateNewTenant
+  - term: fullLeaseCreateRequest
+    definition: 'Object declared by the contract with fields: name, property, units, term, start, end, rolloverToAtWill, tenants, rent, securityDeposits,
+      oneTimeCharges, oneTimeCredits. (6 more)'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/fullLeaseCreateRequest
+  - term: fullLeaseCreateResponse
+    definition: 'Object declared by the contract with fields: lease, createdTenantIds, createdChargeIds, createdRecurringTransactionIds.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/fullLeaseCreateResponse
+  - term: Lease
+    definition: 'Object declared by the contract with fields: id, property, name, notes, reference, start, end, term, rolloverToAtWill, units,
+      status, evictonPending. (7 more)'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/Lease
+  - term: Account
+    definition: Represents an account from the Chart of Accounts
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/account
+  - term: person
+    definition: 'Object declared by the contract with fields: id, name, firstName, middleName, lastName, gender, fullName, dateOfBirth, timezone,
+      company, companyName, jobTitle. (6 more)'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/person
+  - term: phone
+    definition: 'Object declared by the contract with fields: type, number.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/phone
+  - term: email
+    definition: 'Object declared by the contract with fields: type, address.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/email
+  - term: property
+    definition: 'Object declared by the contract with fields: id, name, type, address, description, class, active, numActiveUnits, settings, owners,
+      pictures, amenities.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/property
+  - term: propertyType
+    definition: 'Enumeration declared by the contract with values: RESIDENTIAL_SINGLE_FAMILY, RESIDENTIAL_MULTI_FAMILY, RESIDENTIAL_CONDO, RESIDENTIAL_TOWNHOME,
+      RESIDENTIAL_OTHER, COMMERCIAL_OTHER, COMMERCIAL_INDUSTRIAL, COMMERCIAL_OFFICE, COMMERCIAL_RETAIL, COMMERCIAL_SHOPPING_CENTER, COMMERCIAL_STORAGE,
+      COMMERCIAL_PARKING. (1 more)'
+    tags:
+    - Enumeration
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/propertyType
+  - term: leaseTenant
+    definition: 'Object declared by the contract with fields: id, name, lease, property, units, status, moveInAt, moveOutAt, moveOutNoticeAt,
+      portalEnabled, tenant.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/leaseTenant
+  - term: Lease-Payment
+    definition: 'Object declared by the contract with fields: id, reference, amountReceived, paymentMethod, lease, receivedFromTenant, depositToAccount,
+      autoApplyPaymentOnCharges, autoDeposit, depositStatus, reversedPayment, date. (9 more)'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/leasePayment
+  - term: paymentMethods
+    definition: Lists all possible payment methods that can be used in payable and receivable transactions. Use EFT to record an electronic funds
+      transfer that was collected outside DoorLoop. EPAY is reserved for payments processed through DoorLoop's own merchant account and requires
+      a nested ePayInfo object.
+    tags:
+    - Enumeration
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/paymentMethods
+  - term: leaseTransactionLine
+    definition: 'Object declared by the contract with fields: id, amount, account, memo, balance.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/leaseTransactionLine
+  - term: propertyGroup
+    definition: 'Object declared by the contract with fields: id, name, properties.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/propertyGroup
+  - term: federalTaxInfo
+    definition: 'Object declared by the contract with fields: addressFor1099SameAsPrimaryAddress, addressFor1099, taxpayerName, taxpayerId.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/federalTaxInfo
+  - term: insuranceInfo
+    definition: 'Object declared by the contract with fields: provider, policyNumber, coverage, effectiveDate, expirationDate.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/insuranceInfo
+  - term: expenseTransactionLine
+    definition: 'Object declared by the contract with fields: id, amount, account, memo, linkedToResourceType, linkedToResourceId, balance.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/expenseTransactionLine
+  - term: expense
+    definition: 'Object declared by the contract with fields: id, payFromAccount, paymentMethod, payToResourceType, payToResourceId, lines, memo,
+      reference, date, batch, totalAmount.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/expense
+  - term: vendorTransaction
+    definition: 'Object declared by the contract with fields: id, vendor, lines, date, dueDate, memo, reference, batch, totalAmount, totalBalance.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/vendorTransaction
+  - term: profitAndLossReportItem
+    definition: 'Object declared by the contract with fields: columns, data.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/profitAndLossReportItem
+  - term: communication
+    definition: 'Object declared by the contract with fields: id, subject, bodyHtml, bodyPreview, from, to, cc, bcc, sentAt, type, threadId, externalId.
+      (5 more)'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/communication
+  - term: communicationParticipant
+    definition: 'Object declared by the contract with fields: displayName, address, linkedToType, linkedToId.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/communicationParticipant
+  - term: note
+    definition: 'Object declared by the contract with fields: id, title, body, tags, linkedResource, createdAt, createdBy.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/note
+  - term: noteLinkedResource
+    definition: 'Object declared by the contract with fields: resourceId, resourceType.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/noteLinkedResource
+  - term: fileLinkedResource
+    definition: 'Object declared by the contract with fields: resourceId, resourceType.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/fileLinkedResource
+  - term: file
+    definition: 'Object declared by the contract with fields: id, name, notes, linkedResource, tags, size, mimeType, createdBy, createdAt, downloadUrl.'
+    tags:
+    - Object
+    source: openapi/doorloop-api-reference-openapi.yml#/components/schemas/file
+  - term: Accounts
+    definition: 'Resource group in the contract; its operation GET /accounts: Retrieves the chart of accounts'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Communications
+    definition: 'Resource group in the contract; its operation GET /communications: Lists all Communication Log Entries'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Expenses
+    definition: 'Resource group in the contract; its operation GET /expenses: Lists all Expenses'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Files
+    definition: 'Resource group in the contract; its operation GET /files: Lists all Files'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Lease Charges
+    definition: 'Resource group in the contract; its operation GET /lease-charges: Lists all Lease Charges'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Lease Credits
+    definition: 'Resource group in the contract; its operation GET /lease-credits: Lists all Lease Credits'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Lease Payments
+    definition: 'Resource group in the contract; its operation GET /lease-payments: Lists all Lease Payments'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Lease Returned Payments
+    definition: 'Resource group in the contract; its operation GET /lease-reversed-payments: Lists all Lease Returned Payments'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Leases
+    definition: 'Resource group in the contract; its operation GET /leases: Lists all Leases.'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Notes
+    definition: 'Resource group in the contract; its operation GET /notes: Lists all Notes'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Owners
+    definition: 'Resource group in the contract; its operation GET /owners: Lists all Owners'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Properties
+    definition: 'Resource group in the contract; its operation GET /properties: Lists all Properties'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Portfolios
+    definition: 'Resource group in the contract; its operation GET /property-groups: Lists all Portfolios'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Reports
+    definition: 'Resource group in the contract; its operation GET /reports/balance-sheet-summary: Balance Sheet'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Tasks
+    definition: 'Resource group in the contract; its operation GET /tasks: Retrieves all Tasks'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Tenants
+    definition: 'Resource group in the contract; its operation GET /tenants: Retrieves all Tenants.'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Units
+    definition: 'Resource group in the contract; its operation GET /units: Lists all Units'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Users
+    definition: 'Resource group in the contract; its operation GET /users: Retrieve a list of all users in the account'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Vendor Bills
+    definition: 'Resource group in the contract; its operation GET /vendor-bills: Lists all Vendor Bills'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Vendor Credits
+    definition: 'Resource group in the contract; its operation GET /vendor-credits: Lists all Vendor Credits'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml
+  - term: Vendors
+    definition: 'Resource group in the contract; its operation GET /vendors: Lists all Vendors'
+    tags:
+    - Resource Group
+    source: openapi/doorloop-api-reference-openapi.yml

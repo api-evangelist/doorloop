@@ -1,0 +1,17 @@
+generated: '2026-10-14'
+method: derived
+source: openapi/doorloop-api-reference-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: Key
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: 'Bearer token. Create a key under Settings -> API access; it is a JWT. Example:
+    `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.<payload>.<signature>`'
+  sources:
+  - openapi/doorloop-api-reference-openapi.yml

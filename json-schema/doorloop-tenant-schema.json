@@ -1,0 +1,446 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/doorloop/main/json-schema/doorloop-tenant-schema.json",
+  "title": "tenant",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/doorloop-api-reference-openapi.yml#/components/schemas/tenant",
+  "allOf": [
+    {
+      "$ref": "#/$defs/person"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "dependants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "firstName": {
+                "type": "string"
+              },
+              "middleName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "dateOfBirth": {
+                "type": "string"
+              },
+              "relationship": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "pets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "petType": {
+                "type": "string"
+              },
+              "weight": {
+                "type": "number"
+              },
+              "age": {
+                "type": "integer"
+              },
+              "color": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "breed": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "gender": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "isSpayedOrNeutered": {
+                "type": "boolean"
+              },
+              "isServiceAnimal": {
+                "type": "boolean"
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 1000
+              }
+            }
+          }
+        },
+        "vehicles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "make": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "model": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "year": {
+                "type": "integer",
+                "minimum": 1950,
+                "maximum": 2050
+              },
+              "color": {
+                "type": "string",
+                "maxLength": 50
+              },
+              "licensePlatae": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "state": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 1000
+              }
+            }
+          }
+        },
+        "emergencyContacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "relationship": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "email": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "phone": {
+                "type": "string",
+                "maxLength": 100
+              }
+            }
+          }
+        },
+        "prospectInfo": {
+          "type": "object",
+          "properties": {
+            "assignedToUser": {
+              "type": "string",
+              "description": "The User Id this Prospect is assigned to"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "NEW",
+                "CONTACT_ATTEMPTED",
+                "CONTACT_MADE",
+                "SHOWING_SCHEDULED",
+                "SHOWING_COMPLETED",
+                "APPLICATION_SENT",
+                "APPLICATION_SUBMITTED",
+                "LEASE_OFFER_MADE",
+                "LEASE_OFFER_ACCEPTED",
+                "LEASE_SENT_FOR_SIGNATURE",
+                "CLOSED_MOVED_IN",
+                "CLOSED_LOST"
+              ]
+            },
+            "interests": {
+              "type": "array",
+              "description": "Represents all the properties and/or units this prospect is interested moving into",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "property": {
+                    "type": "string",
+                    "description": "Reference the Property Id"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Reference the Unit Id"
+                  }
+                }
+              }
+            },
+            "leadSource": {
+              "type": "string",
+              "description": "References to the Tag Id"
+            },
+            "minBathrooms": {
+              "type": "number",
+              "minimum": 0
+            },
+            "minBedrooms": {
+              "type": "number",
+              "minimum": 0
+            },
+            "maxRent": {
+              "type": "number",
+              "minimum": 0
+            },
+            "expectedMoveInDate": {
+              "type": "string",
+              "description": "Format: YYYY-MM-DD"
+            },
+            "creditScore": {
+              "type": "integer"
+            },
+            "monthlyIncome": {
+              "type": "number"
+            },
+            "campaignSource": {
+              "type": "string"
+            },
+            "campaignMedium": {
+              "type": "string"
+            },
+            "campaignName": {
+              "type": "string"
+            },
+            "campaignContent": {
+              "type": "string"
+            },
+            "campaignTerm": {
+              "type": "string"
+            },
+            "nextTaskDate": {
+              "type": "string",
+              "description": "Read Only. Format: YYYY-MM-DD"
+            }
+          }
+        },
+        "portalInfo": {
+          "type": "object",
+          "properties": {
+            "allowAccess": {
+              "type": "boolean"
+            },
+            "lastSeenAt": {
+              "type": "string",
+              "description": "Read Only. Format: YYYY-MM-DD"
+            },
+            "loginEmail": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "status": {
+              "type": "string",
+              "description": "Read Only",
+              "enum": [
+                "ACTIVE",
+                "INACTIVE",
+                "INVITED"
+              ]
+            },
+            "invitationLastSentAt": {
+              "type": "string",
+              "description": "Read Only. Format: YYYY-MM-DD"
+            }
+          }
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "LEASE_TENANT",
+            "PROSPECT_TENANT"
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "address": {
+      "title": "address",
+      "x-stoplight": {
+        "id": "a6vhbqoeituyk"
+      },
+      "type": "object",
+      "description": "",
+      "properties": {
+        "street1": {
+          "type": "string"
+        },
+        "street2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "zip": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "string"
+        },
+        "lng": {
+          "type": "string"
+        }
+      }
+    },
+    "email": {
+      "title": "email",
+      "x-stoplight": {
+        "id": "33vnq3pmvuy4l"
+      },
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Primary",
+            "Secondary",
+            "Personal",
+            "Work",
+            "Other"
+          ]
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "address"
+      ]
+    },
+    "mongoId": {
+      "type": "string",
+      "title": "mongoId",
+      "x-stoplight": {
+        "id": "40j7qlmpihfdj"
+      },
+      "pattern": "/^[a-f\\d]{24}$/i"
+    },
+    "person": {
+      "title": "person",
+      "x-stoplight": {
+        "id": "w8ihhyv3ctmy8"
+      },
+      "type": "object",
+      "description": "",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/mongoId"
+        },
+        "name": {
+          "type": "string",
+          "description": "Read Only"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string",
+          "enum": [
+            "MALE",
+            "FEMALE",
+            "PREFER_NOT_TO_SAY"
+          ]
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Read Only"
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "description": "Format: YYYY-MM-DD"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "jobTitle": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "phones": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/phone"
+          }
+        },
+        "emails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/email"
+          }
+        },
+        "primaryAddress": {
+          "$ref": "#/$defs/address"
+        },
+        "pictureUrl": {
+          "type": "string"
+        },
+        "": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "firstName",
+        "lastName"
+      ]
+    },
+    "phone": {
+      "title": "phone",
+      "x-stoplight": {
+        "id": "9kqyepto63cpi"
+      },
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Home",
+            "Work",
+            "Mobile",
+            "Fax",
+            "Other"
+          ]
+        },
+        "number": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "type",
+        "number"
+      ]
+    }
+  }
+}

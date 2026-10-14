@@ -1,0 +1,50 @@
+generated: '2026-10-14'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/doorloop-api-reference-openapi.yml
+format: custom
+envelope:
+  media_type: application/json
+  schema: file
+coverage:
+  operations: 96
+  statuses_declared: 6
+problems:
+- status: 400
+  title: Bad Request
+  description: Bad Request
+  operations: 70
+  media_types: []
+  schema: null
+- status: 401
+  title: Unauthorized
+  description: Unauthorized
+  operations: 1
+  media_types: []
+  schema: null
+- status: 403
+  title: Forbidden
+  description: Forbidden
+  operations: 1
+  media_types: []
+  schema: null
+- status: 404
+  title: Not Found
+  description: Not Found
+  operations: 50
+  media_types:
+  - application/json
+  schema: file
+- status: 405
+  title: Method Not Allowed
+  description: Method Not Allowed
+  operations: 1
+  media_types: []
+  schema: null
+- status: 500
+  title: Internal Server Error
+  description: Internal Server Error
+  operations: 1
+  media_types: []
+  schema: null

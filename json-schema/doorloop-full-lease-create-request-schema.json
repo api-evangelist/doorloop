@@ -1,0 +1,309 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/doorloop/main/json-schema/doorloop-full-lease-create-request-schema.json",
+  "title": "fullLeaseCreateRequest",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/doorloop-api-reference-openapi.yml#/components/schemas/fullLeaseCreateRequest",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Defaults to the tenant names when omitted."
+    },
+    "property": {
+      "$ref": "#/$defs/mongoId"
+    },
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "description": "One or more units on the property.",
+      "items": {
+        "$ref": "#/$defs/mongoId"
+      }
+    },
+    "term": {
+      "type": "string",
+      "enum": [
+        "Fixed",
+        "AtWill"
+      ]
+    },
+    "start": {
+      "type": "string",
+      "description": "Format: YYYY-MM-DD"
+    },
+    "end": {
+      "type": "string",
+      "description": "Format: YYYY-MM-DD. Required when term is Fixed; ignored when term is AtWill."
+    },
+    "rolloverToAtWill": {
+      "type": "boolean"
+    },
+    "tenants": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Each entry is either an existing tenant id or a new-tenant object to create inline.",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/mongoId"
+          },
+          {
+            "$ref": "#/$defs/fullLeaseCreateNewTenant"
+          }
+        ]
+      }
+    },
+    "rent": {
+      "$ref": "#/$defs/fullLeaseCreateRent"
+    },
+    "securityDeposits": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/fullLeaseCreateSigningOneTime"
+      }
+    },
+    "oneTimeCharges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/fullLeaseCreateOneTime"
+      }
+    },
+    "oneTimeCredits": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/fullLeaseCreateSigningOneTime"
+      }
+    },
+    "recurringCharges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/fullLeaseCreateRecurring"
+      }
+    },
+    "recurringCredits": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/fullLeaseCreateRecurring"
+      }
+    },
+    "residentPortalAccess": {
+      "type": "boolean",
+      "default": false
+    },
+    "requireRentersInsurance": {
+      "type": "boolean",
+      "default": false
+    },
+    "automaticLateFees": {
+      "type": "boolean",
+      "default": false
+    },
+    "sendWelcomeSms": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "property",
+    "units",
+    "term",
+    "start",
+    "tenants"
+  ],
+  "$defs": {
+    "fullLeaseCreateLine": {
+      "type": "object",
+      "title": "fullLeaseCreateLine",
+      "properties": {
+        "account": {
+          "$ref": "#/$defs/mongoId"
+        },
+        "amount": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "memo": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "account",
+        "amount"
+      ]
+    },
+    "fullLeaseCreateNewTenant": {
+      "type": "object",
+      "title": "fullLeaseCreateNewTenant",
+      "description": "Creates a tenant inline, inside the same transaction. De-duplicated by email within the company - the address is matched case-insensitively against existing tenants and stored trimmed and lowercased.",
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "lastName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 30
+        }
+      },
+      "required": [
+        "firstName",
+        "lastName"
+      ]
+    },
+    "fullLeaseCreateOneTime": {
+      "type": "object",
+      "title": "fullLeaseCreateOneTime",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "Format: YYYY-MM-DD"
+        },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/fullLeaseCreateLine"
+          }
+        }
+      },
+      "required": [
+        "date",
+        "lines"
+      ]
+    },
+    "fullLeaseCreateRecurring": {
+      "type": "object",
+      "title": "fullLeaseCreateRecurring",
+      "properties": {
+        "frequency": {
+          "type": "string",
+          "enum": [
+            "Daily",
+            "Weekly",
+            "Every2Weeks",
+            "Monthly",
+            "Every2Months",
+            "Quarterly",
+            "Every6Months",
+            "Annually"
+          ]
+        },
+        "start": {
+          "type": "string",
+          "description": "Format: YYYY-MM-DD"
+        },
+        "end": {
+          "type": "string",
+          "description": "Format: YYYY-MM-DD. Omit for an open-ended schedule."
+        },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/fullLeaseCreateLine"
+          }
+        }
+      },
+      "required": [
+        "frequency",
+        "start",
+        "lines"
+      ]
+    },
+    "fullLeaseCreateRent": {
+      "type": "object",
+      "title": "fullLeaseCreateRent",
+      "properties": {
+        "frequency": {
+          "type": "string",
+          "enum": [
+            "Daily",
+            "Weekly",
+            "Every2Weeks",
+            "Monthly",
+            "Every2Months",
+            "Quarterly",
+            "Every6Months",
+            "Annually"
+          ]
+        },
+        "start": {
+          "type": "string",
+          "description": "Format: YYYY-MM-DD. Defaults to the lease start date when omitted."
+        },
+        "end": {
+          "type": "string",
+          "description": "Format: YYYY-MM-DD"
+        },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/fullLeaseCreateLine"
+          }
+        }
+      },
+      "required": [
+        "frequency",
+        "lines"
+      ]
+    },
+    "fullLeaseCreateSigningOneTime": {
+      "type": "object",
+      "title": "fullLeaseCreateSigningOneTime",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "Format: YYYY-MM-DD"
+        },
+        "chargeTiming": {
+          "type": "string",
+          "enum": [
+            "byDate",
+            "uponSigning"
+          ]
+        },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/fullLeaseCreateLine"
+          }
+        }
+      },
+      "required": [
+        "date",
+        "lines"
+      ]
+    },
+    "mongoId": {
+      "type": "string",
+      "title": "mongoId",
+      "x-stoplight": {
+        "id": "40j7qlmpihfdj"
+      },
+      "pattern": "/^[a-f\\d]{24}$/i"
+    }
+  }
+}

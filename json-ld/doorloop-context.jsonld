@@ -1,0 +1,643 @@
+{
+  "@context": {
+    "@vocab": "https://doorloop.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "doorloop": "https://doorloop.com/schema#",
+    "address": "doorloop:address",
+    "street1": {
+      "@id": "doorloop:street1",
+      "@type": "xsd:string"
+    },
+    "street2": {
+      "@id": "doorloop:street2",
+      "@type": "xsd:string"
+    },
+    "city": {
+      "@id": "doorloop:city",
+      "@type": "xsd:string"
+    },
+    "zip": {
+      "@id": "doorloop:zip",
+      "@type": "xsd:string"
+    },
+    "country": {
+      "@id": "doorloop:country",
+      "@type": "xsd:string"
+    },
+    "lat": {
+      "@id": "doorloop:lat",
+      "@type": "xsd:string"
+    },
+    "lng": {
+      "@id": "doorloop:lng",
+      "@type": "xsd:string"
+    },
+    "unit": "doorloop:unit",
+    "id": {
+      "@id": "doorloop:id",
+      "@type": "@id"
+    },
+    "active": {
+      "@id": "doorloop:active",
+      "@type": "xsd:boolean"
+    },
+    "addressSameAsProperty": {
+      "@id": "doorloop:addressSameAsProperty",
+      "@type": "xsd:boolean"
+    },
+    "name": {
+      "@id": "doorloop:name",
+      "@type": "xsd:string"
+    },
+    "beds": {
+      "@id": "doorloop:beds",
+      "@type": "xsd:decimal"
+    },
+    "baths": {
+      "@id": "doorloop:baths",
+      "@type": "xsd:decimal"
+    },
+    "size": {
+      "@id": "doorloop:size",
+      "@type": "xsd:decimal"
+    },
+    "marketRent": {
+      "@id": "doorloop:marketRent",
+      "@type": "xsd:decimal"
+    },
+    "property": {
+      "@id": "doorloop:property",
+      "@type": "@id"
+    },
+    "pictures": {
+      "@id": "doorloop:pictures",
+      "@container": "@list"
+    },
+    "description": {
+      "@id": "doorloop:description",
+      "@type": "xsd:string"
+    },
+    "listing": {
+      "@id": "doorloop:listing"
+    },
+    "rentalApplicationListing": {
+      "@id": "doorloop:rentalApplicationListing"
+    },
+    "amenities": {
+      "@id": "doorloop:amenities",
+      "@container": "@list"
+    },
+    "picture": "doorloop:picture",
+    "rank": {
+      "@id": "doorloop:rank",
+      "@type": "xsd:integer"
+    },
+    "url": {
+      "@id": "doorloop:url",
+      "@type": "xsd:string"
+    },
+    "fullLeaseCreateLine": "doorloop:fullLeaseCreateLine",
+    "account": {
+      "@id": "doorloop:account",
+      "@type": "@id"
+    },
+    "amount": {
+      "@id": "doorloop:amount",
+      "@type": "xsd:decimal"
+    },
+    "memo": {
+      "@id": "doorloop:memo",
+      "@type": "xsd:string"
+    },
+    "fullLeaseCreateOneTime": "doorloop:fullLeaseCreateOneTime",
+    "date": {
+      "@id": "doorloop:date",
+      "@type": "xsd:string"
+    },
+    "lines": {
+      "@id": "doorloop:lines",
+      "@container": "@list"
+    },
+    "fullLeaseCreateSigningOneTime": "doorloop:fullLeaseCreateSigningOneTime",
+    "chargeTiming": {
+      "@id": "doorloop:chargeTiming",
+      "@type": "xsd:string"
+    },
+    "fullLeaseCreateRecurring": "doorloop:fullLeaseCreateRecurring",
+    "frequency": {
+      "@id": "doorloop:frequency",
+      "@type": "xsd:string"
+    },
+    "start": {
+      "@id": "doorloop:start",
+      "@type": "xsd:string"
+    },
+    "end": {
+      "@id": "doorloop:end",
+      "@type": "xsd:string"
+    },
+    "fullLeaseCreateRent": "doorloop:fullLeaseCreateRent",
+    "fullLeaseCreateNewTenant": "doorloop:fullLeaseCreateNewTenant",
+    "firstName": {
+      "@id": "doorloop:firstName",
+      "@type": "xsd:string"
+    },
+    "lastName": {
+      "@id": "doorloop:lastName",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "doorloop:email",
+      "@type": "xsd:string"
+    },
+    "phone": {
+      "@id": "doorloop:phone",
+      "@type": "xsd:string"
+    },
+    "fullLeaseCreateRequest": "doorloop:fullLeaseCreateRequest",
+    "units": {
+      "@id": "doorloop:units",
+      "@container": "@list"
+    },
+    "term": {
+      "@id": "doorloop:term",
+      "@type": "xsd:string"
+    },
+    "rolloverToAtWill": {
+      "@id": "doorloop:rolloverToAtWill",
+      "@type": "xsd:boolean"
+    },
+    "tenants": {
+      "@id": "doorloop:tenants",
+      "@container": "@list"
+    },
+    "rent": {
+      "@id": "doorloop:rent",
+      "@type": "@id"
+    },
+    "securityDeposits": {
+      "@id": "doorloop:securityDeposits",
+      "@container": "@list"
+    },
+    "oneTimeCharges": {
+      "@id": "doorloop:oneTimeCharges",
+      "@container": "@list"
+    },
+    "oneTimeCredits": {
+      "@id": "doorloop:oneTimeCredits",
+      "@container": "@list"
+    },
+    "recurringCharges": {
+      "@id": "doorloop:recurringCharges",
+      "@container": "@list"
+    },
+    "recurringCredits": {
+      "@id": "doorloop:recurringCredits",
+      "@container": "@list"
+    },
+    "residentPortalAccess": {
+      "@id": "doorloop:residentPortalAccess",
+      "@type": "xsd:boolean"
+    },
+    "requireRentersInsurance": {
+      "@id": "doorloop:requireRentersInsurance",
+      "@type": "xsd:boolean"
+    },
+    "automaticLateFees": {
+      "@id": "doorloop:automaticLateFees",
+      "@type": "xsd:boolean"
+    },
+    "sendWelcomeSms": {
+      "@id": "doorloop:sendWelcomeSms",
+      "@type": "xsd:boolean"
+    },
+    "fullLeaseCreateResponse": "doorloop:fullLeaseCreateResponse",
+    "lease": {
+      "@id": "doorloop:lease",
+      "@type": "@id"
+    },
+    "createdTenantIds": {
+      "@id": "doorloop:createdTenantIds",
+      "@container": "@list"
+    },
+    "createdChargeIds": {
+      "@id": "doorloop:createdChargeIds",
+      "@container": "@list"
+    },
+    "createdRecurringTransactionIds": {
+      "@id": "doorloop:createdRecurringTransactionIds",
+      "@container": "@list"
+    },
+    "Lease": "doorloop:Lease",
+    "notes": {
+      "@id": "doorloop:notes",
+      "@type": "xsd:string"
+    },
+    "reference": {
+      "@id": "doorloop:reference",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "doorloop:status",
+      "@type": "xsd:string"
+    },
+    "evictonPending": {
+      "@id": "doorloop:evictonPending",
+      "@type": "xsd:boolean"
+    },
+    "proofOfInsuranceRequired": {
+      "@id": "doorloop:proofOfInsuranceRequired",
+      "@type": "xsd:boolean"
+    },
+    "totalBalancedue": {
+      "@id": "doorloop:totalBalancedue",
+      "@type": "xsd:decimal"
+    },
+    "totalDepositsHeld": {
+      "@id": "doorloop:totalDepositsHeld",
+      "@type": "xsd:decimal"
+    },
+    "totalRecurringRent": {
+      "@id": "doorloop:totalRecurringRent",
+      "@type": "xsd:decimal"
+    },
+    "totalRecurringPayments": {
+      "@id": "doorloop:totalRecurringPayments",
+      "@type": "xsd:decimal"
+    },
+    "totalRecurringCredits": {
+      "@id": "doorloop:totalRecurringCredits",
+      "@type": "xsd:decimal"
+    },
+    "TotalRecurringCharges": {
+      "@id": "doorloop:TotalRecurringCharges",
+      "@type": "xsd:decimal"
+    },
+    "person": "doorloop:person",
+    "middleName": {
+      "@id": "doorloop:middleName",
+      "@type": "xsd:string"
+    },
+    "gender": {
+      "@id": "doorloop:gender",
+      "@type": "xsd:string"
+    },
+    "fullName": {
+      "@id": "doorloop:fullName",
+      "@type": "xsd:string"
+    },
+    "dateOfBirth": {
+      "@id": "doorloop:dateOfBirth",
+      "@type": "xsd:string"
+    },
+    "timezone": {
+      "@id": "doorloop:timezone",
+      "@type": "xsd:string"
+    },
+    "company": {
+      "@id": "doorloop:company",
+      "@type": "xsd:string"
+    },
+    "companyName": {
+      "@id": "doorloop:companyName",
+      "@type": "xsd:string"
+    },
+    "jobTitle": {
+      "@id": "doorloop:jobTitle",
+      "@type": "xsd:string"
+    },
+    "phones": {
+      "@id": "doorloop:phones",
+      "@container": "@list"
+    },
+    "emails": {
+      "@id": "doorloop:emails",
+      "@container": "@list"
+    },
+    "primaryAddress": {
+      "@id": "doorloop:primaryAddress",
+      "@type": "@id"
+    },
+    "pictureUrl": {
+      "@id": "doorloop:pictureUrl",
+      "@type": "xsd:string"
+    },
+    "propertyType": "doorloop:propertyType",
+    "leaseTenant": "doorloop:leaseTenant",
+    "moveInAt": {
+      "@id": "doorloop:moveInAt",
+      "@type": "xsd:string"
+    },
+    "moveOutAt": {
+      "@id": "doorloop:moveOutAt",
+      "@type": "xsd:string"
+    },
+    "moveOutNoticeAt": {
+      "@id": "doorloop:moveOutNoticeAt",
+      "@type": "xsd:string"
+    },
+    "portalEnabled": {
+      "@id": "doorloop:portalEnabled",
+      "@type": "xsd:boolean"
+    },
+    "tenant": {
+      "@id": "doorloop:tenant",
+      "@type": "@id"
+    },
+    "leasePayment": "doorloop:leasePayment",
+    "amountReceived": {
+      "@id": "doorloop:amountReceived",
+      "@type": "xsd:decimal"
+    },
+    "paymentMethod": {
+      "@id": "doorloop:paymentMethod",
+      "@type": "@id"
+    },
+    "receivedFromTenant": {
+      "@id": "doorloop:receivedFromTenant",
+      "@type": "@id"
+    },
+    "depositToAccount": {
+      "@id": "doorloop:depositToAccount",
+      "@type": "@id"
+    },
+    "autoApplyPaymentOnCharges": {
+      "@id": "doorloop:autoApplyPaymentOnCharges",
+      "@type": "xsd:boolean"
+    },
+    "autoDeposit": {
+      "@id": "doorloop:autoDeposit",
+      "@type": "xsd:boolean"
+    },
+    "depositStatus": {
+      "@id": "doorloop:depositStatus",
+      "@type": "xsd:string"
+    },
+    "reversedPayment": {
+      "@id": "doorloop:reversedPayment",
+      "@type": "xsd:string"
+    },
+    "linkedCharges": {
+      "@id": "doorloop:linkedCharges",
+      "@container": "@list"
+    },
+    "linkedCredits": {
+      "@id": "doorloop:linkedCredits",
+      "@container": "@list"
+    },
+    "amountAppliedToCharges": {
+      "@id": "doorloop:amountAppliedToCharges",
+      "@type": "xsd:decimal"
+    },
+    "amountAppliedToCredits": {
+      "@id": "doorloop:amountAppliedToCredits",
+      "@type": "xsd:decimal"
+    },
+    "amountNotAppliedToCharges": {
+      "@id": "doorloop:amountNotAppliedToCharges",
+      "@type": "xsd:decimal"
+    },
+    "ePayInfo": {
+      "@id": "doorloop:ePayInfo"
+    },
+    "paymentOrigin": {
+      "@id": "doorloop:paymentOrigin",
+      "@type": "xsd:string"
+    },
+    "depositEntry": {
+      "@id": "doorloop:depositEntry"
+    },
+    "isDepositPayment": {
+      "@id": "doorloop:isDepositPayment",
+      "@type": "xsd:boolean"
+    },
+    "paymentMethods": "doorloop:paymentMethods",
+    "leaseTransactionLine": "doorloop:leaseTransactionLine",
+    "balance": {
+      "@id": "doorloop:balance",
+      "@type": "xsd:decimal"
+    },
+    "propertyGroup": "doorloop:propertyGroup",
+    "properties": {
+      "@id": "doorloop:properties",
+      "@container": "@list"
+    },
+    "federalTaxInfo": "doorloop:federalTaxInfo",
+    "addressFor1099SameAsPrimaryAddress": {
+      "@id": "doorloop:addressFor1099SameAsPrimaryAddress",
+      "@type": "xsd:boolean"
+    },
+    "addressFor1099": {
+      "@id": "doorloop:addressFor1099",
+      "@type": "@id"
+    },
+    "taxpayerName": {
+      "@id": "doorloop:taxpayerName",
+      "@type": "xsd:string"
+    },
+    "taxpayerId": {
+      "@id": "doorloop:taxpayerId",
+      "@type": "xsd:string"
+    },
+    "insuranceInfo": "doorloop:insuranceInfo",
+    "provider": {
+      "@id": "doorloop:provider",
+      "@type": "xsd:string"
+    },
+    "policyNumber": {
+      "@id": "doorloop:policyNumber",
+      "@type": "xsd:string"
+    },
+    "coverage": {
+      "@id": "doorloop:coverage",
+      "@type": "xsd:decimal"
+    },
+    "effectiveDate": {
+      "@id": "doorloop:effectiveDate",
+      "@type": "xsd:string"
+    },
+    "expirationDate": {
+      "@id": "doorloop:expirationDate",
+      "@type": "xsd:string"
+    },
+    "expenseTransactionLine": "doorloop:expenseTransactionLine",
+    "linkedToResourceType": {
+      "@id": "doorloop:linkedToResourceType",
+      "@type": "xsd:string"
+    },
+    "linkedToResourceId": {
+      "@id": "doorloop:linkedToResourceId",
+      "@type": "xsd:string"
+    },
+    "expense": "doorloop:expense",
+    "payFromAccount": {
+      "@id": "doorloop:payFromAccount",
+      "@type": "xsd:string"
+    },
+    "payToResourceType": {
+      "@id": "doorloop:payToResourceType",
+      "@type": "xsd:string"
+    },
+    "payToResourceId": {
+      "@id": "doorloop:payToResourceId",
+      "@type": "xsd:string"
+    },
+    "batch": {
+      "@id": "doorloop:batch",
+      "@type": "xsd:string"
+    },
+    "totalAmount": {
+      "@id": "doorloop:totalAmount",
+      "@type": "xsd:decimal"
+    },
+    "vendorTransaction": "doorloop:vendorTransaction",
+    "vendor": {
+      "@id": "doorloop:vendor",
+      "@type": "@id"
+    },
+    "dueDate": {
+      "@id": "doorloop:dueDate",
+      "@type": "xsd:string"
+    },
+    "totalBalance": {
+      "@id": "doorloop:totalBalance",
+      "@type": "xsd:decimal"
+    },
+    "profitAndLossReportItem": "doorloop:profitAndLossReportItem",
+    "columns": {
+      "@id": "doorloop:columns",
+      "@container": "@list"
+    },
+    "data": {
+      "@id": "doorloop:data",
+      "@container": "@list"
+    },
+    "communication": "doorloop:communication",
+    "subject": {
+      "@id": "doorloop:subject",
+      "@type": "xsd:string"
+    },
+    "bodyHtml": {
+      "@id": "doorloop:bodyHtml",
+      "@type": "xsd:string"
+    },
+    "bodyPreview": {
+      "@id": "doorloop:bodyPreview",
+      "@type": "xsd:string"
+    },
+    "from": {
+      "@id": "doorloop:from",
+      "@type": "@id"
+    },
+    "to": {
+      "@id": "doorloop:to",
+      "@container": "@list"
+    },
+    "cc": {
+      "@id": "doorloop:cc",
+      "@container": "@list"
+    },
+    "bcc": {
+      "@id": "doorloop:bcc",
+      "@container": "@list"
+    },
+    "sentAt": {
+      "@id": "doorloop:sentAt",
+      "@type": "xsd:decimal"
+    },
+    "type": {
+      "@id": "doorloop:type",
+      "@type": "xsd:string"
+    },
+    "threadId": {
+      "@id": "doorloop:threadId",
+      "@type": "xsd:string"
+    },
+    "externalId": {
+      "@id": "doorloop:externalId",
+      "@type": "xsd:string"
+    },
+    "openedAt": {
+      "@id": "doorloop:openedAt",
+      "@container": "@list"
+    },
+    "clickedAt": {
+      "@id": "doorloop:clickedAt",
+      "@container": "@list"
+    },
+    "bouncedAt": {
+      "@id": "doorloop:bouncedAt",
+      "@container": "@list"
+    },
+    "announcement": {
+      "@id": "doorloop:announcement",
+      "@type": "@id"
+    },
+    "communicationParticipant": "doorloop:communicationParticipant",
+    "displayName": {
+      "@id": "doorloop:displayName",
+      "@type": "xsd:string"
+    },
+    "linkedToType": {
+      "@id": "doorloop:linkedToType",
+      "@type": "xsd:string"
+    },
+    "linkedToId": {
+      "@id": "doorloop:linkedToId",
+      "@type": "@id"
+    },
+    "note": "doorloop:note",
+    "title": {
+      "@id": "doorloop:title",
+      "@type": "xsd:string"
+    },
+    "body": {
+      "@id": "doorloop:body",
+      "@type": "xsd:string"
+    },
+    "tags": {
+      "@id": "doorloop:tags",
+      "@container": "@list"
+    },
+    "linkedResource": {
+      "@id": "doorloop:linkedResource",
+      "@type": "@id"
+    },
+    "createdAt": {
+      "@id": "doorloop:createdAt",
+      "@type": "xsd:decimal"
+    },
+    "createdBy": {
+      "@id": "doorloop:createdBy",
+      "@type": "xsd:string"
+    },
+    "noteLinkedResource": "doorloop:noteLinkedResource",
+    "resourceId": {
+      "@id": "doorloop:resourceId",
+      "@type": "@id"
+    },
+    "resourceType": {
+      "@id": "doorloop:resourceType",
+      "@type": "xsd:string"
+    },
+    "fileLinkedResource": "doorloop:fileLinkedResource",
+    "file": "doorloop:file",
+    "mimeType": {
+      "@id": "doorloop:mimeType",
+      "@type": "xsd:string"
+    },
+    "downloadUrl": {
+      "@id": "doorloop:downloadUrl",
+      "@type": "xsd:string"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "DoorLoop API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects DoorLoop's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-14) from openapi/doorloop-api-reference-openapi.yml.",
+  "dcterms:created": "2026-10-14",
+  "dcterms:source": [
+    "openapi/doorloop-api-reference-openapi.yml"
+  ]
+}

@@ -1,0 +1,24 @@
+generated: '2026-10-14'
+method: probed
+generator: harvest-packages.py
+source: registry metadata endpoints (registry.npmjs.org, pypi.org, rubygems.org, api.nuget.org, packagist.org, crates.io)
+ownership_rule: 'official: true only when the registry metadata (homepage, repository, author, URLs) names the provider''s domain (authentication/doorloop-authentication.yml,
+  doorloop.com, finops/doorloop-finops.yml, linkedin.com, plans/doorloop-plans-pricing.yml, rate-limits/doorloop-rate-limits.yml, security/doorloop-domain-security.yml,
+  security/doorloop-vulnerability-disclosure.yml, x.com) or its accepted GitHub org.'
+packages:
+- name: doorloop
+  registry: pypi
+  url: https://pypi.org/project/doorloop/
+  language: Python
+  official: true
+  version: 0.0.6
+  published: '2023-04-26'
+  evidence: metadata names doorloop.com
+- name: doorloop
+  registry: rubygems
+  url: https://rubygems.org/gems/doorloop
+  language: Ruby
+  official: false
+  version: 0.1.2
+  published: '2024-07-11'
+  evidence: 'name match only: the metadata names neither the provider''s domain nor its GitHub org'

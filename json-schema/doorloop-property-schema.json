@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/doorloop/main/json-schema/doorloop-property-schema.json",
+  "title": "property",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/doorloop-api-reference-openapi.yml#/components/schemas/property",
+  "x-stoplight": {
+    "id": "i1ymxdkpfcody"
+  },
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/mongoId"
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "type": {
+      "$ref": "#/$defs/propertyType"
+    },
+    "address": {
+      "$ref": "#/$defs/address"
+    },
+    "description": {
+      "type": "string"
+    },
+    "class": {
+      "type": "string",
+      "description": "Read Only",
+      "enum": [
+        "RESIDENTIAL",
+        "COMMERCIAL"
+      ]
+    },
+    "active": {
+      "type": "boolean",
+      "readOnly": true,
+      "description": "Whether the property is active. A property cannot be made inactive while it has active units, and a unit cannot be made active while its property is inactive."
+    },
+    "numActiveUnits": {
+      "type": "number",
+      "readOnly": true,
+      "description": "The number of units in this property with active set to true, whether or not they are listed."
+    },
+    "settings": {
+      "type": "object",
+      "description": "Per-property settings. settings.defaultAccounts.bank_operating is the operating account for this property and is the correct value to use as depositToAccount when recording a payment. A portfolio can run a different bank account per property, so do not resolve one account per company and reuse it; the company-level default is only the fallback. The groups that can appear, once they have been set, are tenantPortal, lateFeesPolicy, rentersInsurance, paymentAllocations, recurringTransactions, defaultAccounts, propertyReserve, managementFees, mailingTemplates, paymentInstructions, convenienceFeesPolicy, creditCardConvenienceFeesPolicy, returnedPaymentFeesSettings, rentReminders, tenantRequests and showings.",
+      "properties": {
+        "defaultAccounts": {
+          "type": "object",
+          "properties": {
+            "bank_operating": {
+              "$ref": "#/$defs/mongoId"
+            }
+          }
+        }
+      }
+    },
+    "owners": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "$ref": "#/$defs/mongoId"
+          },
+          "ownershipPercentage": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "owner",
+          "ownershipPercentage"
+        ]
+      }
+    },
+    "pictures": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/picture"
+      }
+    },
+    "amenities": {
+      "type": "array",
+      "description": "Please refer to the MITS standard documentation for a list of possible values",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "type",
+    "address"
+  ],
+  "$defs": {
+    "address": {
+      "title": "address",
+      "x-stoplight": {
+        "id": "a6vhbqoeituyk"
+      },
+      "type": "object",
+      "description": "",
+      "properties": {
+        "street1": {
+          "type": "string"
+        },
+        "street2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "zip": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "string"
+        },
+        "lng": {
+          "type": "string"
+        }
+      }
+    },
+    "mongoId": {
+      "type": "string",
+      "title": "mongoId",
+      "x-stoplight": {
+        "id": "40j7qlmpihfdj"
+      },
+      "pattern": "/^[a-f\\d]{24}$/i"
+    },
+    "picture": {
+      "title": "picture",
+      "x-stoplight": {
+        "id": "pep1xv4l41v6m"
+      },
+      "type": "object",
+      "properties": {
+        "rank": {
+          "type": "integer",
+          "description": "Represents the index of this picture in ascending order"
+        },
+        "url": {
+          "type": "string",
+          "description": "The URL of the picture"
+        }
+      }
+    },
+    "propertyType": {
+      "type": "string",
+      "title": "propertyType",
+      "x-stoplight": {
+        "id": "rjlkdgrtkg7wn"
+      },
+      "enum": [
+        "RESIDENTIAL_SINGLE_FAMILY",
+        "RESIDENTIAL_MULTI_FAMILY",
+        "RESIDENTIAL_CONDO",
+        "RESIDENTIAL_TOWNHOME",
+        "RESIDENTIAL_OTHER",
+        "COMMERCIAL_OTHER",
+        "COMMERCIAL_INDUSTRIAL",
+        "COMMERCIAL_OFFICE",
+        "COMMERCIAL_RETAIL",
+        "COMMERCIAL_SHOPPING_CENTER",
+        "COMMERCIAL_STORAGE",
+        "COMMERCIAL_PARKING",
+        "COMMERCIAL_CO_WORKING"
+      ]
+    }
+  }
+}

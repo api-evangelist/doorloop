@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/doorloop/main/json-schema/doorloop-lease-payment-schema.json",
+  "title": "Lease-Payment",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/doorloop-api-reference-openapi.yml#/components/schemas/leasePayment",
+  "x-stoplight": {
+    "id": "mb48r0rwi1kp0"
+  },
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/mongoId"
+    },
+    "reference": {
+      "type": "string"
+    },
+    "amountReceived": {
+      "type": "number"
+    },
+    "paymentMethod": {
+      "$ref": "#/$defs/paymentMethods"
+    },
+    "lease": {
+      "$ref": "#/$defs/mongoId"
+    },
+    "receivedFromTenant": {
+      "$ref": "#/$defs/mongoId"
+    },
+    "depositToAccount": {
+      "$ref": "#/$defs/mongoId"
+    },
+    "autoApplyPaymentOnCharges": {
+      "type": "boolean"
+    },
+    "autoDeposit": {
+      "type": "boolean"
+    },
+    "depositStatus": {
+      "type": "string",
+      "enum": [
+        "DEPOSITED",
+        "UNDEPOSITED"
+      ],
+      "description": "Read Only"
+    },
+    "reversedPayment": {
+      "type": "string",
+      "description": "If this payment was returned, will reference the returned payment"
+    },
+    "date": {
+      "type": "string",
+      "description": "Transaction date (YYYY-MM-DD)"
+    },
+    "linkedCharges": {
+      "type": "array",
+      "readOnly": true,
+      "description": "Charges this payment was applied against, with the amount applied to each. Populated whether the application was automatic (autoApplyPaymentOnCharges) or manual.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "linkedTransaction": {
+            "$ref": "#/$defs/mongoId"
+          },
+          "amount": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "linkedCredits": {
+      "type": "array",
+      "readOnly": true,
+      "description": "Credits this payment was applied against, with the amount applied to each",
+      "items": {
+        "type": "object",
+        "properties": {
+          "linkedTransaction": {
+            "$ref": "#/$defs/mongoId"
+          },
+          "amount": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "amountAppliedToCharges": {
+      "type": "number",
+      "readOnly": true
+    },
+    "amountAppliedToCredits": {
+      "type": "number",
+      "readOnly": true
+    },
+    "amountNotAppliedToCharges": {
+      "type": "number",
+      "readOnly": true
+    },
+    "ePayInfo": {
+      "type": "object",
+      "readOnly": true,
+      "description": "Present for payments processed by DoorLoop. method is the only way to distinguish a card payment from a bank payment - paymentMethod: EPAY covers both rails.",
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": [
+            "CARD",
+            "ECHECK",
+            "WESTERN_UNION_CASH"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "PROCESSING",
+            "SUCCEEDED",
+            "PENDING_REVIEW",
+            "FAILED",
+            "DISPUTED",
+            "REFUNDED",
+            "IN_TRANSIT",
+            "PAID"
+          ]
+        }
+      }
+    },
+    "paymentOrigin": {
+      "type": "string",
+      "readOnly": true,
+      "description": "Where the payment was initiated from"
+    },
+    "depositEntry": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/mongoId"
+        }
+      ],
+      "readOnly": true,
+      "description": "The deposit journal entry this payment belongs to, if any. depositStatus is derived from its presence rather than being set directly."
+    },
+    "isDepositPayment": {
+      "type": "boolean",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "amountReceived",
+    "paymentMethod",
+    "lease",
+    "depositToAccount",
+    "autoApplyPaymentOnCharges"
+  ],
+  "$defs": {
+    "mongoId": {
+      "type": "string",
+      "title": "mongoId",
+      "x-stoplight": {
+        "id": "40j7qlmpihfdj"
+      },
+      "pattern": "/^[a-f\\d]{24}$/i"
+    },
+    "paymentMethods": {
+      "type": "string",
+      "enum": [
+        "CASH",
+        "CHECK",
+        "CREDIT_CARD",
+        "CASHIERS_CHECK",
+        "MONEY_ORDER",
+        "EFT",
+        "DEBIT_CARD",
+        "OTHER",
+        "EPAY"
+      ],
+      "description": "Lists all possible payment methods that can be used in payable and receivable transactions. Use EFT to record an electronic funds transfer that was collected outside DoorLoop. EPAY is reserved for payments processed through DoorLoop's own merchant account and requires a nested ePayInfo object."
+    }
+  }
+}

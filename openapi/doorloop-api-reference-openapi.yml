@@ -1,0 +1,5448 @@
+openapi: 3.1.0
+x-stoplight:
+  id: cz75kvx8cjg25
+info:
+  title: DoorLoop API Reference
+  version: '1.0'
+  summary: This is the DoorLoop API
+  description: It does some pretty cool stuff and gives you complete access to DoorLoop's data
+  license:
+    name: Terms and Conditions
+    url: https://www.doorloop.com/legal/terms
+  contact:
+    name: DoorLoop Inc.
+    url: www.doorloop.com
+    email: support@doorloop.com
+  termsOfService: https://www.doorloop.com/legal/terms
+servers:
+- url: https://app.doorloop.com/api
+  description: Production
+paths:
+  /accounts:
+    parameters: []
+    get:
+      summary: List all Accounts
+      tags:
+      - Accounts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/account'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-accounts
+      description: Retrieves the chart of accounts
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - ASSET_ACCOUNTS_RECEIVABLE
+          - ASSET_OTHER_CURRENT_ASSETS
+          - ASSET_BANK
+          - ASSET_FIXED_ASSETS
+          - ASSET_OTHER_ASSETS
+          - LIABILITY_ACCOUNTS_PAYABLE
+          - LIABILITY_CREDIT_CARD
+          - LIABILITY_OTHER_CURRENT_LIABILIY
+          - LIABILITY_LONG_TERM_LIABILITY
+          - EQUITY_EQUITY
+          - REVENUE_INCOME
+          - REVENUE_OTHER_INCOME
+          - EXPENSE_EXPENSE
+          - EXPENSE_OTHER_EXPENSE
+          - EXPENSE_COGS
+        in: query
+        name: filter_type
+        description: Filter by account type
+      - schema:
+          type: string
+          enum:
+          - ACCOUNTS_RECEIVABLE
+          - ACCOUNTS_PAYABLE
+          - UNAPPLIED_LEASE_PAYMENTS_INCOME
+          - UNDEPOSITED_FUNDS
+          - LATE_FEES
+          - MANAGEMENT_FEES
+          - RENTAL_INCOME
+          - SECURITY_DEPOSIT
+          - APPLICATION_FEE
+          - OPERATING_ACCOUNT
+          - TRUST_ACCOUNT
+          - OWNER_CONTRIBUTION
+          - OWNER_DISTRIBUTION
+          - OPENING_BALANCE
+          - CONVENIENCE_FEE
+          - CLEARING_ACCOUNT
+          - EQUITY_RETAINED_EARNINGS
+        in: query
+        name: filter_DefaultAccountFor
+        description: Returns the account this company has designated for a given purpose. The chart of accounts is per-company, so account ids differ between companies - resolve these once per company and cache the ids rather than matching on account names.
+      - schema:
+          type: boolean
+        in: query
+        name: filter_leaseChargeItem
+        description: Return only lease charge items - the catalog of things a tenant can be charged for
+      - schema:
+          type: string
+        in: query
+        name: filter_parentAccount
+        description: Return only the direct children of this account
+      - schema:
+          type: string
+        in: query
+        name: filter_ancestorAccount
+        description: Return every account beneath this one at any depth. Use this to resolve a charge to its top-level category when a company files charges under sub-accounts - sub-accounts do not carry a filter_DefaultAccountFor value, only the top-level anchor does.
+      - $ref: '#/components/parameters/page_number'
+      - $ref: '#/components/parameters/page_size'
+      security:
+      - Key: []
+    post:
+      summary: Create an Account
+      operationId: post-account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Accounts
+      description: Creates an Account
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/account'
+  /accounts/{accountId}:
+    parameters:
+    - schema:
+        type: string
+        example: 00000020f51bb4362eee2a4d
+      name: accountId
+      in: path
+      required: true
+      description: The account Id
+    get:
+      summary: Retrieve an Account
+      tags:
+      - Accounts
+      responses:
+        '200':
+          description: Accounts Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/account'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-account
+      description: Retreives an account from the Chart of Accounts
+      parameters: []
+      security:
+      - Key: []
+    put:
+      summary: Update an Account
+      operationId: put-account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Accounts
+      description: Updates an Account
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/account'
+    delete:
+      summary: Delete an Account
+      operationId: delete-account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Deletes an Account
+      security:
+      - Key: []
+      tags:
+      - Accounts
+  /communications:
+    get:
+      summary: List all Communication Logs
+      tags:
+      - Communications
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/communication'
+      operationId: get-communications
+      description: Lists all Communication Log Entries
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_sentAt_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_sentAt_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+          enum:
+          - TENANT
+          - OWNER
+          - VENDOR
+          - USER
+          - SYSTEM
+        in: query
+        name: filter_participantLinkedToType
+      - schema:
+          type: string
+        in: query
+        name: filter_participantLinkedToId
+      - schema:
+          type: string
+        in: query
+        name: filter_threadId
+      - schema:
+          type: string
+          enum:
+          - DRAFT
+          - FAILED
+          - BOUNCED
+          - COMPLAINT
+          - SENT
+          - DELIVERED
+          - OPENED
+          - CLICKED
+        in: query
+        name: filter_status
+      - schema:
+          type: string
+          enum:
+          - EMAIL
+          - PHONE
+          - TEXT
+        in: query
+        name: filter_type
+    post:
+      summary: Create a Communication Log
+      operationId: post-communication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communication'
+        '400':
+          description: Bad Request
+      description: Creates a Communication Log Entry
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/communication'
+      tags:
+      - Communications
+  /communications/{communicationId}:
+    parameters:
+    - schema:
+        type: string
+      name: communicationId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Communication
+      tags:
+      - Communications
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communication'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-communication
+      description: Retrieves a Communication Log Entry
+      security:
+      - Key: []
+    put:
+      summary: Update a Communication
+      operationId: put-communication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communication'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Communications
+      description: Updates a Communication Log Entry
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/communication'
+    delete:
+      summary: Delete a Communication
+      operationId: delete-communication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communication'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Communications
+      description: Deletes a Communication Log Entry
+      security:
+      - Key: []
+  /expenses:
+    get:
+      summary: List all Expenses
+      tags:
+      - Expenses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/expense'
+      operationId: get-expenses
+      description: Lists all Expenses
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_vendor
+        description: Filter by Vendor Id
+      - schema:
+          type: string
+        in: query
+        name: filter_tenant
+        description: Filter by Tenant Id
+      - schema:
+          type: string
+        in: query
+        name: filter_owner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+        in: query
+        name: filter_payFromAccount
+        description: Filter by Pay From Account Id
+      - schema:
+          type: string
+        in: query
+        name: filter_date_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_date_to
+        description: 'Format: YYYY-MM-DD'
+    post:
+      summary: Create an Expense
+      operationId: post-expense
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/expense'
+        '400':
+          description: Bad Request
+      tags:
+      - Expenses
+      description: Creates an Expense
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/expense'
+  /expenses/{expenseId}:
+    parameters:
+    - schema:
+        type: string
+      name: expenseId
+      in: path
+      required: true
+    get:
+      summary: Retrieve an Expense
+      tags:
+      - Expenses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/expense'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-expense
+      description: Retrieves an Expense
+      security:
+      - Key: []
+    put:
+      summary: Update an Expense
+      operationId: put-expense
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/expense'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Updates an Expense
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/expense'
+      tags:
+      - Expenses
+    delete:
+      summary: Delete an Expense
+      operationId: delete-expense
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/expense'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Expenses
+      description: Deletes an Expense
+      security:
+      - Key: []
+  /files:
+    get:
+      summary: List all Files
+      tags:
+      - Files
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/file'
+      operationId: get-files
+      description: Lists all Files
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_resourceId
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_createdBy
+      - schema:
+          type: string
+        in: query
+        name: filter_tags
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by File Name or Notes
+    post:
+      summary: Upload a File
+      operationId: post-files
+      responses:
+        '200':
+          description: OK
+      description: Upoads a File
+      security:
+      - Key: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/file'
+              - type: object
+                properties:
+                  file:
+                    description: The binary file data. Max file size 50MB.
+                    type: array
+                    items:
+                      type: string
+                required:
+                - file
+        description: ''
+      tags:
+      - Files
+  /files/{fileId}:
+    parameters:
+    - schema:
+        type: string
+      name: fileId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a File
+      tags:
+      - Files
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+      operationId: get-file
+      description: Retrieves a File Metadata
+      security:
+      - Key: []
+    put:
+      summary: Update a File
+      operationId: put-file
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Files
+      description: Updates a File Metadata
+    delete:
+      summary: Delete a File
+      operationId: delete-file
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Files
+      description: Deletes a File
+      security:
+      - Key: []
+  /files/{fileId}/download:
+    parameters:
+    - schema:
+        type: string
+      name: fileId
+      in: path
+      required: true
+    get:
+      summary: Download a File
+      tags:
+      - Files
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+      operationId: download-file
+      description: Downloads a File
+      security:
+      - Key: []
+  /lease-charges:
+    parameters: []
+    get:
+      summary: List all Lease Charges
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/leaseTransaction'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-lease-charges
+      description: Lists all Lease Charges
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_lease
+        description: Filter by Lease Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_owner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+        in: query
+        description: Filter by Date (YYYY-MM-DD)
+        name: filter_date_from
+      - schema:
+          type: string
+        in: query
+        description: Filter by Date (YYYY-MM-DD)
+        name: filter_date_to
+      - schema:
+          type: number
+        in: query
+        name: filter_totalBalanceGreaterThan
+        description: Return only charges whose remaining balance exceeds this value. Use 0 to get all open (unpaid) charges.
+      - schema:
+          type: boolean
+        in: query
+        name: filter_lateFeeCharges
+        description: Return only late-fee charges
+      - schema:
+          type: boolean
+        in: query
+        name: filter_excludeAutomaticLateFeeCharges
+        description: Exclude late fees that were generated automatically by DoorLoop
+      - schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: true
+        in: query
+        name: filter_accounts
+        description: Return only charges whose lines reference one of these account ids. Array parameter - send as filter_accounts[]=<id>. A bare scalar value is rejected with a 400.
+      - schema:
+          type: string
+        in: query
+        name: filter_unit
+        description: Return only charges on leases for this unit
+      - $ref: '#/components/parameters/page_number'
+      - $ref: '#/components/parameters/page_size'
+      security:
+      - Key: []
+      tags:
+      - Lease Charges
+    post:
+      summary: Create a Lease Charge
+      operationId: post-lease-charge
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leaseTransaction'
+        '400':
+          description: Bad Request
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/leaseTransaction'
+      description: Created a Lease Charge
+      tags:
+      - Lease Charges
+  /lease-charges/{leaseChargeId}:
+    parameters:
+    - schema:
+        type: string
+      name: leaseChargeId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Lease Charge
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leaseTransaction'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '404':
+          description: Not Found
+      operationId: get-lease-charge
+      description: Retrieves a Lease Charge
+      parameters: []
+      security:
+      - Key: []
+      tags:
+      - Lease Charges
+    put:
+      summary: Update a Lease Charge
+      operationId: put-lease-charge
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leaseTransaction'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/leaseTransaction'
+      tags:
+      - Lease Charges
+      description: ''
+    delete:
+      summary: Delete a Lease Credit
+      operationId: delete-lease-charge
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leaseTransaction'
+      security:
+      - Key: []
+      tags:
+      - Lease Charges
+      description: Deletes a Lease Credit
+  /lease-credits:
+    parameters: []
+    get:
+      summary: List all Lease Credits
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/leaseTransaction'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-lease-credits
+      description: Lists all Lease Credits
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_lease
+        description: Filter by Lease Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_owner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+        in: query
+        name: filter_date_from
+        description: Filter by Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_date_to
+        description: Filter by Date (YYYY-MM-DD)
+      security:
+      - Key: []
+      tags:
+      - Lease Credits
+    post:
+      summary: Create a Lease Credit
+      operationId: post-lease-credit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leaseTransaction'
+      tags:
+      - Lease Credits
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/leaseTransaction'
+      description: Creates a Lease Credit
+  /lease-credits/{leaseCreditId}:
+    parameters:
+    - schema:
+        type: string
+      name: leaseCreditId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Lease Credit
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leaseTransaction'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '404':
+          description: Not Found
+      operationId: get-lease-credit
+      description: Retrieves a Lease Credits
+      parameters: []
+      security:
+      - Key: []
+      tags:
+      - Lease Credits
+    put:
+      summary: Update a Lease Credit
+      operationId: put-lease-credit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leaseTransaction'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/leaseTransaction'
+      description: Updates a Lease Credit
+      tags:
+      - Lease Credits
+    delete:
+      summary: Delete a Lease Credit
+      operationId: delete-lease-credits-leaseCreditId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leaseTransaction'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Lease Credits
+      description: Delete Lease Credits
+  /lease-payments:
+    parameters: []
+    get:
+      summary: List all Lease Payments
+      tags:
+      - Lease Payments
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/leasePayment'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-lease-payments
+      description: Lists all Lease Payments
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_lease
+        description: Filter by Lease Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          $ref: '#/components/schemas/paymentMethods'
+        in: query
+        name: filter_paymentMethod
+        description: Filter by Payment Method
+      - schema:
+          type: string
+        in: query
+        name: filter_owner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+        in: query
+        name: filter_date_from
+        description: Filter by Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_date_to
+        description: Filter by Date (YYYY-MM-DD)
+      security:
+      - Key: []
+    post:
+      summary: Create a Lease Payment
+      operationId: post-lease-payment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leasePayment'
+        '400':
+          description: Bad Request
+      description: Creates a Lease Payment
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/leasePayment'
+      tags:
+      - Lease Payments
+  /lease-payments/{leasePaymentId}:
+    parameters:
+    - schema:
+        type: string
+      name: leasePaymentId
+      in: path
+      required: true
+      description: The Lease Payment Id
+    get:
+      summary: Retrieve a Lease Payment
+      tags:
+      - Lease Payments
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leasePayment'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '404':
+          description: Not Found
+      operationId: get-lease-payment
+      description: Retrieves a Lease Payment
+      parameters: []
+      security:
+      - Key: []
+    put:
+      summary: Update a Lease Payment
+      operationId: put-lease-payment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leasePayment'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Updates a Lease Payment
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/leasePayment'
+      tags:
+      - Lease Payments
+    delete:
+      summary: Delete a Lease Payment
+      operationId: delete-lease-payment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leasePayment'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Lease Payments
+      description: Deletes a Lease Payment
+      security:
+      - Key: []
+  /lease-reversed-payments:
+    parameters: []
+    get:
+      summary: List all Lease Returned Payments
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/leaseReversedPayment'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-lease-reversed-payments
+      description: Lists all Lease Returned Payments
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_lease
+        description: Filter by Lease Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          $ref: '#/components/schemas/paymentMethods'
+        in: query
+        name: filter_paymentMethod
+        description: Filter by Payment Method
+      - schema:
+          type: string
+        in: query
+        name: filter_owner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+        in: query
+        name: filter_date_from
+        description: Filter by Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_date_to
+        description: Filter by Date (YYYY-MM-DD)
+      security:
+      - Key: []
+      tags:
+      - Lease Returned Payments
+    post:
+      summary: Create a Lease Returned Payment
+      operationId: post-lease-reversed-payments
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leaseReversedPayment'
+        '400':
+          description: Bad Request
+      description: Create a Lease Returned Payment which marks an existing Lease Payment as returned
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/leaseReversedPayment'
+      tags:
+      - Lease Returned Payments
+  /lease-reversed-payments/{leaseReversedPaymentId}:
+    parameters:
+    - schema:
+        type: string
+      name: leaseReversedPaymentId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Lease Returned Payment
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leaseReversedPayment'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '404':
+          description: Not Found
+      operationId: get-lease-reversed-payment
+      description: Retrieves a Lease Returned Payment
+      parameters: []
+      security:
+      - Key: []
+      tags:
+      - Lease Returned Payments
+    delete:
+      summary: Delete a Lease Returned Payment
+      operationId: delete-lease-reversed-payment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leaseReversedPayment'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Deletes a Lease Returned Payment
+      security:
+      - Key: []
+      tags:
+      - Lease Returned Payments
+  /leases:
+    get:
+      summary: List all Leases
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Lease'
+        '400':
+          description: Bad Request
+      operationId: get-leases
+      description: Lists all Leases. To correlate leases with tenants, use GET /leases/tenants - it returns both the lease and the tenant on every row, along with move-in and move-out dates.
+      parameters:
+      - $ref: '#/components/parameters/Authorization'
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filters by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_owner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Lease Name
+      - schema:
+          type: string
+        in: query
+        name: filter_start_date_from
+        description: Filter by Start Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_start_date_to
+        description: Filter by Start Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_end_date_from
+        description: Filter by End Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_end_date_to
+        description: Filter by End Date (YYYY-MM-DD)
+      - schema:
+          type: string
+          enum:
+          - RESIDENTIAL
+          - COMMERCIAL
+        in: query
+        name: filter_propertyClass
+        description: Filter by Property Class
+      - schema:
+          type: string
+        in: query
+        name: filter_unit
+        description: Filter by Unit Id
+      - schema:
+          type: string
+        in: query
+        name: filter_tenant
+        description: Filter by Tenant Id
+      - schema:
+          type: number
+        in: query
+        name: filter_outstandingBalanceGreaterThan
+        description: Filter by Min Outstanding Balance
+      - schema:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        in: query
+        name: filter_status
+        description: Filter by Status
+      - schema:
+          type: string
+          enum:
+          - Rollover
+          - AtWill
+        in: query
+        name: filter_term
+        description: Filter by Term
+      - schema:
+          type: string
+          enum:
+          - IN_EVICTION
+          - PAY_OR_QUIT_EXPIRED
+          - PAY_OR_QUIT_SENT
+          - EXPIRED
+          - AT_RISK
+          - ACTIVE
+        in: query
+        name: filter_calculatedStatus
+        description: 'Collections stage, resolved by priority. NOTE: ACTIVE means active AND not in any collections state - it excludes pay-or-quit, holdover, on-notice and eviction leases, all of which are still occupied and paying. To list current occupants use GET /leases/tenants?filter_status=CURRENT instead.'
+      - schema:
+          type: string
+          enum:
+          - BALANCE_DUE
+          - CREDIT_AVAILABLE
+          - ZERO_BALANCE
+          - EXPIRED
+          - EVICTION
+        in: query
+        name: filter_situation
+        description: Filter by lease situation, derived from balance and lifecycle
+      - schema:
+          type: boolean
+        in: query
+        name: filter_evictionPending
+        description: Return only leases with a pending eviction
+      - $ref: '#/components/parameters/page_number'
+      - $ref: '#/components/parameters/page_size'
+      security:
+      - Key: []
+      tags:
+      - Leases
+    parameters: []
+  /leases/full:
+    parameters: []
+    post:
+      summary: Create a Lease
+      operationId: post-leases-full
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fullLeaseCreateResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '405':
+          description: Method Not Allowed
+      tags:
+      - Leases
+      description: Creates a complete, ready-to-use lease in a single call - property, units, term, dates, security deposits, one-time and recurring charges and credits, and tenant move-in - inside one transaction. Tenants may be passed as existing ids or as new-tenant objects created inline and de-duplicated by email within the company. If any part fails, nothing is persisted.
+      security:
+      - Key: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/fullLeaseCreateRequest'
+            examples:
+              Fixed-term lease with a new tenant:
+                value:
+                  property: 507f191e810c19729de860ea
+                  units:
+                  - 507f191e810c19729de860eb
+                  term: Fixed
+                  start: '2026-09-01'
+                  end: '2027-08-31'
+                  tenants:
+                  - firstName: Ada
+                    lastName: Lovelace
+                    email: ada.lovelace@example.com
+                  rent:
+                    frequency: Monthly
+                    lines:
+                    - account: 507f191e810c19729de860ec
+                      amount: 1500
+                  securityDeposits:
+                  - date: '2026-09-01'
+                    lines:
+                    - account: 507f191e810c19729de860ed
+                      amount: 3000
+  /leases/move-in:
+    parameters: []
+    post:
+      summary: Move in Tenant
+      operationId: post-leases-move-in
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lease'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Leases
+      description: Moves in a Tenant
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leaseId:
+                  $ref: '#/components/schemas/mongoId'
+                moveInAt:
+                  type: string
+                  description: 'Format: YYYY-MM-DD'
+                tenantIds:
+                  type: array
+                  description: An array of Tenant Ids to move in
+                  items:
+                    $ref: '#/components/schemas/mongoId'
+                portalEnabled:
+                  type: boolean
+              required:
+              - leaseId
+              - moveInAt
+              - tenantIds
+              - portalEnabled
+  /leases/move-out:
+    parameters: []
+    post:
+      summary: Move out Tenant
+      operationId: post-leases-move-out
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Leases
+      description: Moves out a Tenant
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leaseId:
+                  $ref: '#/components/schemas/mongoId'
+                movedOutAt:
+                  type: string
+                  description: 'Format: YYYY-MM-DD'
+                tenants:
+                  type: array
+                  description: An array of Tenant Ids to move in
+                  items:
+                    $ref: '#/components/schemas/mongoId'
+                portalEnabled:
+                  type: boolean
+                moveOutNoticeAt:
+                  type: string
+                  description: 'Format: YYYY-MM-DD'
+                moveOutReason:
+                  type: string
+                  maxLength: 100
+              required:
+              - leaseId
+              - movedOutAt
+              - tenants
+              - portalEnabled
+        description: ''
+  /leases/tenants:
+    parameters: []
+    get:
+      summary: List all Lease Tenants
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/leaseTenant'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-lease-tenants
+      description: 'Retrieves a list of all lease tenants, meaning, tenants that have been associated with an active list.
+
+
+        This endpoint includes additional information related to the lease for each tenant in DoorLoop, with the full Tenant object included as well.
+
+
+        If a tenant is associated with multiple leases, the tenant will appear in the results here once for each lease it is associated with.'
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_lease
+        description: Filter by Lease Id
+      - schema:
+          type: string
+          enum:
+          - PAST
+          - CURRENT
+          - FUTURE
+        in: query
+        name: filter_status
+        description: Occupancy status, derived from move-in and move-out dates rather than lease status - so CURRENT includes tenants in eviction, on notice, holdover and pay-or-quit. This is the recommended way to list current occupants.
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Tenant Name / Email
+      - schema:
+          type: string
+        in: query
+        name: filter_movedInAt_from
+        description: Filter by Move In Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_movedInAt_to
+        description: Filter by Move In Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_movedOutAt_from
+        description: Filter by Move Out Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_movedOutAt_To
+        description: Filter by Move Out Date (YYYY-MM-DD)
+      security:
+      - Key: []
+      tags:
+      - Leases
+  /leases/{leaseId}:
+    parameters:
+    - schema:
+        type: string
+      name: leaseId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Lease
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lease'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-lease
+      description: Retrieves a Lease
+      parameters: []
+      security:
+      - Key: []
+      tags:
+      - Leases
+  /notes:
+    get:
+      summary: List all Notes
+      tags:
+      - Notes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/note'
+      operationId: get-notes
+      description: Lists all Notes
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_resourceId
+      - schema:
+          type: string
+        in: query
+        name: filter_createdBy
+      - schema:
+          type: string
+        in: query
+        name: filter_tags
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Note Title or Body
+    post:
+      summary: Create a Note
+      operationId: post-notes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note'
+        '400':
+          description: Bad Request
+      tags:
+      - Notes
+      description: Creates a Note
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/note'
+  /notes/{noteId}:
+    parameters:
+    - schema:
+        type: string
+      name: noteId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Note
+      tags:
+      - Notes
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note'
+      operationId: get-note
+      security:
+      - Key: []
+    put:
+      summary: Update a Note
+      operationId: put-note
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Notes
+      description: Updates a Note
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/note'
+    delete:
+      summary: Delete a Note
+      operationId: delete-note
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Deletes a Note
+      security:
+      - Key: []
+      tags:
+      - Notes
+  /owners:
+    get:
+      summary: List all Owners
+      tags:
+      - Owners
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/owner'
+      operationId: get-owners
+      description: Lists all Owners
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: boolean
+        in: query
+        name: filter_active
+        description: Filter by Active/Inactive
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Owner Name / Email
+      - schema:
+          type: string
+        in: query
+        name: filter_management_ends_before
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_to
+        description: 'Format: YYYY-MM-DD'
+    post:
+      summary: Create an Owner
+      operationId: post-owner
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/owner'
+        '400':
+          description: Bad Request
+      tags:
+      - Owners
+      description: Creates an Owner
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/owner'
+  /owners/{ownerId}:
+    parameters:
+    - schema:
+        type: string
+      name: ownerId
+      in: path
+      required: true
+    get:
+      summary: Retrieve an Owner
+      tags:
+      - Owners
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/owner'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-owner
+      security:
+      - Key: []
+      description: Retrieves an Owner
+    put:
+      summary: Update an Owner
+      operationId: put-owner
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/owner'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Updates an Owner
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/owner'
+      tags:
+      - Owners
+    delete:
+      summary: Delete an Owner
+      operationId: delete-owner
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/owner'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Deletes an Owner
+      security:
+      - Key: []
+      tags:
+      - Owners
+  /properties:
+    parameters: []
+    get:
+      summary: List all Properties
+      responses:
+        '200':
+          description: Accounts Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/property'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-properties
+      description: Lists all Properties
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Property Name
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+          enum:
+          - RESIDENTIAL
+          - COMMERCIAL
+        in: query
+        name: filter_class
+        description: Filter by Property Class
+      - schema:
+          type: string
+        in: query
+        name: filter_owner
+        description: Filter by Property Owner
+      tags:
+      - Properties
+      security:
+      - Key: []
+  /properties/{propertyId}:
+    parameters:
+    - schema:
+        type: string
+      name: propertyId
+      in: path
+      required: true
+      description: The Property Id
+    get:
+      summary: Retrieve a Property
+      tags:
+      - Properties
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/property'
+        '404':
+          description: Not Found
+      operationId: get-property
+      description: Retrieves a Property
+      security:
+      - Key: []
+  /property-groups:
+    get:
+      summary: List all Portfolios
+      tags:
+      - Portfolios
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/propertyGroup'
+      operationId: get-property-groups
+      security:
+      - Key: []
+      description: Lists all Portfolios
+  /property-groups/{portfolioId}:
+    get:
+      summary: Retrieve a Portfolio
+      tags:
+      - Portfolios
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/propertyGroup'
+      operationId: get-property-group
+      security:
+      - Key: []
+      description: Retreieves a Portfolio
+    parameters:
+    - schema:
+        type: string
+      name: portfolioId
+      in: path
+      required: true
+  /reports/balance-sheet-summary:
+    get:
+      summary: Balance Sheet
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profitAndLossReportItem'
+              examples: {}
+      operationId: get-reports-balance-sheet
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_propertyOwner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+          enum:
+          - CASH
+          - ACCRUAL
+        in: query
+        name: filter_accountingMethod
+        required: true
+        description: Cash / Accrual
+      - schema:
+          type: string
+        in: query
+        name: filter_date_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_date_to
+        description: 'Format: YYYY-MM-DD'
+      description: ''
+    parameters: []
+  /reports/cash-flow-statement:
+    get:
+      summary: Cash Flow Statement
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profitAndLossReportItem'
+              examples: {}
+      operationId: get-reports-cash-flow-statement
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_propertyOwner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+          enum:
+          - CASH
+          - ACCRUAL
+        in: query
+        name: filter_accountingMethod
+        required: true
+        description: Cash / Accrual
+      - schema:
+          type: string
+        in: query
+        name: filter_date_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_date_to
+        description: 'Format: YYYY-MM-DD'
+      description: ''
+    parameters: []
+  /reports/profit-and-loss-summary:
+    get:
+      summary: Profit & Loss
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profitAndLossReportItem'
+              examples:
+                example-1:
+                  value:
+                    columns:
+                    - title: string
+                      field: string
+                    data:
+                    - accountType: string
+                      accountName: string
+                      accountId: string
+                      rootAccount: true
+                      parentAccountId: null
+                      total: 0
+                      totalWithSubAccounts: 0
+                      groupBy:
+                        ? ''
+                        : string
+      operationId: get-reports-profit-and-loss
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_propertyOwner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+          enum:
+          - CASH
+          - ACCRUAL
+        in: query
+        name: filter_accountingMethod
+        required: true
+        description: Cash / Accrual
+      - schema:
+          type: string
+        in: query
+        name: filter_date_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_date_to
+        description: 'Format: YYYY-MM-DD'
+      description: ''
+    parameters: []
+  /reports/rent-roll:
+    get:
+      summary: Rent Roll
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  example-1:
+                    active: true
+                    unitId: 601aad8e4fdad2298bb88162
+                    unitName: '12'
+                    unitAmenities: []
+                    beds: 1
+                    baths: 2
+                    size: 1111
+                    bedsAndBaths: 1/2
+                    marketRent: 1000
+                    property: 601aad884fdad2298bb88158
+                    pictures: []
+                    occupied: true
+                    leaseId: 601aada84fdad2298bb881a8
+                    leaseName: Tenant Portal7 & Tenant Portal8
+                    start: '2021-02-03'
+                    end: '2023-01-07'
+                    term: Fixed
+                    totalRecurringRent: 1000
+                    rentPerSize: 0.9000900090009001
+                    totalBalanceDue: 2000
+                    leaseStatus: PAST_DUE
+                    totalDepositsHeld: 0
+                    renewalStage: NOT_STARTED
+                    totalRecurringCharges: 0
+                    totalRecurringCredits: 0
+                    totalRecurringPayments: 0
+                    lastPaymentDate: '2021-02-23'
+                    lastPaymentAmount: 1000
+                    lastReturnedPaymentDate: '2021-05-01'
+                    lastReturnedPaymentAmount: -1000
+                properties:
+                  active:
+                    type: boolean
+                  unitId:
+                    type: string
+                  unitName:
+                    type: string
+                  unitAmenities:
+                    type: array
+                    items:
+                      type: string
+                  beds:
+                    type: integer
+                  baths:
+                    type: integer
+                  size:
+                    type: number
+                  bedsAndBaths:
+                    type: string
+                  marketRent:
+                    type: number
+                  property:
+                    $ref: '#/components/schemas/mongoId'
+                  pictures:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        rank:
+                          type: integer
+                        url:
+                          type: string
+                  occupied:
+                    type: boolean
+                  leaseId:
+                    $ref: '#/components/schemas/mongoId'
+                  leaseName:
+                    type: string
+                  start:
+                    type: string
+                  end:
+                    type: string
+                  term:
+                    type: string
+                    enum:
+                    - FIXED
+                    - AT_WILL
+                  totalRecurringRent:
+                    type: number
+                  rentPerSize:
+                    type: number
+                  totalBalanceDue:
+                    type: number
+                  leaseStatus:
+                    type: string
+                    enum:
+                    - ACTIVE
+                    - INACTIVE
+                  totalDepositsHeld:
+                    type: number
+                  renewalStage:
+                    type: string
+                    enum:
+                    - NOT_STARTED
+                    - RENEWAL_DRAFT
+                    - RENEWAL_OFFER
+                    - NOT_RENEWING
+                  totalRecurringCharges:
+                    type: number
+                  totalRecurringCredits:
+                    type: number
+                  totalRecurringPayments:
+                    type: number
+                  lastPaymentDate:
+                    type: string
+                    description: 'Format: YYYY-MM-DD'
+                  lastPaymentAmount:
+                    type: number
+                  lastReturnedPaymentDate:
+                    type: string
+                    description: 'Format: YYYY-MM-DD'
+                  lastReturnedPaymentAmount:
+                    type: number
+                  nextLeaseId:
+                    $ref: '#/components/schemas/mongoId'
+                  nextLeaseName:
+                    type: string
+                  nextLeaseStart:
+                    type: string
+                    description: 'Format: YYYY-MM-DD'
+                  rolloverToAtWill:
+                    type: boolean
+      operationId: get-reports-rent-roll
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_owner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+        in: query
+        name: filter_asOfDate
+        description: 'Format: YYYY-MM-DD'
+      description: ''
+  /tasks:
+    get:
+      summary: Retrieve all Tasks
+      tags:
+      - Tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/task'
+      operationId: get-tasks
+      description: Retrieves all Tasks
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_propertyGroup
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_unit
+        description: Filter by Unit Id
+      - schema:
+          type: string
+          enum:
+          - INTERNAL_TASK
+          - WORK_ORDER
+          - TENANT_REQUEST
+          - OWNER_REQUEST
+        in: query
+        name: filter_type
+        description: Filter by Task Type
+      - schema:
+          type: string
+          enum:
+          - NOT_STARTED
+          - IN_PROGRESS
+          - COMPLETED
+          - NOT_COMPLETED
+          - RECEIVED
+          - ARCHIVED
+        in: query
+        name: filter_status
+        description: Filter by Task Status
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_dueDate_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_dueDate_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_completedAt_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_completedAt_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_assignedToUser
+        description: Filter by User Id or "unassigned"
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Subject, Description or Reference
+      - schema:
+          type: string
+        in: query
+        name: filter_requestedById
+        description: Filter by Requested by User, Tenant or Owner Id
+    parameters: []
+    post:
+      summary: Create a Task
+      operationId: post-task
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+        '400':
+          description: Bad Request
+      description: Creates a Task
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/task'
+      tags:
+      - Tasks
+  /tasks/update:
+    post:
+      summary: Post an Update on a Task
+      operationId: post-task-update
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+        '400':
+          description: Bad Request
+      description: Posts an update on a task
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskId:
+                  $ref: '#/components/schemas/mongoId'
+                message:
+                  type: string
+                  description: '10000'
+                dueDate:
+                  type: string
+                  description: 'Format: YYYY-MM-DD'
+                priority:
+                  type: string
+                  enum:
+                  - LOW
+                  - MEDIUM
+                  - HIGH
+                status:
+                  type: string
+                  enum:
+                  - NOT_STARTED
+                  - RECEIVED
+                  - IN_PROGRESS
+                  - COMPLETED
+                  - ARCHIVED
+                assignedToUsers:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/mongoId'
+                notifyTenant:
+                  type: boolean
+                notifyAssignees:
+                  type: boolean
+              required:
+              - taskId
+      tags:
+      - Tasks
+    parameters: []
+  /tasks/{taskId}:
+    parameters:
+    - schema:
+        type: string
+      name: taskId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Task
+      tags:
+      - Tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+        '404':
+          description: Not Found
+      operationId: get-task
+      description: Retrieves a Task
+      security:
+      - Key: []
+    put:
+      summary: Update a Task
+      operationId: put-task
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Tasks
+      description: Updates a Task
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/task'
+    delete:
+      summary: Deletes a Task
+      operationId: delete-task
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Deletes a Task
+      security:
+      - Key: []
+      tags:
+      - Tasks
+  /tenants:
+    parameters: []
+    get:
+      summary: Retrieve all Tenants
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/tenant'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-tenants
+      description: "Retrieves all Tenants. \nIn DoorLoop there are 2 types of Tenants:\nif (type = LEASE_TENANT): This tenant has been associated with a lease.\nif (type = PROSPECT_TENANT): This tenant has not been associated with a leasa and is considered a \"Prospect\"."
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_lease
+        description: Filter by Lease Id
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Tenant Name / Email
+      - schema:
+          type: string
+        in: query
+        name: filter_unit
+        description: Filter by Unit Id
+      - schema:
+          type: string
+          enum:
+          - LEASE_TENANT
+          - PROSPECT_TENANT
+        in: query
+        name: filter_type
+        description: Filter by Tenant Type
+      security:
+      - Key: []
+      tags:
+      - Tenants
+    post:
+      summary: Create a Prospect
+      operationId: post-tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tenant'
+        '400':
+          description: Bad Request
+      description: 'Creates a Prospect.
+
+        In DoorLoop there are 2 types of Tenants:
+
+        if (type = LEASE_TENANT): This tenant has been associated with a lease.
+
+        if (type = PROSPECT_TENANT): This tenant has not been associated with a leasa and is considered a "Prospect".
+
+
+        All Tenants are created as a PROSPECT_TENANT, and their type changes once they are associated with a lease.'
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tenant'
+      tags:
+      - Tenants
+  /tenants/{tenantId}:
+    parameters:
+    - schema:
+        type: string
+      name: tenantId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tenant'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-tenant
+      description: "Retrieves a Tenant. \nIn DoorLoop there are 2 types of Tenants:\nif (type = LEASE_TENANT): This tenant has been associated with a lease.\nif (type = PROSPECT_TENANT): This tenant has not been associated with a leasa and is considered a \"Prospect\"."
+      parameters: []
+      security:
+      - Key: []
+      tags:
+      - Tenants
+    put:
+      summary: Update a Tenant
+      operationId: put-tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tenant'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Updates a Tenant
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tenant'
+      tags:
+      - Tenants
+    delete:
+      summary: Delete a Tenant
+      operationId: delete-tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tenant'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Deletes a Tenant
+      security:
+      - Key: []
+      tags:
+      - Tenants
+  /units:
+    get:
+      summary: List all Units
+      tags:
+      - Units
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/unit'
+        '400':
+          description: Bad Request
+      operationId: get-units
+      description: Lists all Units
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filters by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_owner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Unit Name
+      - schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          - all
+        in: query
+        name: filter_active
+        description: Which units to return by status. Without this parameter only active units are returned. Use all for active and inactive units together, or false for only the inactive ones.
+      security:
+      - Key: []
+  /units/{unitId}:
+    parameters:
+    - schema:
+        type: string
+      name: unitId
+      in: path
+      required: true
+      description: The Unit Id
+    put:
+      summary: Update a Unit
+      operationId: put-unit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unit'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Units
+      description: 'Updates a Unit.
+
+
+        This endpoint replaces the stored Unit rather than patching it. Retrieve the Unit first, apply your changes to the object you got back, and send the whole object. Any property you leave out of the body is cleared, including the nested "listing" and "rentalApplicationListing" objects.
+
+
+        Two properties behave in ways that are easy to get wrong:
+
+
+        * "addressSameAsProperty" defaults to true when omitted. If the Unit has its own address, send it explicitly as false or the address will be replaced by the property address.
+
+        * "rentalApplicationListing.activeListing" is forced to true whenever "listing.activeListing" or "listing.companySiteListingOnly" is true. A Unit that is publicly listed always accepts rental applications, so applications cannot be closed on their own.
+
+
+        To take a Unit off the market entirely, set "listing.activeListing", "listing.companySiteListingOnly" and "rentalApplicationListing.activeListing" all to false in the same request.'
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/unit'
+        description: The complete Unit object, as returned by Retrieve a Unit, with your changes applied.
+    get:
+      summary: Retrieve a Unit
+      tags:
+      - Units
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unit'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-unit
+      description: Retrieves a Unit
+      parameters: []
+      security:
+      - Key: []
+  /users:
+    parameters: []
+    get:
+      summary: List all Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-users
+      description: Retrieve a list of all users in the account
+      parameters: []
+      security:
+      - Key: []
+      tags:
+      - Users
+  /users/me:
+    parameters: []
+    get:
+      summary: Get Current User
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-current-user
+      description: Retrieves the the user that created this api key
+      parameters: []
+      security:
+      - Key: []
+      tags:
+      - Users
+  /users/{userId}:
+    parameters:
+    - schema:
+        type: string
+      name: userId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a User
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-user
+      description: Retrieves a User
+      parameters: []
+      security:
+      - Key: []
+      tags:
+      - Users
+  /vendor-bills:
+    get:
+      summary: List all Vendor Bills
+      tags:
+      - Vendor Bills
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/vendorTransaction'
+      operationId: get-vendor-bills
+      description: Lists all Vendor Bills
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_vendor
+        description: Filter by Vendor Id
+      - schema:
+          type: string
+        in: query
+        name: filter_date_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_date_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_due_date_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_due_date_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: boolean
+        in: query
+        name: filter_openBills
+        description: 'If set to true will return only bills with an open balance '
+    post:
+      summary: Create a Vendor Bill
+      operationId: post-vendor-bill
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendorTransaction'
+        '400':
+          description: Bad Request
+      tags:
+      - Vendor Bills
+      description: Creates a Vendor Bill
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendorTransaction'
+  /vendor-bills/{vendorBillId}:
+    parameters:
+    - schema:
+        type: string
+      name: vendorBillId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Vendor Bill
+      tags:
+      - Vendor Bills
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendorTransaction'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-vendor-bill
+      description: Retrieves a Vendor Bill
+      security:
+      - Key: []
+    put:
+      summary: Update a Vendor Bill
+      operationId: put-vendor-bill
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendorTransaction'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Vendor Bills
+      description: Updates a Vendor Bill
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendorTransaction'
+    delete:
+      summary: Delete a Vendor Bill
+      operationId: delete-vendor-bill
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendorTransaction'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Vendor Bills
+      description: Deletes a Vendor Bill
+      security:
+      - Key: []
+  /vendor-credits:
+    get:
+      summary: List all Vendor Credits
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/vendorTransaction'
+      operationId: get-vendor-credits
+      description: Lists all Vendor Credits
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_vendor
+        description: Filter by Vendor Id
+      - schema:
+          type: string
+        in: query
+        name: filter_date_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_date_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_due_date_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_due_date_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: boolean
+        in: query
+        name: filter_openBills
+        description: 'If set to true will return only bills with an open balance '
+      tags:
+      - Vendor Credits
+    parameters: []
+    post:
+      summary: Create a Vendor Credit
+      operationId: post-vendor-credit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendorTransaction'
+        '400':
+          description: Bad Request
+      description: Creates a Vendor Credit
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendorTransaction'
+      tags:
+      - Vendor Credits
+  /vendor-credits/{vendorCreditId}:
+    parameters:
+    - schema:
+        type: string
+      name: vendorCreditId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Vendor Credit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendorTransaction'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-vendor-credit
+      description: Retrieves a Vendor Credit
+      security:
+      - Key: []
+      tags:
+      - Vendor Credits
+    put:
+      summary: Update a Vendor Credit
+      operationId: put-vendor-credit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendorTransaction'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Updates a Vendor Credit
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendorTransaction'
+      tags:
+      - Vendor Credits
+    delete:
+      summary: Delete a Vendor Credit
+      operationId: delete-vendor-Credit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendorTransaction'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Deletes a Vendor Credit
+      security:
+      - Key: []
+      tags:
+      - Vendor Credits
+  /vendors:
+    get:
+      summary: List all Vendors
+      tags:
+      - Vendors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/vendor'
+      operationId: get-vendors
+      description: Lists all Vendors
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: boolean
+        in: query
+        name: filter_active
+        description: Filter by Active/Inactive
+      - schema:
+          type: string
+        in: query
+        name: filter_insurance_expires_before
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: boolean
+        in: query
+        name: filter_openBalance
+        description: If true, will return only vendors with an open balance
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_to
+        description: 'Format: YYYY-MM-DD'
+    post:
+      summary: Create a Vendor
+      operationId: post-vendor
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendor'
+        '400':
+          description: Bad Request
+      tags:
+      - Vendors
+      description: Creates a Vendor
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendor'
+  /vendors/{vendorId}:
+    parameters:
+    - schema:
+        type: string
+      name: vendorId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Vendor
+      tags:
+      - Vendors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendor'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-vendor
+      security:
+      - Key: []
+      description: Retrieves a Vendor
+    put:
+      summary: Update a Vendor
+      operationId: put-vendor
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendor'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Vendors
+      description: Updates a Vendor
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendor'
+    delete:
+      summary: Delete a Vendor
+      operationId: delete-vendor
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendor'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Vendors
+      description: Deletes a Vendor
+      security:
+      - Key: []
+components:
+  schemas:
+    mongoId:
+      type: string
+      title: mongoId
+      x-stoplight:
+        id: 40j7qlmpihfdj
+      pattern: /^[a-f\d]{24}$/i
+      examples:
+      - 507f191e810c19729de860ea
+      example: 00000020f51bb4362eee2a4d
+    address:
+      title: address
+      x-stoplight:
+        id: a6vhbqoeituyk
+      type: object
+      description: ''
+      properties:
+        street1:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+        lat:
+          type: string
+        lng:
+          type: string
+    unit:
+      title: unit
+      x-stoplight:
+        id: j9hclsxdesa9a
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        active:
+          type: boolean
+        address:
+          $ref: '#/components/schemas/address'
+        addressSameAsProperty:
+          type: boolean
+          description: If set to true, the address of this unit will be the same as the property it is linked to and the value in the "address" property will be ignored.
+        name:
+          type: string
+          maxLength: 255
+        beds:
+          type: number
+          minimum: 0
+        baths:
+          type: number
+          minimum: 0
+          description: The number of bathrooms. Fractions are allowed, for example 2.5.
+        size:
+          type: number
+          minimum: 0
+          description: The size of the unit in square feet.
+        marketRent:
+          type: number
+          minimum: 0
+          description: The internal market rent of the unit, used in reports such as the rent roll. The rent advertised in a listing is listing.rent.
+        property:
+          $ref: '#/components/schemas/mongoId'
+        pictures:
+          type: array
+          items:
+            $ref: '#/components/schemas/picture'
+        description:
+          type: string
+          maxLength: 1000
+        listing:
+          type: object
+          description: 'The advertised listing of the unit: whether it is published to listing partners or the company site, with the advertised rent, deposit, date available and contact. It is separate from rentalApplicationListing, which controls whether the unit accepts rental applications.'
+          properties:
+            activeListing:
+              type: boolean
+            dateAvailable:
+              type: string
+              pattern: YYYY-MM-DD
+            rent:
+              type: number
+            deposit:
+              type: number
+            contact:
+              type: string
+              description: Reference to the User Id who is the listing contact person. The user's contact information (Phone number, Email address) will be posted
+            leaseLength:
+              type: string
+              maxLength: 100
+            companySiteListingOnly:
+              type: boolean
+              description: When true the Unit is published only to your company site and not to the syndicated listing partners. It still counts as listed, so it keeps rental applications open.
+        rentalApplicationListing:
+          type: object
+          description: Controls whether the Unit accepts rental applications. Forced active while "listing.activeListing" or "listing.companySiteListingOnly" is true.
+          properties:
+            activeListing:
+              type: boolean
+            dateAvailable:
+              type: string
+              pattern: YYYY-MM-DD
+            rent:
+              type: number
+        amenities:
+          type: array
+          description: Please refer to the MITS standard for a list of possible values
+          items:
+            type: string
+      required:
+      - name
+      - property
+    picture:
+      title: picture
+      x-stoplight:
+        id: pep1xv4l41v6m
+      type: object
+      properties:
+        rank:
+          type: integer
+          description: Represents the index of this picture in ascending order
+        url:
+          type: string
+          description: The URL of the picture
+    fullLeaseCreateLine:
+      type: object
+      title: fullLeaseCreateLine
+      properties:
+        account:
+          $ref: '#/components/schemas/mongoId'
+        amount:
+          type: number
+          exclusiveMinimum: 0
+        memo:
+          type: string
+          maxLength: 1000
+      required:
+      - account
+      - amount
+    fullLeaseCreateOneTime:
+      type: object
+      title: fullLeaseCreateOneTime
+      properties:
+        date:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateLine'
+      required:
+      - date
+      - lines
+    fullLeaseCreateSigningOneTime:
+      type: object
+      title: fullLeaseCreateSigningOneTime
+      properties:
+        date:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        chargeTiming:
+          type: string
+          enum:
+          - byDate
+          - uponSigning
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateLine'
+      required:
+      - date
+      - lines
+    fullLeaseCreateRecurring:
+      type: object
+      title: fullLeaseCreateRecurring
+      properties:
+        frequency:
+          type: string
+          enum:
+          - Daily
+          - Weekly
+          - Every2Weeks
+          - Monthly
+          - Every2Months
+          - Quarterly
+          - Every6Months
+          - Annually
+        start:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        end:
+          type: string
+          description: 'Format: YYYY-MM-DD. Omit for an open-ended schedule.'
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateLine'
+      required:
+      - frequency
+      - start
+      - lines
+    fullLeaseCreateRent:
+      type: object
+      title: fullLeaseCreateRent
+      properties:
+        frequency:
+          type: string
+          enum:
+          - Daily
+          - Weekly
+          - Every2Weeks
+          - Monthly
+          - Every2Months
+          - Quarterly
+          - Every6Months
+          - Annually
+        start:
+          type: string
+          description: 'Format: YYYY-MM-DD. Defaults to the lease start date when omitted.'
+        end:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateLine'
+      required:
+      - frequency
+      - lines
+    fullLeaseCreateNewTenant:
+      type: object
+      title: fullLeaseCreateNewTenant
+      description: Creates a tenant inline, inside the same transaction. De-duplicated by email within the company - the address is matched case-insensitively against existing tenants and stored trimmed and lowercased.
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 100
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 100
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          minLength: 3
+          maxLength: 30
+      required:
+      - firstName
+      - lastName
+    fullLeaseCreateRequest:
+      type: object
+      title: fullLeaseCreateRequest
+      properties:
+        name:
+          type: string
+          maxLength: 1000
+          description: Defaults to the tenant names when omitted.
+        property:
+          $ref: '#/components/schemas/mongoId'
+        units:
+          type: array
+          minItems: 1
+          description: One or more units on the property.
+          items:
+            $ref: '#/components/schemas/mongoId'
+        term:
+          type: string
+          enum:
+          - Fixed
+          - AtWill
+        start:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        end:
+          type: string
+          description: 'Format: YYYY-MM-DD. Required when term is Fixed; ignored when term is AtWill.'
+        rolloverToAtWill:
+          type: boolean
+        tenants:
+          type: array
+          minItems: 1
+          description: Each entry is either an existing tenant id or a new-tenant object to create inline.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/mongoId'
+            - $ref: '#/components/schemas/fullLeaseCreateNewTenant'
+        rent:
+          $ref: '#/components/schemas/fullLeaseCreateRent'
+        securityDeposits:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateSigningOneTime'
+        oneTimeCharges:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateOneTime'
+        oneTimeCredits:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateSigningOneTime'
+        recurringCharges:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateRecurring'
+        recurringCredits:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateRecurring'
+        residentPortalAccess:
+          type: boolean
+          default: false
+        requireRentersInsurance:
+          type: boolean
+          default: false
+        automaticLateFees:
+          type: boolean
+          default: false
+        sendWelcomeSms:
+          type: boolean
+          default: false
+      required:
+      - property
+      - units
+      - term
+      - start
+      - tenants
+    fullLeaseCreateResponse:
+      type: object
+      title: fullLeaseCreateResponse
+      properties:
+        lease:
+          $ref: '#/components/schemas/Lease'
+        createdTenantIds:
+          type: array
+          description: Ids of tenants created inline by this request. Empty when every tenant already existed.
+          items:
+            $ref: '#/components/schemas/mongoId'
+        createdChargeIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/mongoId'
+        createdRecurringTransactionIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/mongoId'
+    Lease:
+      title: Lease
+      x-stoplight:
+        id: xpmo15f176x18
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        property:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          maxLength: 1000
+        notes:
+          type: string
+          maxLength: 1000
+        reference:
+          type: string
+          description: Read Only
+        start:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        end:
+          type: string
+          description: 'Required if term == AtWill. Format: YYYY-MM-DD'
+        term:
+          type: string
+          enum:
+          - Fixed
+          - AtWill
+        rolloverToAtWill:
+          type: string
+          description: If set to true, the lease will automatically rollover to "At Will" (Month to Month) at the end of the fixed term.
+        units:
+          type: array
+          description: An array of Unit Ids for this lease
+          minItems: 1
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/mongoId'
+        status:
+          type: string
+          description: Read Only
+          enum:
+          - ACTIVE
+          - INACTIVE
+        evictonPending:
+          type: boolean
+        proofOfInsuranceRequired:
+          type: boolean
+        totalBalancedue:
+          type: number
+          description: Read Only
+        totalDepositsHeld:
+          type: number
+          description: Read Only
+        totalRecurringRent:
+          type: number
+          description: Read Only
+        totalRecurringPayments:
+          type: number
+          description: Read Only
+        totalRecurringCredits:
+          type: number
+          description: Read Only
+        TotalRecurringCharges:
+          type: number
+          description: Read Only
+      required:
+      - property
+      - name
+      - start
+      - term
+      - units
+      - status
+    account:
+      title: Account
+      x-stoplight:
+        id: ivofyr6xu6xk4
+      type: object
+      examples:
+      - id: string
+        name: string
+        active: true
+        type: ASSET_ACCOUNTS_RECEIVABLE
+        description: string
+      description: Represents an account from the Chart of Accounts
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          maxLength: 1000
+        active:
+          type: boolean
+        type:
+          type: string
+          enum:
+          - ASSET_ACCOUNTS_RECEIVABLE
+          - ASSET_OTHER_CURRENT_ASSETS
+          - ASSET_BANK
+          - ASSET_FIXED_ASSETS
+          - ASSET_OTHER_ASSETS
+          - LIABILITY_ACCOUNTS_PAYABLE
+          - LIABILITY_CREDIT_CARD
+          - LIABILITY_OTHER_CURRENT_LIABILIY
+          - LIABILITY_LONG_TERM_LIABILITY
+          - EQUITY_EQUITY
+          - REVENUE_INCOME
+          - REVENUE_OTHER_INCOME
+          - EXPENSE_EXPENSE
+          - EXPENSE_OTHER_EXPENSE
+          - EXPENSE_COGS
+        description:
+          type: string
+      required:
+      - name
+      - active
+      - type
+    person:
+      title: person
+      x-stoplight:
+        id: w8ihhyv3ctmy8
+      type: object
+      description: ''
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          description: Read Only
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        gender:
+          type: string
+          enum:
+          - MALE
+          - FEMALE
+          - PREFER_NOT_TO_SAY
+        fullName:
+          type: string
+          description: Read Only
+        dateOfBirth:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        timezone:
+          type: string
+        company:
+          type: string
+        companyName:
+          type: string
+        jobTitle:
+          type: string
+        notes:
+          type: string
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/phone'
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/email'
+        primaryAddress:
+          $ref: '#/components/schemas/address'
+        pictureUrl:
+          type: string
+        ? ''
+        : type: string
+      required:
+      - firstName
+      - lastName
+    phone:
+      title: phone
+      x-stoplight:
+        id: 9kqyepto63cpi
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Home
+          - Work
+          - Mobile
+          - Fax
+          - Other
+        number:
+          type: string
+          maxLength: 50
+      required:
+      - type
+      - number
+    email:
+      title: email
+      x-stoplight:
+        id: 33vnq3pmvuy4l
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Primary
+          - Secondary
+          - Personal
+          - Work
+          - Other
+        address:
+          type: string
+      required:
+      - type
+      - address
+    user:
+      title: user
+      x-stoplight:
+        id: g16curqmwnz93
+      allOf:
+      - $ref: '#/components/schemas/person'
+      - type: object
+        properties:
+          active:
+            type: boolean
+          loginEmail:
+            type: string
+          role:
+            type: string
+          properties:
+            type: string
+          lastSeenAt:
+            type: string
+        required:
+        - active
+        - loginEmail
+        - role
+    property:
+      title: property
+      x-stoplight:
+        id: i1ymxdkpfcody
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          maxLength: 255
+        type:
+          $ref: '#/components/schemas/propertyType'
+        address:
+          $ref: '#/components/schemas/address'
+        description:
+          type: string
+        class:
+          type: string
+          description: Read Only
+          enum:
+          - RESIDENTIAL
+          - COMMERCIAL
+        active:
+          type: boolean
+          readOnly: true
+          description: Whether the property is active. A property cannot be made inactive while it has active units, and a unit cannot be made active while its property is inactive.
+        numActiveUnits:
+          type: number
+          readOnly: true
+          description: The number of units in this property with active set to true, whether or not they are listed.
+        settings:
+          type: object
+          description: Per-property settings. settings.defaultAccounts.bank_operating is the operating account for this property and is the correct value to use as depositToAccount when recording a payment. A portfolio can run a different bank account per property, so do not resolve one account per company and reuse it; the company-level default is only the fallback. The groups that can appear, once they have been set, are tenantPortal, lateFeesPolicy, rentersInsurance, paymentAllocations, recurringTransactions, defaultAccounts, propertyReserve, managementFees, mailingTemplates, paymentInstructions, convenienceFeesPolicy, creditCardConvenienceFeesPolicy, returnedPaymentFeesSettings, rentReminders, tenantRequests and showings.
+          properties:
+            defaultAccounts:
+              type: object
+              properties:
+                bank_operating:
+                  $ref: '#/components/schemas/mongoId'
+        owners:
+          type: array
+          items:
+            type: object
+            properties:
+              owner:
+                $ref: '#/components/schemas/mongoId'
+              ownershipPercentage:
+                type: number
+                minimum: 0
+                maximum: 100
+            required:
+            - owner
+            - ownershipPercentage
+        pictures:
+          type: array
+          items:
+            $ref: '#/components/schemas/picture'
+        amenities:
+          type: array
+          description: Please refer to the MITS standard documentation for a list of possible values
+          items:
+            type: string
+      required:
+      - name
+      - type
+      - address
+    propertyType:
+      type: string
+      title: propertyType
+      x-stoplight:
+        id: rjlkdgrtkg7wn
+      enum:
+      - RESIDENTIAL_SINGLE_FAMILY
+      - RESIDENTIAL_MULTI_FAMILY
+      - RESIDENTIAL_CONDO
+      - RESIDENTIAL_TOWNHOME
+      - RESIDENTIAL_OTHER
+      - COMMERCIAL_OTHER
+      - COMMERCIAL_INDUSTRIAL
+      - COMMERCIAL_OFFICE
+      - COMMERCIAL_RETAIL
+      - COMMERCIAL_SHOPPING_CENTER
+      - COMMERCIAL_STORAGE
+      - COMMERCIAL_PARKING
+      - COMMERCIAL_CO_WORKING
+    leaseTenant:
+      title: leaseTenant
+      x-stoplight:
+        id: ekzigjjakppro
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          description: The display name for this tenant
+        lease:
+          $ref: '#/components/schemas/mongoId'
+        property:
+          $ref: '#/components/schemas/mongoId'
+        units:
+          type: array
+          description: An array of unit Ids for this tenant
+          items:
+            $ref: '#/components/schemas/mongoId'
+        status:
+          type: string
+          enum:
+          - PAST
+          - FUTURE
+          - CURRENT
+          description: The current status of this tenant
+        moveInAt:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        moveOutAt:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        moveOutNoticeAt:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        portalEnabled:
+          type: boolean
+        tenant:
+          $ref: '#/components/schemas/tenant'
+      required:
+      - id
+      - name
+      - lease
+      - property
+      - units
+      - status
+    tenant:
+      allOf:
+      - $ref: '#/components/schemas/person'
+      - type: object
+        properties:
+          dependants:
+            type: array
+            items:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                middleName:
+                  type: string
+                lastName:
+                  type: string
+                dateOfBirth:
+                  type: string
+                relationship:
+                  type: string
+          pets:
+            type: array
+            items:
+              type: object
+              properties:
+                petType:
+                  type: string
+                weight:
+                  type: number
+                age:
+                  type: integer
+                color:
+                  type: string
+                  maxLength: 100
+                breed:
+                  type: string
+                  maxLength: 100
+                name:
+                  type: string
+                  maxLength: 100
+                gender:
+                  type: string
+                  maxLength: 100
+                isSpayedOrNeutered:
+                  type: boolean
+                isServiceAnimal:
+                  type: boolean
+                notes:
+                  type: string
+                  maxLength: 1000
+          vehicles:
+            type: array
+            items:
+              type: object
+              properties:
+                make:
+                  type: string
+                  maxLength: 100
+                model:
+                  type: string
+                  maxLength: 100
+                year:
+                  type: integer
+                  minimum: 1950
+                  maximum: 2050
+                color:
+                  type: string
+                  maxLength: 50
+                licensePlatae:
+                  type: string
+                  maxLength: 20
+                state:
+                  type: string
+                  maxLength: 20
+                notes:
+                  type: string
+                  maxLength: 1000
+          emergencyContacts:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                relationship:
+                  type: string
+                  maxLength: 100
+                email:
+                  type: string
+                  maxLength: 100
+                phone:
+                  type: string
+                  maxLength: 100
+          prospectInfo:
+            type: object
+            properties:
+              assignedToUser:
+                type: string
+                description: The User Id this Prospect is assigned to
+              status:
+                type: string
+                enum:
+                - NEW
+                - CONTACT_ATTEMPTED
+                - CONTACT_MADE
+                - SHOWING_SCHEDULED
+                - SHOWING_COMPLETED
+                - APPLICATION_SENT
+                - APPLICATION_SUBMITTED
+                - LEASE_OFFER_MADE
+                - LEASE_OFFER_ACCEPTED
+                - LEASE_SENT_FOR_SIGNATURE
+                - CLOSED_MOVED_IN
+                - CLOSED_LOST
+              interests:
+                type: array
+                description: Represents all the properties and/or units this prospect is interested moving into
+                items:
+                  type: object
+                  properties:
+                    property:
+                      type: string
+                      description: Reference the Property Id
+                    unit:
+                      type: string
+                      description: Reference the Unit Id
+              leadSource:
+                type: string
+                description: References to the Tag Id
+              minBathrooms:
+                type: number
+                minimum: 0
+              minBedrooms:
+                type: number
+                minimum: 0
+              maxRent:
+                type: number
+                minimum: 0
+              expectedMoveInDate:
+                type: string
+                description: 'Format: YYYY-MM-DD'
+              creditScore:
+                type: integer
+              monthlyIncome:
+                type: number
+              campaignSource:
+                type: string
+              campaignMedium:
+                type: string
+              campaignName:
+                type: string
+              campaignContent:
+                type: string
+              campaignTerm:
+                type: string
+              nextTaskDate:
+                type: string
+                description: 'Read Only. Format: YYYY-MM-DD'
+          portalInfo:
+            type: object
+            properties:
+              allowAccess:
+                type: boolean
+              lastSeenAt:
+                type: string
+                description: 'Read Only. Format: YYYY-MM-DD'
+              loginEmail:
+                type: string
+                maxLength: 255
+              status:
+                type: string
+                description: Read Only
+                enum:
+                - ACTIVE
+                - INACTIVE
+                - INVITED
+              invitationLastSentAt:
+                type: string
+                description: 'Read Only. Format: YYYY-MM-DD'
+          type:
+            type: string
+            enum:
+            - LEASE_TENANT
+            - PROSPECT_TENANT
+    leasePayment:
+      title: Lease-Payment
+      x-stoplight:
+        id: mb48r0rwi1kp0
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        reference:
+          type: string
+        amountReceived:
+          type: number
+          example: 1000.5
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethods'
+        lease:
+          $ref: '#/components/schemas/mongoId'
+        receivedFromTenant:
+          $ref: '#/components/schemas/mongoId'
+        depositToAccount:
+          $ref: '#/components/schemas/mongoId'
+        autoApplyPaymentOnCharges:
+          type: boolean
+        autoDeposit:
+          type: boolean
+        depositStatus:
+          type: string
+          enum:
+          - DEPOSITED
+          - UNDEPOSITED
+          description: Read Only
+        reversedPayment:
+          type: string
+          description: If this payment was returned, will reference the returned payment
+        date:
+          type: string
+          description: Transaction date (YYYY-MM-DD)
+        linkedCharges:
+          type: array
+          readOnly: true
+          description: Charges this payment was applied against, with the amount applied to each. Populated whether the application was automatic (autoApplyPaymentOnCharges) or manual.
+          items:
+            type: object
+            properties:
+              linkedTransaction:
+                $ref: '#/components/schemas/mongoId'
+              amount:
+                type: number
+        linkedCredits:
+          type: array
+          readOnly: true
+          description: Credits this payment was applied against, with the amount applied to each
+          items:
+            type: object
+            properties:
+              linkedTransaction:
+                $ref: '#/components/schemas/mongoId'
+              amount:
+                type: number
+        amountAppliedToCharges:
+          type: number
+          readOnly: true
+        amountAppliedToCredits:
+          type: number
+          readOnly: true
+        amountNotAppliedToCharges:
+          type: number
+          readOnly: true
+        ePayInfo:
+          type: object
+          readOnly: true
+          description: 'Present for payments processed by DoorLoop. method is the only way to distinguish a card payment from a bank payment - paymentMethod: EPAY covers both rails.'
+          properties:
+            method:
+              type: string
+              enum:
+              - CARD
+              - ECHECK
+              - WESTERN_UNION_CASH
+            status:
+              type: string
+              enum:
+              - PROCESSING
+              - SUCCEEDED
+              - PENDING_REVIEW
+              - FAILED
+              - DISPUTED
+              - REFUNDED
+              - IN_TRANSIT
+              - PAID
+        paymentOrigin:
+          type: string
+          readOnly: true
+          description: Where the payment was initiated from
+        depositEntry:
+          allOf:
+          - $ref: '#/components/schemas/mongoId'
+          readOnly: true
+          description: The deposit journal entry this payment belongs to, if any. depositStatus is derived from its presence rather than being set directly.
+        isDepositPayment:
+          type: boolean
+          readOnly: true
+      required:
+      - amountReceived
+      - paymentMethod
+      - lease
+      - depositToAccount
+      - autoApplyPaymentOnCharges
+    paymentMethods:
+      type: string
+      enum:
+      - CASH
+      - CHECK
+      - CREDIT_CARD
+      - CASHIERS_CHECK
+      - MONEY_ORDER
+      - EFT
+      - DEBIT_CARD
+      - OTHER
+      - EPAY
+      description: Lists all possible payment methods that can be used in payable and receivable transactions. Use EFT to record an electronic funds transfer that was collected outside DoorLoop. EPAY is reserved for payments processed through DoorLoop's own merchant account and requires a nested ePayInfo object.
+    leaseTransactionLine:
+      title: leaseTransactionLine
+      x-stoplight:
+        id: fc1wegnped57j
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        amount:
+          type: number
+        account:
+          type: string
+          description: References the Account Id for this line.
+        memo:
+          type: string
+          maxLength: 1000
+        balance:
+          type: number
+          readOnly: true
+          description: Remaining unpaid amount on this line. `amount` is the original charged amount, so the amount paid is `amount - balance`.
+      required:
+      - amount
+      - account
+    leaseTransaction:
+      title: journalEntry
+      x-stoplight:
+        id: j92801xr8v1ta
+      allOf:
+      - properties:
+          lease:
+            $ref: '#/components/schemas/mongoId'
+          lines:
+            type: array
+            items:
+              $ref: '#/components/schemas/leaseTransactionLine'
+          memo:
+            type: string
+            maxLength: 1000
+          reference:
+            type: string
+            description: If not provided one will be generated by the server
+            maxLength: 50
+          date:
+            type: string
+            description: 'Format: YYYY-MM-DD'
+          batch:
+            type: string
+        required:
+        - lease
+        - lines
+        - date
+      type: object
+    leaseReversedPayment:
+      allOf:
+      - $ref: '#/components/schemas/leaseTransaction'
+      - type: object
+        properties:
+          leasePayment:
+            type: string
+            description: Referenced the original Lease Payment Id that was returned
+        required:
+        - leasePayment
+    propertyGroup:
+      title: ''
+      x-stoplight:
+        id: pmuqa1tixt7kj
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        properties:
+          type: array
+          description: An array of Property Ids for properties in this portfolio.
+          items:
+            type: string
+      required:
+      - name
+      - properties
+    task:
+      title: task
+      x-stoplight:
+        id: p0f9c0fwm79sl
+      allOf:
+      - properties:
+          id:
+            $ref: '#/components/schemas/mongoId'
+          type:
+            type: string
+            enum:
+            - INTERNAL_TASK
+            - TENANT_REQUEST
+            - OWNER_REQUEST
+            - WORK_ORDER
+          reference:
+            type: string
+          subject:
+            type: string
+            maxLength: 255
+          description:
+            type: string
+            maxLength: 10000
+          dueDate:
+            type: string
+            description: 'Format: YYYY-MM-DD'
+          status:
+            type: string
+            enum:
+            - NOT_STARTED
+            - RECEIVED
+            - IN_PROGRESS
+            - COMPLETED
+            - ARCHIVED
+          priority:
+            type: string
+            enum:
+            - LOW
+            - MEDIUM
+            - HIGH
+          requestedByUser:
+            type: string
+            description: "The User Id who requested this task. \nRequired if type == INTERNAL_TASK."
+          requestedByTenant:
+            type: string
+            description: "The Tenant Id who requested this task. \nRequired if type == TENANT_REQUEST."
+          requestedByOwner:
+            type: string
+            description: "The Owner Id who requested this task. \nRequired if type == OWNER_REQUEST."
+          assignedToUsers:
+            type: array
+            items:
+              $ref: '#/components/schemas/mongoId'
+          property:
+            $ref: '#/components/schemas/mongoId'
+          unit:
+            $ref: '#/components/schemas/mongoId'
+          notifyTenant:
+            type: boolean
+            description: If type = TENANT_REQUEST and notifyTenant = "true" the tenants will be notified when this task is created or updated.
+          notifyAssignees:
+            type: boolean
+            description: If set to "true", the assigned to users will be notified when this task is created or updated.
+          entryNotes:
+            type: string
+            maxLength: 10000
+          workOrder:
+            type: object
+            description: Required if type == WORK_ORDER
+            properties:
+              assignedToVendor:
+                $ref: '#/components/schemas/mongoId'
+              instructionsToVendor:
+                type: string
+                maxLength: 10000
+              approvedByOwner:
+                type: boolean
+              billed:
+                type: boolean
+                description: Read Only. If billed == true, the Vendor Bill Id be referenced under "vendorBill"
+              vendorBill:
+                $ref: '#/components/schemas/mongoId'
+            required:
+            - assignedToVendor
+          entryPermission:
+            type: string
+            enum:
+            - NOT_APPLICABLE
+            - 'YES'
+            - 'NO'
+          createdAt:
+            type: number
+          updatedAt:
+            type: number
+        required:
+        - type
+        - subject
+        - status
+      type: object
+    owner:
+      allOf:
+      - $ref: '#/components/schemas/person'
+      - type: object
+        properties:
+          active:
+            type: boolean
+          managementStartDate:
+            type: string
+            description: 'Format: YYYY-MM-DD'
+          managementEndDate:
+            type: string
+            description: 'Format: YYYY-MM-DD'
+          federalTaxInfo:
+            $ref: '#/components/schemas/federalTaxInfo'
+        required:
+        - active
+    federalTaxInfo:
+      title: federalTaxInfo
+      x-stoplight:
+        id: d1fvqgbj6zgev
+      type: object
+      properties:
+        addressFor1099SameAsPrimaryAddress:
+          type: boolean
+          description: If set to "true", will use the primaryAddress on the 1099 form. Otherwise addressFor1099 will be required.
+        addressFor1099:
+          $ref: '#/components/schemas/address'
+        taxpayerName:
+          type: string
+        taxpayerId:
+          type: string
+      required:
+      - addressFor1099SameAsPrimaryAddress
+      - taxpayerName
+      - taxpayerId
+    vendor:
+      allOf:
+      - $ref: '#/components/schemas/person'
+      - type: object
+        properties:
+          active:
+            type: boolean
+          balance:
+            type: number
+            description: Read Only
+          properties:
+            type: array
+            description: References the properties served by this vendor
+            items:
+              $ref: '#/components/schemas/mongoId'
+          insuranceInfo:
+            $ref: '#/components/schemas/insuranceInfo'
+          federalTaxInfo:
+            $ref: '#/components/schemas/federalTaxInfo'
+        required:
+        - active
+    insuranceInfo:
+      title: insuranceInfo
+      x-stoplight:
+        id: 0u3re29llsdch
+      type: object
+      properties:
+        provider:
+          type: string
+          maxLength: 200
+        policyNumber:
+          type: string
+          maxLength: 200
+        coverage:
+          type: number
+          minimum: 0
+        effectiveDate:
+          type: string
+          description: 'Format: YYYY-MM-DD. Must be before expirationDate.'
+        expirationDate:
+          type: string
+          description: 'Format: YYYY-MM-DD. Must be after effectiveDate.'
+      required:
+      - provider
+      - policyNumber
+      - coverage
+      - effectiveDate
+      - expirationDate
+    expenseTransactionLine:
+      title: expenseTransactionLine
+      x-stoplight:
+        id: i2oe5ol30qri6
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        amount:
+          type: number
+        account:
+          $ref: '#/components/schemas/mongoId'
+        memo:
+          type: string
+          maxLength: 1000
+        linkedToResourceType:
+          type: string
+          description: At the monent, only "property" is supported
+          enum:
+          - property
+        linkedToResourceId:
+          type: string
+          description: The Property Id for this line.
+        balance:
+          description: Read Only
+          type: number
+      required:
+      - account
+      - linkedToResourceType
+      - linkedToResourceId
+    expense:
+      title: expense
+      x-stoplight:
+        id: kznbaq3e7rwg2
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        payFromAccount:
+          type: string
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethods'
+        payToResourceType:
+          type: string
+        payToResourceId:
+          type: string
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/expenseTransactionLine'
+        memo:
+          type: string
+          maxLength: 1000
+        reference:
+          type: string
+          maxLength: 255
+          description: If not provided will be generated automatically by the server.
+        date:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        batch:
+          type: string
+        totalAmount:
+          type: number
+          description: Read Only. Calculated as sum of lines.amount.
+      required:
+      - payFromAccount
+      - paymentMethod
+      - lines
+      - date
+      examples: []
+    vendorTransaction:
+      title: vendorTransaction
+      x-stoplight:
+        id: 1fqjs8q8lcqqh
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        vendor:
+          $ref: '#/components/schemas/mongoId'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/expenseTransactionLine'
+        date:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        dueDate:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        memo:
+          type: string
+          maxLength: 1000
+        reference:
+          type: string
+          description: If not provided wil be generated by the server.
+          maxLength: 255
+        batch:
+          type: string
+        totalAmount:
+          type: number
+          description: Read Only. Calculated by the server.
+        totalBalance:
+          type: number
+          description: Read Only. Calculated by the server.
+      required:
+      - vendor
+      - lines
+      - date
+      - dueDate
+    profitAndLossReportItem:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              field:
+                type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              accountType:
+                type: string
+              accountName:
+                type: string
+              accountId:
+                type: string
+              rootAccount:
+                type: boolean
+              parentAccountId:
+                type: 'null'
+              total:
+                type: integer
+              totalWithSubAccounts:
+                type: integer
+              groupBy:
+                type: object
+                properties:
+                  ? ''
+                  : type: string
+      x-examples:
+        example-1:
+          columns:
+          - title: string
+            field: string
+          data:
+          - accountType: string
+            accountName: string
+            accountId: string
+            rootAccount: true
+            parentAccountId: null
+            total: 0
+            totalWithSubAccounts: 0
+            groupBy:
+              ? ''
+              : string
+    communication:
+      title: communication
+      x-stoplight:
+        id: uzdwlgssgn5lz
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        subject:
+          type: string
+          maxLength: 255
+        bodyHtml:
+          type: string
+          description: For performance reasons, bodyHtml will only be returned when retrieving a single communication
+        bodyPreview:
+          type: string
+          maxLength: 255
+        from:
+          $ref: '#/components/schemas/communicationParticipant'
+        to:
+          type: array
+          items:
+            $ref: '#/components/schemas/communicationParticipant'
+        cc:
+          type: array
+          items:
+            $ref: '#/components/schemas/communicationParticipant'
+        bcc:
+          type: array
+          items:
+            $ref: '#/components/schemas/communicationParticipant'
+        sentAt:
+          type: number
+        type:
+          type: string
+          enum:
+          - EMAIL
+          - PHONE
+          - TEXT
+        threadId:
+          type: string
+          maxLength: 255
+        externalId:
+          type: string
+          maxLength: 255
+        openedAt:
+          type: array
+          items:
+            type: number
+        clickedAt:
+          type: array
+          items:
+            type: number
+        bouncedAt:
+          type: array
+          items:
+            type: number
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - FAILED
+          - BOUNCED
+          - COMPLAINT
+          - SENT
+          - DELIVERED
+          - OPENED
+          - CLICKED
+        announcement:
+          $ref: '#/components/schemas/mongoId'
+      required:
+      - subject
+      - from
+      - sentAt
+      - type
+      - status
+    communicationParticipant:
+      title: communicationParticipant
+      x-stoplight:
+        id: r0qslo7h1ax6g
+      type: object
+      properties:
+        displayName:
+          type: string
+        address:
+          type: string
+        linkedToType:
+          type: string
+          enum:
+          - USER
+          - TENANT
+          - OWNER
+          - VENDOR
+          - SYSTEM
+        linkedToId:
+          $ref: '#/components/schemas/mongoId'
+      required:
+      - address
+      - linkedToType
+      - linkedToId
+    note:
+      title: note
+      x-stoplight:
+        id: g3gxurg6g7l2i
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        title:
+          type: string
+          maxLength: 255
+        body:
+          type: string
+          maxLength: 10000
+        tags:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/mongoId'
+        linkedResource:
+          $ref: '#/components/schemas/noteLinkedResource'
+        createdAt:
+          description: Read Only
+          type: number
+        createdBy:
+          type: string
+          description: Read Only
+      required:
+      - title
+      - linkedResource
+    noteLinkedResource:
+      title: noteLinkedResource
+      x-stoplight:
+        id: tdd2wdxg0yyjm
+      type: object
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/mongoId'
+        resourceType:
+          type: string
+          enum:
+          - TENANT
+          - OWNER
+          - VENDOR
+          - PROPERTY
+          - UNIT
+          - LEASE
+          - LEASE_DRAFT
+          - TASK
+          - RENTAL_APPLICATION
+      required:
+      - resourceId
+      - resourceType
+    fileLinkedResource:
+      title: fileLinkedResource
+      x-stoplight:
+        id: tdd2wdxg0yyjm
+      type: object
+      description: ''
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/mongoId'
+        resourceType:
+          type: string
+          enum:
+          - TENANT
+          - OWNER
+          - VENDOR
+          - PROPERTY
+          - UNIT
+          - LEASE
+          - LEASE_DRAFT
+          - TASK
+          - RENTAL_APPLICATION
+          - BILL
+          - BILL_PAYMENT
+          - VENDOR_CREDIT
+          - NOTE
+          - INSURANCE_POLICY
+          - COMMUNICATION
+      required:
+      - resourceId
+      - resourceType
+    file:
+      title: file
+      x-stoplight:
+        id: 1125csq7d6u3b
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          description: The name of the file. Must be a valid unix file name.
+          maxLength: 255
+        notes:
+          type: string
+        linkedResource:
+          $ref: '#/components/schemas/fileLinkedResource'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/mongoId'
+        size:
+          type: number
+        mimeType:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+        downloadUrl:
+          type: string
+          description: Read Only. References the URL from which this file can be downloaded
+      required:
+      - name
+      - linkedResource
+  securitySchemes:
+    Key:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Bearer token. Create a key under Settings -> API access; it is a JWT. Example: `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.<payload>.<signature>`'
+  parameters:
+    page_number:
+      name: page_number
+      in: query
+      required: false
+      description: 1-based page index. Pages are disjoint. Every list response includes a total.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    page_size:
+      name: page_size
+      in: query
+      required: false
+      description: Rows per page. Defaults to 50. Values above 1000 are rejected with a 400.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 50
+    Authorization:
+      name: Authorization
+      in: header
+      required: true
+      schema:
+        type: string
+        example: bearer 412423kakkjdfkj134234asdasd
+      description: Your API key goes here
+x-provenance:
+  method: searched
+  source: https://api.doorloop.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://api.doorloop.com/reference/delete-account.md
+  - https://api.doorloop.com/reference/delete-communication.md
+  - https://api.doorloop.com/reference/delete-expense.md
+  - https://api.doorloop.com/reference/delete-file.md
+  - https://api.doorloop.com/reference/delete-lease-charge.md
+  - https://api.doorloop.com/reference/delete-lease-credits-leasecreditid.md
+  - https://api.doorloop.com/reference/delete-lease-payment.md
+  - https://api.doorloop.com/reference/delete-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/delete-note.md
+  - https://api.doorloop.com/reference/delete-owner.md
+  - https://api.doorloop.com/reference/delete-task.md
+  - https://api.doorloop.com/reference/delete-tenant.md
+  - https://api.doorloop.com/reference/delete-vendor-bill.md
+  - https://api.doorloop.com/reference/delete-vendor-credit.md
+  - https://api.doorloop.com/reference/delete-vendor.md
+  - https://api.doorloop.com/reference/download-file.md
+  - https://api.doorloop.com/reference/get-account.md
+  - https://api.doorloop.com/reference/get-accounts.md
+  - https://api.doorloop.com/reference/get-communication.md
+  - https://api.doorloop.com/reference/get-communications.md
+  - https://api.doorloop.com/reference/get-current-user.md
+  - https://api.doorloop.com/reference/get-expense.md
+  - https://api.doorloop.com/reference/get-expenses.md
+  - https://api.doorloop.com/reference/get-file.md
+  - https://api.doorloop.com/reference/get-files.md
+  - https://api.doorloop.com/reference/get-lease-charge.md
+  - https://api.doorloop.com/reference/get-lease-charges.md
+  - https://api.doorloop.com/reference/get-lease-credit.md
+  - https://api.doorloop.com/reference/get-lease-credits.md
+  - https://api.doorloop.com/reference/get-lease-payment.md
+  - https://api.doorloop.com/reference/get-lease-payments.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/get-lease-tenants.md
+  - https://api.doorloop.com/reference/get-lease.md
+  - https://api.doorloop.com/reference/get-leases.md
+  - https://api.doorloop.com/reference/get-note.md
+  - https://api.doorloop.com/reference/get-notes.md
+  - https://api.doorloop.com/reference/get-owner.md
+  - https://api.doorloop.com/reference/get-owners.md
+  - https://api.doorloop.com/reference/get-properties.md
+  - https://api.doorloop.com/reference/get-property-group.md
+  - https://api.doorloop.com/reference/get-property-groups.md
+  - https://api.doorloop.com/reference/get-property.md
+  - https://api.doorloop.com/reference/get-reports-balance-sheet.md
+  - https://api.doorloop.com/reference/get-reports-cash-flow-statement.md
+  - https://api.doorloop.com/reference/get-reports-profit-and-loss.md
+  - https://api.doorloop.com/reference/get-reports-rent-roll.md
+  - https://api.doorloop.com/reference/get-task.md
+  - https://api.doorloop.com/reference/get-tasks.md
+  - https://api.doorloop.com/reference/get-tenant.md
+  - https://api.doorloop.com/reference/get-tenants.md
+  - https://api.doorloop.com/reference/get-unit.md
+  - https://api.doorloop.com/reference/get-units.md
+  - https://api.doorloop.com/reference/get-user.md
+  - https://api.doorloop.com/reference/get-users.md
+  - https://api.doorloop.com/reference/get-vendor-bill.md
+  - https://api.doorloop.com/reference/get-vendor-bills.md
+  - https://api.doorloop.com/reference/get-vendor-credit.md
+  - https://api.doorloop.com/reference/get-vendor-credits.md
+  - https://api.doorloop.com/reference/get-vendor.md
+  - https://api.doorloop.com/reference/get-vendors.md
+  - https://api.doorloop.com/reference/post-account.md
+  - https://api.doorloop.com/reference/post-communication.md
+  - https://api.doorloop.com/reference/post-expense.md
+  - https://api.doorloop.com/reference/post-files.md
+  - https://api.doorloop.com/reference/post-lease-charge.md
+  - https://api.doorloop.com/reference/post-lease-credit.md
+  - https://api.doorloop.com/reference/post-lease-payment.md
+  - https://api.doorloop.com/reference/post-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/post-leases-full.md
+  - https://api.doorloop.com/reference/post-leases-move-in.md
+  - https://api.doorloop.com/reference/post-leases-move-out.md
+  - https://api.doorloop.com/reference/post-notes.md
+  - https://api.doorloop.com/reference/post-owner.md
+  - https://api.doorloop.com/reference/post-task-update.md
+  - https://api.doorloop.com/reference/post-task.md
+  - https://api.doorloop.com/reference/post-tenant.md
+  - https://api.doorloop.com/reference/post-vendor-bill.md
+  - https://api.doorloop.com/reference/post-vendor-credit.md
+  - https://api.doorloop.com/reference/post-vendor.md
+  - https://api.doorloop.com/reference/put-account.md
+  - https://api.doorloop.com/reference/put-communication.md
+  - https://api.doorloop.com/reference/put-expense.md
+  - https://api.doorloop.com/reference/put-file.md
+  - https://api.doorloop.com/reference/put-lease-charge.md
+  - https://api.doorloop.com/reference/put-lease-credit.md
+  - https://api.doorloop.com/reference/put-lease-payment.md
+  - https://api.doorloop.com/reference/put-note.md
+  - https://api.doorloop.com/reference/put-owner.md
+  - https://api.doorloop.com/reference/put-task.md
+  - https://api.doorloop.com/reference/put-tenant.md
+  - https://api.doorloop.com/reference/put-unit.md
+  - https://api.doorloop.com/reference/put-vendor-bill.md
+  - https://api.doorloop.com/reference/put-vendor-credit.md
+  - https://api.doorloop.com/reference/put-vendor.md
+  merge:
+    pages: 96
+    deduped: 446
+    conflicts_kept_first: 0

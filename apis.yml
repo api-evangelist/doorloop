@@ -1,12 +1,11 @@
 aid: doorloop
+
 name: DoorLoop
-description: >-
-  DoorLoop is property management software with a REST API for managing
-  properties, units, leases, rent collection, maintenance requests, accounting,
-  and tenant communication. The API provides two-way access to read and write
-  data across nearly every DoorLoop feature, with predictable resource-oriented
-  URLs, JSON-encoded request and response bodies, and standard HTTP response
-  codes. API access is included on the Premium plan.
+
+description: DoorLoop is property management software with a REST API for managing properties, units, leases, rent collection, maintenance requests,
+  accounting, and tenant communication. The API provides two-way access to read and write data across nearly every DoorLoop feature, with predictable
+  resource-oriented URLs, JSON-encoded request and response bodies, and standard HTTP response codes. API access is included on the Premium plan.
+
 deliveryModel:
   model: saas
   open_source: false
@@ -18,6 +17,7 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: paid
   onboarding: unknown
@@ -30,90 +30,164 @@ accessModel:
   - plans
   generated: '2026-07-22'
   method: derived
+
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/doorloop.png
-url: >-
-  https://raw.githubusercontent.com/api-evangelist/doorloop/refs/heads/main/apis.yml
-created: "2026-06-13"
-modified: "2026-06-13"
+
+url: https://raw.githubusercontent.com/api-evangelist/doorloop/refs/heads/main/apis.yml
+
+created: '2026-06-13'
+
+modified: '2026-06-13'
+
 specificationVersion: '0.23'
+
 x-docs-platform: readme
+
 x-docs-platform-confidence: high
+
 x-docs-platform-checked: 2026-09-25
+
 tags:
-  - Property Management
-  - Real Estate
-  - Leases
-  - Rent Collection
-  - Maintenance
-  - Accounting
-  - Tenant Communication
+- Property Management
+- Real Estate
+- Leases
+- Rent Collection
+- Maintenance
+- Accounting
+- Tenant Communication
+
 tags_raw:
+- Property Management
+- Real Estate
+- Leases
+- Rent Collection
+- Maintenance
+- Accounting
+- Tenant Communication
+- Real-Estate
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+
+common:
+- type: AgenticAccess
+  url: agentic-access/doorloop-agentic-access.yml
+- type: Spectral
+  url: rules/doorloop-rules.yml
+- type: JSONLD
+  url: json-ld/doorloop-context.jsonld
+- type: Vocabulary
+  url: vocabulary/doorloop-vocabulary.yml
+- type: DataModel
+  url: data-model/doorloop-data-model.yml
+- type: ErrorCatalog
+  url: errors/doorloop-problem-types.yml
+- type: Conformance
+  url: conformance/doorloop-conformance.yml
+- type: LLMsTxt
+  url: llms/doorloop-llms.txt
+- type: MCPServer
+  url: mcp/doorloop-mcp.yml
+- type: SecurityTxt
+  url: well-known/doorloop-status-security.txt
+- type: WellKnown
+  url: well-known/doorloop-well-known.yml
+- type: Hosts
+  url: hosts/doorloop-hosts.yml
+- type: IntegrationEdges
+  url: integrations/doorloop-integration-edges.yml
+- type: Vendors
+  url: vendors/doorloop-vendors.yml
+- type: SDKs
+  url: packages/doorloop-packages.yml
+- type: Packages
+  url: packages/doorloop-packages.yml
+- type: TermsOfService
+  url: https://www.doorloop.com/legal/terms
+- type: Support
+  url: https://support.doorloop.com/en/
+- type: Security
+  url: https://www.doorloop.com/security
+- type: PrivacyPolicy
+  url: https://www.doorloop.com/legal/privacy
+- type: Newsroom
+  url: https://www.doorloop.com/press
+- type: Login
+  url: https://www.doorloop.com/login
+- type: Authentication
+  url: authentication/doorloop-authentication.yml
+- type: VulnerabilityDisclosure
+  url: security/doorloop-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/doorloop-domain-security.yml
+- type: Website
+  url: https://www.doorloop.com
+- type: Documentation
+  url: https://api.doorloop.com/reference/introduction
+- type: GitHubOrg
+  url: https://github.com/mezbahalam/doorloop
+- type: LinkedIn
+  url: https://linkedin.com/company/doorloop/
+- type: Blog
+  url: https://www.doorloop.com/blogs/doorloop
+- type: Pricing
+  url: https://www.doorloop.com/pricing
+- type: StatusPage
+  url: https://status.doorloop.com
+- type: X
+  url: https://x.com/doorloopapp
+- type: Plans
+  url: plans/doorloop-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/doorloop-rate-limits.yml
+- type: FinOps
+  url: finops/doorloop-finops.yml
+
+apis:
+- aid: doorloop:doorloop-api
+  name: DoorLoop API
+  description: REST API for DoorLoop property management software. Provides access to properties, units, leases, tenants, rent collection, maintenance
+    requests, accounting, and tenant communication. Authenticated via API keys managed under Zapier & API Keys in company settings. Returns JSON-encoded
+    responses and supports OData queries for filtering and pagination.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
   - Property Management
   - Real Estate
   - Leases
-  - Rent Collection
-  - Maintenance
+  - Tenants
   - Accounting
-  - Tenant Communication
+  tags_raw:
+  - Property Management
+  - Real Estate
+  - Leases
+  - Tenants
+  - Accounting
   - Real-Estate
-apis:
-  - aid: doorloop:doorloop-api
-    name: DoorLoop API
-    description: >-
-      REST API for DoorLoop property management software. Provides access to
-      properties, units, leases, tenants, rent collection, maintenance requests,
-      accounting, and tenant communication. Authenticated via API keys managed
-      under Zapier & API Keys in company settings. Returns JSON-encoded
-      responses and supports OData queries for filtering and pagination.
-    image: >-
-      https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://api.doorloop.com/reference/introduction
-    baseURL: https://api.doorloop.com
-    tags:
-      - Property Management
-      - Real Estate
-      - Leases
-      - Tenants
-      - Accounting
-    tags_raw:
-      - Property Management
-      - Real Estate
-      - Leases
-      - Tenants
-      - Accounting
-      - Real-Estate
-    properties:
-      - type: Documentation
-        url: https://api.doorloop.com/reference/introduction
-      - type: Authentication
-        url: https://api.doorloop.com/reference/authentication
-common:
-  - type: VulnerabilityDisclosure
-    url: security/doorloop-vulnerability-disclosure.yml
-  - type: DomainSecurity
-    url: security/doorloop-domain-security.yml
-  - type: Website
-    url: https://www.doorloop.com
+  properties:
+  - url: openapi/doorloop-api-reference-openapi.yml
+    type: OpenAPI
   - type: Documentation
     url: https://api.doorloop.com/reference/introduction
-  - type: GitHubOrg
-    url: https://github.com/mezbahalam/doorloop
-  - type: LinkedIn
-    url: https://linkedin.com/company/doorloop/
-  - type: Blog
-    url: https://www.doorloop.com/blogs/doorloop
-  - type: Pricing
-    url: https://www.doorloop.com/pricing
-  - type: StatusPage
-    url: https://status.doorloop.com
-  - type: X
-    url: https://x.com/doorloopapp
-  - type: Plans
-    url: plans/doorloop-plans-pricing.yml
-  - type: RateLimits
-    url: rate-limits/doorloop-rate-limits.yml
-  - type: FinOps
-    url: finops/doorloop-finops.yml
-maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+
+x-readme-harvest:
+  date: '2026-10-14'
+  ops: 96
+  tool: harvest-readme-openapi.py
+  portal: https://api.doorloop.com

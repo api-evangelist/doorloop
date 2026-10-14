@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/doorloop/main/json-schema/doorloop-unit-schema.json",
+  "title": "unit",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/doorloop-api-reference-openapi.yml#/components/schemas/unit",
+  "x-stoplight": {
+    "id": "j9hclsxdesa9a"
+  },
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/mongoId"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "address": {
+      "$ref": "#/$defs/address"
+    },
+    "addressSameAsProperty": {
+      "type": "boolean",
+      "description": "If set to true, the address of this unit will be the same as the property it is linked to and the value in the \"address\" property will be ignored."
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "beds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "baths": {
+      "type": "number",
+      "minimum": 0,
+      "description": "The number of bathrooms. Fractions are allowed, for example 2.5."
+    },
+    "size": {
+      "type": "number",
+      "minimum": 0,
+      "description": "The size of the unit in square feet."
+    },
+    "marketRent": {
+      "type": "number",
+      "minimum": 0,
+      "description": "The internal market rent of the unit, used in reports such as the rent roll. The rent advertised in a listing is listing.rent."
+    },
+    "property": {
+      "$ref": "#/$defs/mongoId"
+    },
+    "pictures": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/picture"
+      }
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "listing": {
+      "type": "object",
+      "description": "The advertised listing of the unit: whether it is published to listing partners or the company site, with the advertised rent, deposit, date available and contact. It is separate from rentalApplicationListing, which controls whether the unit accepts rental applications.",
+      "properties": {
+        "activeListing": {
+          "type": "boolean"
+        },
+        "dateAvailable": {
+          "type": "string",
+          "pattern": "YYYY-MM-DD"
+        },
+        "rent": {
+          "type": "number"
+        },
+        "deposit": {
+          "type": "number"
+        },
+        "contact": {
+          "type": "string",
+          "description": "Reference to the User Id who is the listing contact person. The user's contact information (Phone number, Email address) will be posted"
+        },
+        "leaseLength": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "companySiteListingOnly": {
+          "type": "boolean",
+          "description": "When true the Unit is published only to your company site and not to the syndicated listing partners. It still counts as listed, so it keeps rental applications open."
+        }
+      }
+    },
+    "rentalApplicationListing": {
+      "type": "object",
+      "description": "Controls whether the Unit accepts rental applications. Forced active while \"listing.activeListing\" or \"listing.companySiteListingOnly\" is true.",
+      "properties": {
+        "activeListing": {
+          "type": "boolean"
+        },
+        "dateAvailable": {
+          "type": "string",
+          "pattern": "YYYY-MM-DD"
+        },
+        "rent": {
+          "type": "number"
+        }
+      }
+    },
+    "amenities": {
+      "type": "array",
+      "description": "Please refer to the MITS standard for a list of possible values",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "property"
+  ],
+  "$defs": {
+    "address": {
+      "title": "address",
+      "x-stoplight": {
+        "id": "a6vhbqoeituyk"
+      },
+      "type": "object",
+      "description": "",
+      "properties": {
+        "street1": {
+          "type": "string"
+        },
+        "street2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "zip": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "string"
+        },
+        "lng": {
+          "type": "string"
+        }
+      }
+    },
+    "mongoId": {
+      "type": "string",
+      "title": "mongoId",
+      "x-stoplight": {
+        "id": "40j7qlmpihfdj"
+      },
+      "pattern": "/^[a-f\\d]{24}$/i"
+    },
+    "picture": {
+      "title": "picture",
+      "x-stoplight": {
+        "id": "pep1xv4l41v6m"
+      },
+      "type": "object",
+      "properties": {
+        "rank": {
+          "type": "integer",
+          "description": "Represents the index of this picture in ascending order"
+        },
+        "url": {
+          "type": "string",
+          "description": "The URL of the picture"
+        }
+      }
+    }
+  }
+}
