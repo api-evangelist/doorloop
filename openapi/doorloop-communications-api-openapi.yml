@@ -1,0 +1,410 @@
+openapi: 3.2.0
+info:
+  title: DoorLoop API Reference Communications API
+  version: '1.0'
+  summary: This is the DoorLoop API
+  description: It does some pretty cool stuff and gives you complete access to DoorLoop's data
+  license:
+    name: Terms and Conditions
+    url: https://www.doorloop.com/legal/terms
+  contact:
+    name: DoorLoop Inc.
+    url: www.doorloop.com
+    email: support@doorloop.com
+  termsOfService: https://www.doorloop.com/legal/terms
+servers:
+- url: https://app.doorloop.com/api
+  description: Production
+tags:
+- name: Communications
+paths:
+  /communications:
+    get:
+      summary: List all Communication Logs
+      tags:
+      - Communications
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/communication'
+      operationId: get-communications
+      description: Lists all Communication Log Entries
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_sentAt_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_sentAt_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+          enum:
+          - TENANT
+          - OWNER
+          - VENDOR
+          - USER
+          - SYSTEM
+        in: query
+        name: filter_participantLinkedToType
+      - schema:
+          type: string
+        in: query
+        name: filter_participantLinkedToId
+      - schema:
+          type: string
+        in: query
+        name: filter_threadId
+      - schema:
+          type: string
+          enum:
+          - DRAFT
+          - FAILED
+          - BOUNCED
+          - COMPLAINT
+          - SENT
+          - DELIVERED
+          - OPENED
+          - CLICKED
+        in: query
+        name: filter_status
+      - schema:
+          type: string
+          enum:
+          - EMAIL
+          - PHONE
+          - TEXT
+        in: query
+        name: filter_type
+    post:
+      summary: Create a Communication Log
+      operationId: post-communication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communication'
+        '400':
+          description: Bad Request
+      description: Creates a Communication Log Entry
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/communication'
+      tags:
+      - Communications
+  /communications/{communicationId}:
+    parameters:
+    - schema:
+        type: string
+      name: communicationId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Communication
+      tags:
+      - Communications
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communication'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-communication
+      description: Retrieves a Communication Log Entry
+      security:
+      - Key: []
+    put:
+      summary: Update a Communication
+      operationId: put-communication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communication'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Communications
+      description: Updates a Communication Log Entry
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/communication'
+    delete:
+      summary: Delete a Communication
+      operationId: delete-communication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communication'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Communications
+      description: Deletes a Communication Log Entry
+      security:
+      - Key: []
+components:
+  schemas:
+    communicationParticipant:
+      title: communicationParticipant
+      x-stoplight:
+        id: r0qslo7h1ax6g
+      type: object
+      properties:
+        displayName:
+          type: string
+        address:
+          type: string
+        linkedToType:
+          type: string
+          enum:
+          - USER
+          - TENANT
+          - OWNER
+          - VENDOR
+          - SYSTEM
+        linkedToId:
+          $ref: '#/components/schemas/mongoId'
+      required:
+      - address
+      - linkedToType
+      - linkedToId
+    mongoId:
+      type: string
+      title: mongoId
+      x-stoplight:
+        id: 40j7qlmpihfdj
+      pattern: /^[a-f\d]{24}$/i
+      examples:
+      - 507f191e810c19729de860ea
+      example: 00000020f51bb4362eee2a4d
+    communication:
+      title: communication
+      x-stoplight:
+        id: uzdwlgssgn5lz
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        subject:
+          type: string
+          maxLength: 255
+        bodyHtml:
+          type: string
+          description: For performance reasons, bodyHtml will only be returned when retrieving a single communication
+        bodyPreview:
+          type: string
+          maxLength: 255
+        from:
+          $ref: '#/components/schemas/communicationParticipant'
+        to:
+          type: array
+          items:
+            $ref: '#/components/schemas/communicationParticipant'
+        cc:
+          type: array
+          items:
+            $ref: '#/components/schemas/communicationParticipant'
+        bcc:
+          type: array
+          items:
+            $ref: '#/components/schemas/communicationParticipant'
+        sentAt:
+          type: number
+        type:
+          type: string
+          enum:
+          - EMAIL
+          - PHONE
+          - TEXT
+        threadId:
+          type: string
+          maxLength: 255
+        externalId:
+          type: string
+          maxLength: 255
+        openedAt:
+          type: array
+          items:
+            type: number
+        clickedAt:
+          type: array
+          items:
+            type: number
+        bouncedAt:
+          type: array
+          items:
+            type: number
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - FAILED
+          - BOUNCED
+          - COMPLAINT
+          - SENT
+          - DELIVERED
+          - OPENED
+          - CLICKED
+        announcement:
+          $ref: '#/components/schemas/mongoId'
+      required:
+      - subject
+      - from
+      - sentAt
+      - type
+      - status
+  securitySchemes:
+    Key:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Bearer token. Create a key under Settings -> API access; it is a JWT. Example: `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.<payload>.<signature>`'
+x-stoplight:
+  id: cz75kvx8cjg25
+x-provenance:
+  method: searched
+  source: https://api.doorloop.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://api.doorloop.com/reference/delete-account.md
+  - https://api.doorloop.com/reference/delete-communication.md
+  - https://api.doorloop.com/reference/delete-expense.md
+  - https://api.doorloop.com/reference/delete-file.md
+  - https://api.doorloop.com/reference/delete-lease-charge.md
+  - https://api.doorloop.com/reference/delete-lease-credits-leasecreditid.md
+  - https://api.doorloop.com/reference/delete-lease-payment.md
+  - https://api.doorloop.com/reference/delete-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/delete-note.md
+  - https://api.doorloop.com/reference/delete-owner.md
+  - https://api.doorloop.com/reference/delete-task.md
+  - https://api.doorloop.com/reference/delete-tenant.md
+  - https://api.doorloop.com/reference/delete-vendor-bill.md
+  - https://api.doorloop.com/reference/delete-vendor-credit.md
+  - https://api.doorloop.com/reference/delete-vendor.md
+  - https://api.doorloop.com/reference/download-file.md
+  - https://api.doorloop.com/reference/get-account.md
+  - https://api.doorloop.com/reference/get-accounts.md
+  - https://api.doorloop.com/reference/get-communication.md
+  - https://api.doorloop.com/reference/get-communications.md
+  - https://api.doorloop.com/reference/get-current-user.md
+  - https://api.doorloop.com/reference/get-expense.md
+  - https://api.doorloop.com/reference/get-expenses.md
+  - https://api.doorloop.com/reference/get-file.md
+  - https://api.doorloop.com/reference/get-files.md
+  - https://api.doorloop.com/reference/get-lease-charge.md
+  - https://api.doorloop.com/reference/get-lease-charges.md
+  - https://api.doorloop.com/reference/get-lease-credit.md
+  - https://api.doorloop.com/reference/get-lease-credits.md
+  - https://api.doorloop.com/reference/get-lease-payment.md
+  - https://api.doorloop.com/reference/get-lease-payments.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/get-lease-tenants.md
+  - https://api.doorloop.com/reference/get-lease.md
+  - https://api.doorloop.com/reference/get-leases.md
+  - https://api.doorloop.com/reference/get-note.md
+  - https://api.doorloop.com/reference/get-notes.md
+  - https://api.doorloop.com/reference/get-owner.md
+  - https://api.doorloop.com/reference/get-owners.md
+  - https://api.doorloop.com/reference/get-properties.md
+  - https://api.doorloop.com/reference/get-property-group.md
+  - https://api.doorloop.com/reference/get-property-groups.md
+  - https://api.doorloop.com/reference/get-property.md
+  - https://api.doorloop.com/reference/get-reports-balance-sheet.md
+  - https://api.doorloop.com/reference/get-reports-cash-flow-statement.md
+  - https://api.doorloop.com/reference/get-reports-profit-and-loss.md
+  - https://api.doorloop.com/reference/get-reports-rent-roll.md
+  - https://api.doorloop.com/reference/get-task.md
+  - https://api.doorloop.com/reference/get-tasks.md
+  - https://api.doorloop.com/reference/get-tenant.md
+  - https://api.doorloop.com/reference/get-tenants.md
+  - https://api.doorloop.com/reference/get-unit.md
+  - https://api.doorloop.com/reference/get-units.md
+  - https://api.doorloop.com/reference/get-user.md
+  - https://api.doorloop.com/reference/get-users.md
+  - https://api.doorloop.com/reference/get-vendor-bill.md
+  - https://api.doorloop.com/reference/get-vendor-bills.md
+  - https://api.doorloop.com/reference/get-vendor-credit.md
+  - https://api.doorloop.com/reference/get-vendor-credits.md
+  - https://api.doorloop.com/reference/get-vendor.md
+  - https://api.doorloop.com/reference/get-vendors.md
+  - https://api.doorloop.com/reference/post-account.md
+  - https://api.doorloop.com/reference/post-communication.md
+  - https://api.doorloop.com/reference/post-expense.md
+  - https://api.doorloop.com/reference/post-files.md
+  - https://api.doorloop.com/reference/post-lease-charge.md
+  - https://api.doorloop.com/reference/post-lease-credit.md
+  - https://api.doorloop.com/reference/post-lease-payment.md
+  - https://api.doorloop.com/reference/post-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/post-leases-full.md
+  - https://api.doorloop.com/reference/post-leases-move-in.md
+  - https://api.doorloop.com/reference/post-leases-move-out.md
+  - https://api.doorloop.com/reference/post-notes.md
+  - https://api.doorloop.com/reference/post-owner.md
+  - https://api.doorloop.com/reference/post-task-update.md
+  - https://api.doorloop.com/reference/post-task.md
+  - https://api.doorloop.com/reference/post-tenant.md
+  - https://api.doorloop.com/reference/post-vendor-bill.md
+  - https://api.doorloop.com/reference/post-vendor-credit.md
+  - https://api.doorloop.com/reference/post-vendor.md
+  - https://api.doorloop.com/reference/put-account.md
+  - https://api.doorloop.com/reference/put-communication.md
+  - https://api.doorloop.com/reference/put-expense.md
+  - https://api.doorloop.com/reference/put-file.md
+  - https://api.doorloop.com/reference/put-lease-charge.md
+  - https://api.doorloop.com/reference/put-lease-credit.md
+  - https://api.doorloop.com/reference/put-lease-payment.md
+  - https://api.doorloop.com/reference/put-note.md
+  - https://api.doorloop.com/reference/put-owner.md
+  - https://api.doorloop.com/reference/put-task.md
+  - https://api.doorloop.com/reference/put-tenant.md
+  - https://api.doorloop.com/reference/put-unit.md
+  - https://api.doorloop.com/reference/put-vendor-bill.md
+  - https://api.doorloop.com/reference/put-vendor-credit.md
+  - https://api.doorloop.com/reference/put-vendor.md
+  merge:
+    pages: 96
+    deduped: 446
+    conflicts_kept_first: 0

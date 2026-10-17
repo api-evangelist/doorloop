@@ -145,30 +145,16 @@ common:
   url: finops/doorloop-finops.yml
 
 apis:
-- aid: doorloop:doorloop-api
-  name: DoorLoop API
-  description: REST API for DoorLoop property management software. Provides access to properties, units, leases, tenants, rent collection, maintenance
-    requests, accounting, and tenant communication. Authenticated via API keys managed under Zapier & API Keys in company settings. Returns JSON-encoded
-    responses and supports OData queries for filtering and pagination.
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+- aid: doorloop:doorloop-accounts-api
+  name: DoorLoop Accounts API
+  description: The Accounts API from DoorLoop — 2 operation(s) for accounts.
   humanURL: https://api.doorloop.com/reference/introduction
   baseURL: https://api.doorloop.com
   tags:
-  - Property Management
-  - Real Estate
-  - Leases
-  - Tenants
-  - Accounting
-  tags_raw:
-  - Property Management
-  - Real Estate
-  - Leases
-  - Tenants
-  - Accounting
-  - Real-Estate
+  - Accounts
   properties:
-  - url: openapi/doorloop-api-reference-openapi.yml
-    type: OpenAPI
+  - type: OpenAPI
+    url: openapi/doorloop-accounts-api-openapi.yml
   - type: Documentation
     url: https://api.doorloop.com/reference/introduction
   - type: Authentication
@@ -185,7 +171,527 @@ apis:
     url: json-schema/doorloop-property-schema.json
   - type: JSONSchema
     url: json-schema/doorloop-full-lease-create-request-schema.json
-
+- aid: doorloop:doorloop-communications-api
+  name: DoorLoop Communications API
+  description: The Communications API from DoorLoop — 2 operation(s) for communications.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Communications
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-communications-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-expenses-api
+  name: DoorLoop Expenses API
+  description: The Expenses API from DoorLoop — 2 operation(s) for expenses.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Expenses
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-expenses-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-files-api
+  name: DoorLoop Files API
+  description: The Files API from DoorLoop — 3 operation(s) for files.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Files
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-files-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-lease-charges-api
+  name: DoorLoop Lease Charges API
+  description: The Lease Charges API from DoorLoop — 2 operation(s) for lease charges.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Lease Charges
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-lease-charges-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-lease-credits-api
+  name: DoorLoop Lease Credits API
+  description: The Lease Credits API from DoorLoop — 2 operation(s) for lease credits.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Lease Credits
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-lease-credits-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-lease-payments-api
+  name: DoorLoop Lease Payments API
+  description: The Lease Payments API from DoorLoop — 2 operation(s) for lease payments.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Lease Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-lease-payments-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-lease-returned-payments-api
+  name: DoorLoop Lease Returned Payments API
+  description: >-
+    The Lease Returned Payments API from DoorLoop — 2 operation(s) for lease returned payments.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Lease Returned Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-lease-returned-payments-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-leases-api
+  name: DoorLoop Leases API
+  description: The Leases API from DoorLoop — 6 operation(s) for leases.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Leases
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-leases-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-notes-api
+  name: DoorLoop Notes API
+  description: The Notes API from DoorLoop — 2 operation(s) for notes.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Notes
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-notes-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-owners-api
+  name: DoorLoop Owners API
+  description: The Owners API from DoorLoop — 2 operation(s) for owners.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Owners
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-owners-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-portfolios-api
+  name: DoorLoop Portfolios API
+  description: The Portfolios API from DoorLoop — 2 operation(s) for portfolios.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Portfolios
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-portfolios-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-properties-api
+  name: DoorLoop Properties API
+  description: The Properties API from DoorLoop — 2 operation(s) for properties.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Properties
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-properties-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-reports-api
+  name: DoorLoop Reports API
+  description: The Reports API from DoorLoop — 4 operation(s) for reports.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-reports-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-tasks-api
+  name: DoorLoop Tasks API
+  description: The Tasks API from DoorLoop — 3 operation(s) for tasks.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-tasks-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-tenants-api
+  name: DoorLoop Tenants API
+  description: The Tenants API from DoorLoop — 2 operation(s) for tenants.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Tenants
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-tenants-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-units-api
+  name: DoorLoop Units API
+  description: The Units API from DoorLoop — 2 operation(s) for units.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Units
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-units-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-users-api
+  name: DoorLoop Users API
+  description: The Users API from DoorLoop — 3 operation(s) for users.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-users-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-vendor-bills-api
+  name: DoorLoop Vendor Bills API
+  description: The Vendor Bills API from DoorLoop — 2 operation(s) for vendor bills.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Vendor Bills
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-vendor-bills-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-vendor-credits-api
+  name: DoorLoop Vendor Credits API
+  description: The Vendor Credits API from DoorLoop — 2 operation(s) for vendor credits.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Vendor Credits
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-vendor-credits-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
+- aid: doorloop:doorloop-vendors-api
+  name: DoorLoop Vendors API
+  description: The Vendors API from DoorLoop — 2 operation(s) for vendors.
+  humanURL: https://api.doorloop.com/reference/introduction
+  baseURL: https://api.doorloop.com
+  tags:
+  - Vendors
+  properties:
+  - type: OpenAPI
+    url: openapi/doorloop-vendors-api-openapi.yml
+  - type: Documentation
+    url: https://api.doorloop.com/reference/introduction
+  - type: Authentication
+    url: https://api.doorloop.com/reference/authentication
+  - type: JSONSchema
+    url: json-schema/doorloop-tenant-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-lease-payment-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-unit-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-task-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-property-schema.json
+  - type: JSONSchema
+    url: json-schema/doorloop-full-lease-create-request-schema.json
 x-readme-harvest:
   date: '2026-10-14'
   ops: 96

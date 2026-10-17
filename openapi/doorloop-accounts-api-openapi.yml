@@ -1,0 +1,419 @@
+openapi: 3.2.0
+info:
+  title: DoorLoop API Reference Accounts API
+  version: '1.0'
+  summary: This is the DoorLoop API
+  description: It does some pretty cool stuff and gives you complete access to DoorLoop's data
+  license:
+    name: Terms and Conditions
+    url: https://www.doorloop.com/legal/terms
+  contact:
+    name: DoorLoop Inc.
+    url: www.doorloop.com
+    email: support@doorloop.com
+  termsOfService: https://www.doorloop.com/legal/terms
+servers:
+- url: https://app.doorloop.com/api
+  description: Production
+tags:
+- name: Accounts
+paths:
+  /accounts:
+    parameters: []
+    get:
+      summary: List all Accounts
+      tags:
+      - Accounts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/account'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-accounts
+      description: Retrieves the chart of accounts
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - ASSET_ACCOUNTS_RECEIVABLE
+          - ASSET_OTHER_CURRENT_ASSETS
+          - ASSET_BANK
+          - ASSET_FIXED_ASSETS
+          - ASSET_OTHER_ASSETS
+          - LIABILITY_ACCOUNTS_PAYABLE
+          - LIABILITY_CREDIT_CARD
+          - LIABILITY_OTHER_CURRENT_LIABILIY
+          - LIABILITY_LONG_TERM_LIABILITY
+          - EQUITY_EQUITY
+          - REVENUE_INCOME
+          - REVENUE_OTHER_INCOME
+          - EXPENSE_EXPENSE
+          - EXPENSE_OTHER_EXPENSE
+          - EXPENSE_COGS
+        in: query
+        name: filter_type
+        description: Filter by account type
+      - schema:
+          type: string
+          enum:
+          - ACCOUNTS_RECEIVABLE
+          - ACCOUNTS_PAYABLE
+          - UNAPPLIED_LEASE_PAYMENTS_INCOME
+          - UNDEPOSITED_FUNDS
+          - LATE_FEES
+          - MANAGEMENT_FEES
+          - RENTAL_INCOME
+          - SECURITY_DEPOSIT
+          - APPLICATION_FEE
+          - OPERATING_ACCOUNT
+          - TRUST_ACCOUNT
+          - OWNER_CONTRIBUTION
+          - OWNER_DISTRIBUTION
+          - OPENING_BALANCE
+          - CONVENIENCE_FEE
+          - CLEARING_ACCOUNT
+          - EQUITY_RETAINED_EARNINGS
+        in: query
+        name: filter_DefaultAccountFor
+        description: Returns the account this company has designated for a given purpose. The chart of accounts is per-company, so account ids differ between companies - resolve these once per company and cache the ids rather than matching on account names.
+      - schema:
+          type: boolean
+        in: query
+        name: filter_leaseChargeItem
+        description: Return only lease charge items - the catalog of things a tenant can be charged for
+      - schema:
+          type: string
+        in: query
+        name: filter_parentAccount
+        description: Return only the direct children of this account
+      - schema:
+          type: string
+        in: query
+        name: filter_ancestorAccount
+        description: Return every account beneath this one at any depth. Use this to resolve a charge to its top-level category when a company files charges under sub-accounts - sub-accounts do not carry a filter_DefaultAccountFor value, only the top-level anchor does.
+      - $ref: '#/components/parameters/page_number'
+      - $ref: '#/components/parameters/page_size'
+      security:
+      - Key: []
+    post:
+      summary: Create an Account
+      operationId: post-account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Accounts
+      description: Creates an Account
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/account'
+  /accounts/{accountId}:
+    parameters:
+    - schema:
+        type: string
+        example: 00000020f51bb4362eee2a4d
+      name: accountId
+      in: path
+      required: true
+      description: The account Id
+    get:
+      summary: Retrieve an Account
+      tags:
+      - Accounts
+      responses:
+        '200':
+          description: Accounts Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/account'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-account
+      description: Retreives an account from the Chart of Accounts
+      parameters: []
+      security:
+      - Key: []
+    put:
+      summary: Update an Account
+      operationId: put-account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Accounts
+      description: Updates an Account
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/account'
+    delete:
+      summary: Delete an Account
+      operationId: delete-account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Deletes an Account
+      security:
+      - Key: []
+      tags:
+      - Accounts
+components:
+  schemas:
+    account:
+      title: Account
+      x-stoplight:
+        id: ivofyr6xu6xk4
+      type: object
+      examples:
+      - id: string
+        name: string
+        active: true
+        type: ASSET_ACCOUNTS_RECEIVABLE
+        description: string
+      description: Represents an account from the Chart of Accounts
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          maxLength: 1000
+        active:
+          type: boolean
+        type:
+          type: string
+          enum:
+          - ASSET_ACCOUNTS_RECEIVABLE
+          - ASSET_OTHER_CURRENT_ASSETS
+          - ASSET_BANK
+          - ASSET_FIXED_ASSETS
+          - ASSET_OTHER_ASSETS
+          - LIABILITY_ACCOUNTS_PAYABLE
+          - LIABILITY_CREDIT_CARD
+          - LIABILITY_OTHER_CURRENT_LIABILIY
+          - LIABILITY_LONG_TERM_LIABILITY
+          - EQUITY_EQUITY
+          - REVENUE_INCOME
+          - REVENUE_OTHER_INCOME
+          - EXPENSE_EXPENSE
+          - EXPENSE_OTHER_EXPENSE
+          - EXPENSE_COGS
+        description:
+          type: string
+      required:
+      - name
+      - active
+      - type
+    mongoId:
+      type: string
+      title: mongoId
+      x-stoplight:
+        id: 40j7qlmpihfdj
+      pattern: /^[a-f\d]{24}$/i
+      examples:
+      - 507f191e810c19729de860ea
+      example: 00000020f51bb4362eee2a4d
+  parameters:
+    page_number:
+      name: page_number
+      in: query
+      required: false
+      description: 1-based page index. Pages are disjoint. Every list response includes a total.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    page_size:
+      name: page_size
+      in: query
+      required: false
+      description: Rows per page. Defaults to 50. Values above 1000 are rejected with a 400.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 50
+  securitySchemes:
+    Key:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Bearer token. Create a key under Settings -> API access; it is a JWT. Example: `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.<payload>.<signature>`'
+x-stoplight:
+  id: cz75kvx8cjg25
+x-provenance:
+  method: searched
+  source: https://api.doorloop.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://api.doorloop.com/reference/delete-account.md
+  - https://api.doorloop.com/reference/delete-communication.md
+  - https://api.doorloop.com/reference/delete-expense.md
+  - https://api.doorloop.com/reference/delete-file.md
+  - https://api.doorloop.com/reference/delete-lease-charge.md
+  - https://api.doorloop.com/reference/delete-lease-credits-leasecreditid.md
+  - https://api.doorloop.com/reference/delete-lease-payment.md
+  - https://api.doorloop.com/reference/delete-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/delete-note.md
+  - https://api.doorloop.com/reference/delete-owner.md
+  - https://api.doorloop.com/reference/delete-task.md
+  - https://api.doorloop.com/reference/delete-tenant.md
+  - https://api.doorloop.com/reference/delete-vendor-bill.md
+  - https://api.doorloop.com/reference/delete-vendor-credit.md
+  - https://api.doorloop.com/reference/delete-vendor.md
+  - https://api.doorloop.com/reference/download-file.md
+  - https://api.doorloop.com/reference/get-account.md
+  - https://api.doorloop.com/reference/get-accounts.md
+  - https://api.doorloop.com/reference/get-communication.md
+  - https://api.doorloop.com/reference/get-communications.md
+  - https://api.doorloop.com/reference/get-current-user.md
+  - https://api.doorloop.com/reference/get-expense.md
+  - https://api.doorloop.com/reference/get-expenses.md
+  - https://api.doorloop.com/reference/get-file.md
+  - https://api.doorloop.com/reference/get-files.md
+  - https://api.doorloop.com/reference/get-lease-charge.md
+  - https://api.doorloop.com/reference/get-lease-charges.md
+  - https://api.doorloop.com/reference/get-lease-credit.md
+  - https://api.doorloop.com/reference/get-lease-credits.md
+  - https://api.doorloop.com/reference/get-lease-payment.md
+  - https://api.doorloop.com/reference/get-lease-payments.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/get-lease-tenants.md
+  - https://api.doorloop.com/reference/get-lease.md
+  - https://api.doorloop.com/reference/get-leases.md
+  - https://api.doorloop.com/reference/get-note.md
+  - https://api.doorloop.com/reference/get-notes.md
+  - https://api.doorloop.com/reference/get-owner.md
+  - https://api.doorloop.com/reference/get-owners.md
+  - https://api.doorloop.com/reference/get-properties.md
+  - https://api.doorloop.com/reference/get-property-group.md
+  - https://api.doorloop.com/reference/get-property-groups.md
+  - https://api.doorloop.com/reference/get-property.md
+  - https://api.doorloop.com/reference/get-reports-balance-sheet.md
+  - https://api.doorloop.com/reference/get-reports-cash-flow-statement.md
+  - https://api.doorloop.com/reference/get-reports-profit-and-loss.md
+  - https://api.doorloop.com/reference/get-reports-rent-roll.md
+  - https://api.doorloop.com/reference/get-task.md
+  - https://api.doorloop.com/reference/get-tasks.md
+  - https://api.doorloop.com/reference/get-tenant.md
+  - https://api.doorloop.com/reference/get-tenants.md
+  - https://api.doorloop.com/reference/get-unit.md
+  - https://api.doorloop.com/reference/get-units.md
+  - https://api.doorloop.com/reference/get-user.md
+  - https://api.doorloop.com/reference/get-users.md
+  - https://api.doorloop.com/reference/get-vendor-bill.md
+  - https://api.doorloop.com/reference/get-vendor-bills.md
+  - https://api.doorloop.com/reference/get-vendor-credit.md
+  - https://api.doorloop.com/reference/get-vendor-credits.md
+  - https://api.doorloop.com/reference/get-vendor.md
+  - https://api.doorloop.com/reference/get-vendors.md
+  - https://api.doorloop.com/reference/post-account.md
+  - https://api.doorloop.com/reference/post-communication.md
+  - https://api.doorloop.com/reference/post-expense.md
+  - https://api.doorloop.com/reference/post-files.md
+  - https://api.doorloop.com/reference/post-lease-charge.md
+  - https://api.doorloop.com/reference/post-lease-credit.md
+  - https://api.doorloop.com/reference/post-lease-payment.md
+  - https://api.doorloop.com/reference/post-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/post-leases-full.md
+  - https://api.doorloop.com/reference/post-leases-move-in.md
+  - https://api.doorloop.com/reference/post-leases-move-out.md
+  - https://api.doorloop.com/reference/post-notes.md
+  - https://api.doorloop.com/reference/post-owner.md
+  - https://api.doorloop.com/reference/post-task-update.md
+  - https://api.doorloop.com/reference/post-task.md
+  - https://api.doorloop.com/reference/post-tenant.md
+  - https://api.doorloop.com/reference/post-vendor-bill.md
+  - https://api.doorloop.com/reference/post-vendor-credit.md
+  - https://api.doorloop.com/reference/post-vendor.md
+  - https://api.doorloop.com/reference/put-account.md
+  - https://api.doorloop.com/reference/put-communication.md
+  - https://api.doorloop.com/reference/put-expense.md
+  - https://api.doorloop.com/reference/put-file.md
+  - https://api.doorloop.com/reference/put-lease-charge.md
+  - https://api.doorloop.com/reference/put-lease-credit.md
+  - https://api.doorloop.com/reference/put-lease-payment.md
+  - https://api.doorloop.com/reference/put-note.md
+  - https://api.doorloop.com/reference/put-owner.md
+  - https://api.doorloop.com/reference/put-task.md
+  - https://api.doorloop.com/reference/put-tenant.md
+  - https://api.doorloop.com/reference/put-unit.md
+  - https://api.doorloop.com/reference/put-vendor-bill.md
+  - https://api.doorloop.com/reference/put-vendor-credit.md
+  - https://api.doorloop.com/reference/put-vendor.md
+  merge:
+    pages: 96
+    deduped: 446
+    conflicts_kept_first: 0

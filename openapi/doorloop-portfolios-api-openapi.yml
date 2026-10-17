@@ -1,0 +1,203 @@
+openapi: 3.2.0
+info:
+  title: DoorLoop API Reference Portfolios API
+  version: '1.0'
+  summary: This is the DoorLoop API
+  description: It does some pretty cool stuff and gives you complete access to DoorLoop's data
+  license:
+    name: Terms and Conditions
+    url: https://www.doorloop.com/legal/terms
+  contact:
+    name: DoorLoop Inc.
+    url: www.doorloop.com
+    email: support@doorloop.com
+  termsOfService: https://www.doorloop.com/legal/terms
+servers:
+- url: https://app.doorloop.com/api
+  description: Production
+tags:
+- name: Portfolios
+paths:
+  /property-groups:
+    get:
+      summary: List all Portfolios
+      tags:
+      - Portfolios
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/propertyGroup'
+      operationId: get-property-groups
+      security:
+      - Key: []
+      description: Lists all Portfolios
+  /property-groups/{portfolioId}:
+    parameters:
+    - schema:
+        type: string
+      name: portfolioId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Portfolio
+      tags:
+      - Portfolios
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/propertyGroup'
+      operationId: get-property-group
+      security:
+      - Key: []
+      description: Retreieves a Portfolio
+components:
+  schemas:
+    propertyGroup:
+      title: ''
+      x-stoplight:
+        id: pmuqa1tixt7kj
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        properties:
+          type: array
+          description: An array of Property Ids for properties in this portfolio.
+          items:
+            type: string
+      required:
+      - name
+      - properties
+  securitySchemes:
+    Key:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Bearer token. Create a key under Settings -> API access; it is a JWT. Example: `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.<payload>.<signature>`'
+x-stoplight:
+  id: cz75kvx8cjg25
+x-provenance:
+  method: searched
+  source: https://api.doorloop.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://api.doorloop.com/reference/delete-account.md
+  - https://api.doorloop.com/reference/delete-communication.md
+  - https://api.doorloop.com/reference/delete-expense.md
+  - https://api.doorloop.com/reference/delete-file.md
+  - https://api.doorloop.com/reference/delete-lease-charge.md
+  - https://api.doorloop.com/reference/delete-lease-credits-leasecreditid.md
+  - https://api.doorloop.com/reference/delete-lease-payment.md
+  - https://api.doorloop.com/reference/delete-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/delete-note.md
+  - https://api.doorloop.com/reference/delete-owner.md
+  - https://api.doorloop.com/reference/delete-task.md
+  - https://api.doorloop.com/reference/delete-tenant.md
+  - https://api.doorloop.com/reference/delete-vendor-bill.md
+  - https://api.doorloop.com/reference/delete-vendor-credit.md
+  - https://api.doorloop.com/reference/delete-vendor.md
+  - https://api.doorloop.com/reference/download-file.md
+  - https://api.doorloop.com/reference/get-account.md
+  - https://api.doorloop.com/reference/get-accounts.md
+  - https://api.doorloop.com/reference/get-communication.md
+  - https://api.doorloop.com/reference/get-communications.md
+  - https://api.doorloop.com/reference/get-current-user.md
+  - https://api.doorloop.com/reference/get-expense.md
+  - https://api.doorloop.com/reference/get-expenses.md
+  - https://api.doorloop.com/reference/get-file.md
+  - https://api.doorloop.com/reference/get-files.md
+  - https://api.doorloop.com/reference/get-lease-charge.md
+  - https://api.doorloop.com/reference/get-lease-charges.md
+  - https://api.doorloop.com/reference/get-lease-credit.md
+  - https://api.doorloop.com/reference/get-lease-credits.md
+  - https://api.doorloop.com/reference/get-lease-payment.md
+  - https://api.doorloop.com/reference/get-lease-payments.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/get-lease-tenants.md
+  - https://api.doorloop.com/reference/get-lease.md
+  - https://api.doorloop.com/reference/get-leases.md
+  - https://api.doorloop.com/reference/get-note.md
+  - https://api.doorloop.com/reference/get-notes.md
+  - https://api.doorloop.com/reference/get-owner.md
+  - https://api.doorloop.com/reference/get-owners.md
+  - https://api.doorloop.com/reference/get-properties.md
+  - https://api.doorloop.com/reference/get-property-group.md
+  - https://api.doorloop.com/reference/get-property-groups.md
+  - https://api.doorloop.com/reference/get-property.md
+  - https://api.doorloop.com/reference/get-reports-balance-sheet.md
+  - https://api.doorloop.com/reference/get-reports-cash-flow-statement.md
+  - https://api.doorloop.com/reference/get-reports-profit-and-loss.md
+  - https://api.doorloop.com/reference/get-reports-rent-roll.md
+  - https://api.doorloop.com/reference/get-task.md
+  - https://api.doorloop.com/reference/get-tasks.md
+  - https://api.doorloop.com/reference/get-tenant.md
+  - https://api.doorloop.com/reference/get-tenants.md
+  - https://api.doorloop.com/reference/get-unit.md
+  - https://api.doorloop.com/reference/get-units.md
+  - https://api.doorloop.com/reference/get-user.md
+  - https://api.doorloop.com/reference/get-users.md
+  - https://api.doorloop.com/reference/get-vendor-bill.md
+  - https://api.doorloop.com/reference/get-vendor-bills.md
+  - https://api.doorloop.com/reference/get-vendor-credit.md
+  - https://api.doorloop.com/reference/get-vendor-credits.md
+  - https://api.doorloop.com/reference/get-vendor.md
+  - https://api.doorloop.com/reference/get-vendors.md
+  - https://api.doorloop.com/reference/post-account.md
+  - https://api.doorloop.com/reference/post-communication.md
+  - https://api.doorloop.com/reference/post-expense.md
+  - https://api.doorloop.com/reference/post-files.md
+  - https://api.doorloop.com/reference/post-lease-charge.md
+  - https://api.doorloop.com/reference/post-lease-credit.md
+  - https://api.doorloop.com/reference/post-lease-payment.md
+  - https://api.doorloop.com/reference/post-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/post-leases-full.md
+  - https://api.doorloop.com/reference/post-leases-move-in.md
+  - https://api.doorloop.com/reference/post-leases-move-out.md
+  - https://api.doorloop.com/reference/post-notes.md
+  - https://api.doorloop.com/reference/post-owner.md
+  - https://api.doorloop.com/reference/post-task-update.md
+  - https://api.doorloop.com/reference/post-task.md
+  - https://api.doorloop.com/reference/post-tenant.md
+  - https://api.doorloop.com/reference/post-vendor-bill.md
+  - https://api.doorloop.com/reference/post-vendor-credit.md
+  - https://api.doorloop.com/reference/post-vendor.md
+  - https://api.doorloop.com/reference/put-account.md
+  - https://api.doorloop.com/reference/put-communication.md
+  - https://api.doorloop.com/reference/put-expense.md
+  - https://api.doorloop.com/reference/put-file.md
+  - https://api.doorloop.com/reference/put-lease-charge.md
+  - https://api.doorloop.com/reference/put-lease-credit.md
+  - https://api.doorloop.com/reference/put-lease-payment.md
+  - https://api.doorloop.com/reference/put-note.md
+  - https://api.doorloop.com/reference/put-owner.md
+  - https://api.doorloop.com/reference/put-task.md
+  - https://api.doorloop.com/reference/put-tenant.md
+  - https://api.doorloop.com/reference/put-unit.md
+  - https://api.doorloop.com/reference/put-vendor-bill.md
+  - https://api.doorloop.com/reference/put-vendor-credit.md
+  - https://api.doorloop.com/reference/put-vendor.md
+  merge:
+    pages: 96
+    deduped: 446
+    conflicts_kept_first: 0

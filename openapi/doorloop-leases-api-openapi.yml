@@ -1,0 +1,1227 @@
+openapi: 3.2.0
+info:
+  title: DoorLoop API Reference Leases API
+  version: '1.0'
+  summary: This is the DoorLoop API
+  description: It does some pretty cool stuff and gives you complete access to DoorLoop's data
+  license:
+    name: Terms and Conditions
+    url: https://www.doorloop.com/legal/terms
+  contact:
+    name: DoorLoop Inc.
+    url: www.doorloop.com
+    email: support@doorloop.com
+  termsOfService: https://www.doorloop.com/legal/terms
+servers:
+- url: https://app.doorloop.com/api
+  description: Production
+tags:
+- name: Leases
+paths:
+  /leases:
+    parameters: []
+    get:
+      summary: List all Leases
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Lease'
+        '400':
+          description: Bad Request
+      operationId: get-leases
+      description: Lists all Leases. To correlate leases with tenants, use GET /leases/tenants - it returns both the lease and the tenant on every row, along with move-in and move-out dates.
+      parameters:
+      - $ref: '#/components/parameters/Authorization'
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filters by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_owner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Lease Name
+      - schema:
+          type: string
+        in: query
+        name: filter_start_date_from
+        description: Filter by Start Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_start_date_to
+        description: Filter by Start Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_end_date_from
+        description: Filter by End Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_end_date_to
+        description: Filter by End Date (YYYY-MM-DD)
+      - schema:
+          type: string
+          enum:
+          - RESIDENTIAL
+          - COMMERCIAL
+        in: query
+        name: filter_propertyClass
+        description: Filter by Property Class
+      - schema:
+          type: string
+        in: query
+        name: filter_unit
+        description: Filter by Unit Id
+      - schema:
+          type: string
+        in: query
+        name: filter_tenant
+        description: Filter by Tenant Id
+      - schema:
+          type: number
+        in: query
+        name: filter_outstandingBalanceGreaterThan
+        description: Filter by Min Outstanding Balance
+      - schema:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        in: query
+        name: filter_status
+        description: Filter by Status
+      - schema:
+          type: string
+          enum:
+          - Rollover
+          - AtWill
+        in: query
+        name: filter_term
+        description: Filter by Term
+      - schema:
+          type: string
+          enum:
+          - IN_EVICTION
+          - PAY_OR_QUIT_EXPIRED
+          - PAY_OR_QUIT_SENT
+          - EXPIRED
+          - AT_RISK
+          - ACTIVE
+        in: query
+        name: filter_calculatedStatus
+        description: 'Collections stage, resolved by priority. NOTE: ACTIVE means active AND not in any collections state - it excludes pay-or-quit, holdover, on-notice and eviction leases, all of which are still occupied and paying. To list current occupants use GET /leases/tenants?filter_status=CURRENT instead.'
+      - schema:
+          type: string
+          enum:
+          - BALANCE_DUE
+          - CREDIT_AVAILABLE
+          - ZERO_BALANCE
+          - EXPIRED
+          - EVICTION
+        in: query
+        name: filter_situation
+        description: Filter by lease situation, derived from balance and lifecycle
+      - schema:
+          type: boolean
+        in: query
+        name: filter_evictionPending
+        description: Return only leases with a pending eviction
+      - $ref: '#/components/parameters/page_number'
+      - $ref: '#/components/parameters/page_size'
+      security:
+      - Key: []
+      tags:
+      - Leases
+  /leases/full:
+    parameters: []
+    post:
+      summary: Create a Lease
+      operationId: post-leases-full
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fullLeaseCreateResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '405':
+          description: Method Not Allowed
+      tags:
+      - Leases
+      description: Creates a complete, ready-to-use lease in a single call - property, units, term, dates, security deposits, one-time and recurring charges and credits, and tenant move-in - inside one transaction. Tenants may be passed as existing ids or as new-tenant objects created inline and de-duplicated by email within the company. If any part fails, nothing is persisted.
+      security:
+      - Key: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/fullLeaseCreateRequest'
+            examples:
+              Fixed-term lease with a new tenant:
+                value:
+                  property: 507f191e810c19729de860ea
+                  units:
+                  - 507f191e810c19729de860eb
+                  term: Fixed
+                  start: '2026-09-01'
+                  end: '2027-08-31'
+                  tenants:
+                  - firstName: Ada
+                    lastName: Lovelace
+                    email: ada.lovelace@example.com
+                  rent:
+                    frequency: Monthly
+                    lines:
+                    - account: 507f191e810c19729de860ec
+                      amount: 1500
+                  securityDeposits:
+                  - date: '2026-09-01'
+                    lines:
+                    - account: 507f191e810c19729de860ed
+                      amount: 3000
+  /leases/move-in:
+    parameters: []
+    post:
+      summary: Move in Tenant
+      operationId: post-leases-move-in
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lease'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Leases
+      description: Moves in a Tenant
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leaseId:
+                  $ref: '#/components/schemas/mongoId'
+                moveInAt:
+                  type: string
+                  description: 'Format: YYYY-MM-DD'
+                tenantIds:
+                  type: array
+                  description: An array of Tenant Ids to move in
+                  items:
+                    $ref: '#/components/schemas/mongoId'
+                portalEnabled:
+                  type: boolean
+              required:
+              - leaseId
+              - moveInAt
+              - tenantIds
+              - portalEnabled
+  /leases/move-out:
+    parameters: []
+    post:
+      summary: Move out Tenant
+      operationId: post-leases-move-out
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Leases
+      description: Moves out a Tenant
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leaseId:
+                  $ref: '#/components/schemas/mongoId'
+                movedOutAt:
+                  type: string
+                  description: 'Format: YYYY-MM-DD'
+                tenants:
+                  type: array
+                  description: An array of Tenant Ids to move in
+                  items:
+                    $ref: '#/components/schemas/mongoId'
+                portalEnabled:
+                  type: boolean
+                moveOutNoticeAt:
+                  type: string
+                  description: 'Format: YYYY-MM-DD'
+                moveOutReason:
+                  type: string
+                  maxLength: 100
+              required:
+              - leaseId
+              - movedOutAt
+              - tenants
+              - portalEnabled
+        description: ''
+  /leases/tenants:
+    parameters: []
+    get:
+      summary: List all Lease Tenants
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/leaseTenant'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-lease-tenants
+      description: 'Retrieves a list of all lease tenants, meaning, tenants that have been associated with an active list.
+
+
+        This endpoint includes additional information related to the lease for each tenant in DoorLoop, with the full Tenant object included as well.
+
+
+        If a tenant is associated with multiple leases, the tenant will appear in the results here once for each lease it is associated with.'
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_lease
+        description: Filter by Lease Id
+      - schema:
+          type: string
+          enum:
+          - PAST
+          - CURRENT
+          - FUTURE
+        in: query
+        name: filter_status
+        description: Occupancy status, derived from move-in and move-out dates rather than lease status - so CURRENT includes tenants in eviction, on notice, holdover and pay-or-quit. This is the recommended way to list current occupants.
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Tenant Name / Email
+      - schema:
+          type: string
+        in: query
+        name: filter_movedInAt_from
+        description: Filter by Move In Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_movedInAt_to
+        description: Filter by Move In Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_movedOutAt_from
+        description: Filter by Move Out Date (YYYY-MM-DD)
+      - schema:
+          type: string
+        in: query
+        name: filter_movedOutAt_To
+        description: Filter by Move Out Date (YYYY-MM-DD)
+      security:
+      - Key: []
+      tags:
+      - Leases
+  /leases/{leaseId}:
+    parameters:
+    - schema:
+        type: string
+      name: leaseId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Lease
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lease'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-lease
+      description: Retrieves a Lease
+      parameters: []
+      security:
+      - Key: []
+      tags:
+      - Leases
+components:
+  schemas:
+    mongoId:
+      type: string
+      title: mongoId
+      x-stoplight:
+        id: 40j7qlmpihfdj
+      pattern: /^[a-f\d]{24}$/i
+      examples:
+      - 507f191e810c19729de860ea
+      example: 00000020f51bb4362eee2a4d
+    fullLeaseCreateSigningOneTime:
+      type: object
+      title: fullLeaseCreateSigningOneTime
+      properties:
+        date:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        chargeTiming:
+          type: string
+          enum:
+          - byDate
+          - uponSigning
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateLine'
+      required:
+      - date
+      - lines
+    fullLeaseCreateOneTime:
+      type: object
+      title: fullLeaseCreateOneTime
+      properties:
+        date:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateLine'
+      required:
+      - date
+      - lines
+    phone:
+      title: phone
+      x-stoplight:
+        id: 9kqyepto63cpi
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Home
+          - Work
+          - Mobile
+          - Fax
+          - Other
+        number:
+          type: string
+          maxLength: 50
+      required:
+      - type
+      - number
+    tenant:
+      allOf:
+      - $ref: '#/components/schemas/person'
+      - type: object
+        properties:
+          dependants:
+            type: array
+            items:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                middleName:
+                  type: string
+                lastName:
+                  type: string
+                dateOfBirth:
+                  type: string
+                relationship:
+                  type: string
+          pets:
+            type: array
+            items:
+              type: object
+              properties:
+                petType:
+                  type: string
+                weight:
+                  type: number
+                age:
+                  type: integer
+                color:
+                  type: string
+                  maxLength: 100
+                breed:
+                  type: string
+                  maxLength: 100
+                name:
+                  type: string
+                  maxLength: 100
+                gender:
+                  type: string
+                  maxLength: 100
+                isSpayedOrNeutered:
+                  type: boolean
+                isServiceAnimal:
+                  type: boolean
+                notes:
+                  type: string
+                  maxLength: 1000
+          vehicles:
+            type: array
+            items:
+              type: object
+              properties:
+                make:
+                  type: string
+                  maxLength: 100
+                model:
+                  type: string
+                  maxLength: 100
+                year:
+                  type: integer
+                  minimum: 1950
+                  maximum: 2050
+                color:
+                  type: string
+                  maxLength: 50
+                licensePlatae:
+                  type: string
+                  maxLength: 20
+                state:
+                  type: string
+                  maxLength: 20
+                notes:
+                  type: string
+                  maxLength: 1000
+          emergencyContacts:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                relationship:
+                  type: string
+                  maxLength: 100
+                email:
+                  type: string
+                  maxLength: 100
+                phone:
+                  type: string
+                  maxLength: 100
+          prospectInfo:
+            type: object
+            properties:
+              assignedToUser:
+                type: string
+                description: The User Id this Prospect is assigned to
+              status:
+                type: string
+                enum:
+                - NEW
+                - CONTACT_ATTEMPTED
+                - CONTACT_MADE
+                - SHOWING_SCHEDULED
+                - SHOWING_COMPLETED
+                - APPLICATION_SENT
+                - APPLICATION_SUBMITTED
+                - LEASE_OFFER_MADE
+                - LEASE_OFFER_ACCEPTED
+                - LEASE_SENT_FOR_SIGNATURE
+                - CLOSED_MOVED_IN
+                - CLOSED_LOST
+              interests:
+                type: array
+                description: Represents all the properties and/or units this prospect is interested moving into
+                items:
+                  type: object
+                  properties:
+                    property:
+                      type: string
+                      description: Reference the Property Id
+                    unit:
+                      type: string
+                      description: Reference the Unit Id
+              leadSource:
+                type: string
+                description: References to the Tag Id
+              minBathrooms:
+                type: number
+                minimum: 0
+              minBedrooms:
+                type: number
+                minimum: 0
+              maxRent:
+                type: number
+                minimum: 0
+              expectedMoveInDate:
+                type: string
+                description: 'Format: YYYY-MM-DD'
+              creditScore:
+                type: integer
+              monthlyIncome:
+                type: number
+              campaignSource:
+                type: string
+              campaignMedium:
+                type: string
+              campaignName:
+                type: string
+              campaignContent:
+                type: string
+              campaignTerm:
+                type: string
+              nextTaskDate:
+                type: string
+                description: 'Read Only. Format: YYYY-MM-DD'
+          portalInfo:
+            type: object
+            properties:
+              allowAccess:
+                type: boolean
+              lastSeenAt:
+                type: string
+                description: 'Read Only. Format: YYYY-MM-DD'
+              loginEmail:
+                type: string
+                maxLength: 255
+              status:
+                type: string
+                description: Read Only
+                enum:
+                - ACTIVE
+                - INACTIVE
+                - INVITED
+              invitationLastSentAt:
+                type: string
+                description: 'Read Only. Format: YYYY-MM-DD'
+          type:
+            type: string
+            enum:
+            - LEASE_TENANT
+            - PROSPECT_TENANT
+    fullLeaseCreateNewTenant:
+      type: object
+      title: fullLeaseCreateNewTenant
+      description: Creates a tenant inline, inside the same transaction. De-duplicated by email within the company - the address is matched case-insensitively against existing tenants and stored trimmed and lowercased.
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 100
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 100
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          minLength: 3
+          maxLength: 30
+      required:
+      - firstName
+      - lastName
+    address:
+      title: address
+      x-stoplight:
+        id: a6vhbqoeituyk
+      type: object
+      description: ''
+      properties:
+        street1:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+        lat:
+          type: string
+        lng:
+          type: string
+    Lease:
+      title: Lease
+      x-stoplight:
+        id: xpmo15f176x18
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        property:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          maxLength: 1000
+        notes:
+          type: string
+          maxLength: 1000
+        reference:
+          type: string
+          description: Read Only
+        start:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        end:
+          type: string
+          description: 'Required if term == AtWill. Format: YYYY-MM-DD'
+        term:
+          type: string
+          enum:
+          - Fixed
+          - AtWill
+        rolloverToAtWill:
+          type: string
+          description: If set to true, the lease will automatically rollover to "At Will" (Month to Month) at the end of the fixed term.
+        units:
+          type: array
+          description: An array of Unit Ids for this lease
+          minItems: 1
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/mongoId'
+        status:
+          type: string
+          description: Read Only
+          enum:
+          - ACTIVE
+          - INACTIVE
+        evictonPending:
+          type: boolean
+        proofOfInsuranceRequired:
+          type: boolean
+        totalBalancedue:
+          type: number
+          description: Read Only
+        totalDepositsHeld:
+          type: number
+          description: Read Only
+        totalRecurringRent:
+          type: number
+          description: Read Only
+        totalRecurringPayments:
+          type: number
+          description: Read Only
+        totalRecurringCredits:
+          type: number
+          description: Read Only
+        TotalRecurringCharges:
+          type: number
+          description: Read Only
+      required:
+      - property
+      - name
+      - start
+      - term
+      - units
+      - status
+    email:
+      title: email
+      x-stoplight:
+        id: 33vnq3pmvuy4l
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Primary
+          - Secondary
+          - Personal
+          - Work
+          - Other
+        address:
+          type: string
+      required:
+      - type
+      - address
+    leaseTenant:
+      title: leaseTenant
+      x-stoplight:
+        id: ekzigjjakppro
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          description: The display name for this tenant
+        lease:
+          $ref: '#/components/schemas/mongoId'
+        property:
+          $ref: '#/components/schemas/mongoId'
+        units:
+          type: array
+          description: An array of unit Ids for this tenant
+          items:
+            $ref: '#/components/schemas/mongoId'
+        status:
+          type: string
+          enum:
+          - PAST
+          - FUTURE
+          - CURRENT
+          description: The current status of this tenant
+        moveInAt:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        moveOutAt:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        moveOutNoticeAt:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        portalEnabled:
+          type: boolean
+        tenant:
+          $ref: '#/components/schemas/tenant'
+      required:
+      - id
+      - name
+      - lease
+      - property
+      - units
+      - status
+    fullLeaseCreateRent:
+      type: object
+      title: fullLeaseCreateRent
+      properties:
+        frequency:
+          type: string
+          enum:
+          - Daily
+          - Weekly
+          - Every2Weeks
+          - Monthly
+          - Every2Months
+          - Quarterly
+          - Every6Months
+          - Annually
+        start:
+          type: string
+          description: 'Format: YYYY-MM-DD. Defaults to the lease start date when omitted.'
+        end:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateLine'
+      required:
+      - frequency
+      - lines
+    fullLeaseCreateResponse:
+      type: object
+      title: fullLeaseCreateResponse
+      properties:
+        lease:
+          $ref: '#/components/schemas/Lease'
+        createdTenantIds:
+          type: array
+          description: Ids of tenants created inline by this request. Empty when every tenant already existed.
+          items:
+            $ref: '#/components/schemas/mongoId'
+        createdChargeIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/mongoId'
+        createdRecurringTransactionIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/mongoId'
+    person:
+      title: person
+      x-stoplight:
+        id: w8ihhyv3ctmy8
+      type: object
+      description: ''
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          description: Read Only
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        gender:
+          type: string
+          enum:
+          - MALE
+          - FEMALE
+          - PREFER_NOT_TO_SAY
+        fullName:
+          type: string
+          description: Read Only
+        dateOfBirth:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        timezone:
+          type: string
+        company:
+          type: string
+        companyName:
+          type: string
+        jobTitle:
+          type: string
+        notes:
+          type: string
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/phone'
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/email'
+        primaryAddress:
+          $ref: '#/components/schemas/address'
+        pictureUrl:
+          type: string
+        ? ''
+        : type: string
+      required:
+      - firstName
+      - lastName
+    fullLeaseCreateRequest:
+      type: object
+      title: fullLeaseCreateRequest
+      properties:
+        name:
+          type: string
+          maxLength: 1000
+          description: Defaults to the tenant names when omitted.
+        property:
+          $ref: '#/components/schemas/mongoId'
+        units:
+          type: array
+          minItems: 1
+          description: One or more units on the property.
+          items:
+            $ref: '#/components/schemas/mongoId'
+        term:
+          type: string
+          enum:
+          - Fixed
+          - AtWill
+        start:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        end:
+          type: string
+          description: 'Format: YYYY-MM-DD. Required when term is Fixed; ignored when term is AtWill.'
+        rolloverToAtWill:
+          type: boolean
+        tenants:
+          type: array
+          minItems: 1
+          description: Each entry is either an existing tenant id or a new-tenant object to create inline.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/mongoId'
+            - $ref: '#/components/schemas/fullLeaseCreateNewTenant'
+        rent:
+          $ref: '#/components/schemas/fullLeaseCreateRent'
+        securityDeposits:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateSigningOneTime'
+        oneTimeCharges:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateOneTime'
+        oneTimeCredits:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateSigningOneTime'
+        recurringCharges:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateRecurring'
+        recurringCredits:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateRecurring'
+        residentPortalAccess:
+          type: boolean
+          default: false
+        requireRentersInsurance:
+          type: boolean
+          default: false
+        automaticLateFees:
+          type: boolean
+          default: false
+        sendWelcomeSms:
+          type: boolean
+          default: false
+      required:
+      - property
+      - units
+      - term
+      - start
+      - tenants
+    fullLeaseCreateRecurring:
+      type: object
+      title: fullLeaseCreateRecurring
+      properties:
+        frequency:
+          type: string
+          enum:
+          - Daily
+          - Weekly
+          - Every2Weeks
+          - Monthly
+          - Every2Months
+          - Quarterly
+          - Every6Months
+          - Annually
+        start:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        end:
+          type: string
+          description: 'Format: YYYY-MM-DD. Omit for an open-ended schedule.'
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/fullLeaseCreateLine'
+      required:
+      - frequency
+      - start
+      - lines
+    fullLeaseCreateLine:
+      type: object
+      title: fullLeaseCreateLine
+      properties:
+        account:
+          $ref: '#/components/schemas/mongoId'
+        amount:
+          type: number
+          exclusiveMinimum: 0
+        memo:
+          type: string
+          maxLength: 1000
+      required:
+      - account
+      - amount
+  parameters:
+    page_number:
+      name: page_number
+      in: query
+      required: false
+      description: 1-based page index. Pages are disjoint. Every list response includes a total.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    Authorization:
+      name: Authorization
+      in: header
+      required: true
+      schema:
+        type: string
+        example: bearer 412423kakkjdfkj134234asdasd
+      description: Your API key goes here
+    page_size:
+      name: page_size
+      in: query
+      required: false
+      description: Rows per page. Defaults to 50. Values above 1000 are rejected with a 400.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 50
+  securitySchemes:
+    Key:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Bearer token. Create a key under Settings -> API access; it is a JWT. Example: `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.<payload>.<signature>`'
+x-stoplight:
+  id: cz75kvx8cjg25
+x-provenance:
+  method: searched
+  source: https://api.doorloop.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://api.doorloop.com/reference/delete-account.md
+  - https://api.doorloop.com/reference/delete-communication.md
+  - https://api.doorloop.com/reference/delete-expense.md
+  - https://api.doorloop.com/reference/delete-file.md
+  - https://api.doorloop.com/reference/delete-lease-charge.md
+  - https://api.doorloop.com/reference/delete-lease-credits-leasecreditid.md
+  - https://api.doorloop.com/reference/delete-lease-payment.md
+  - https://api.doorloop.com/reference/delete-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/delete-note.md
+  - https://api.doorloop.com/reference/delete-owner.md
+  - https://api.doorloop.com/reference/delete-task.md
+  - https://api.doorloop.com/reference/delete-tenant.md
+  - https://api.doorloop.com/reference/delete-vendor-bill.md
+  - https://api.doorloop.com/reference/delete-vendor-credit.md
+  - https://api.doorloop.com/reference/delete-vendor.md
+  - https://api.doorloop.com/reference/download-file.md
+  - https://api.doorloop.com/reference/get-account.md
+  - https://api.doorloop.com/reference/get-accounts.md
+  - https://api.doorloop.com/reference/get-communication.md
+  - https://api.doorloop.com/reference/get-communications.md
+  - https://api.doorloop.com/reference/get-current-user.md
+  - https://api.doorloop.com/reference/get-expense.md
+  - https://api.doorloop.com/reference/get-expenses.md
+  - https://api.doorloop.com/reference/get-file.md
+  - https://api.doorloop.com/reference/get-files.md
+  - https://api.doorloop.com/reference/get-lease-charge.md
+  - https://api.doorloop.com/reference/get-lease-charges.md
+  - https://api.doorloop.com/reference/get-lease-credit.md
+  - https://api.doorloop.com/reference/get-lease-credits.md
+  - https://api.doorloop.com/reference/get-lease-payment.md
+  - https://api.doorloop.com/reference/get-lease-payments.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/get-lease-tenants.md
+  - https://api.doorloop.com/reference/get-lease.md
+  - https://api.doorloop.com/reference/get-leases.md
+  - https://api.doorloop.com/reference/get-note.md
+  - https://api.doorloop.com/reference/get-notes.md
+  - https://api.doorloop.com/reference/get-owner.md
+  - https://api.doorloop.com/reference/get-owners.md
+  - https://api.doorloop.com/reference/get-properties.md
+  - https://api.doorloop.com/reference/get-property-group.md
+  - https://api.doorloop.com/reference/get-property-groups.md
+  - https://api.doorloop.com/reference/get-property.md
+  - https://api.doorloop.com/reference/get-reports-balance-sheet.md
+  - https://api.doorloop.com/reference/get-reports-cash-flow-statement.md
+  - https://api.doorloop.com/reference/get-reports-profit-and-loss.md
+  - https://api.doorloop.com/reference/get-reports-rent-roll.md
+  - https://api.doorloop.com/reference/get-task.md
+  - https://api.doorloop.com/reference/get-tasks.md
+  - https://api.doorloop.com/reference/get-tenant.md
+  - https://api.doorloop.com/reference/get-tenants.md
+  - https://api.doorloop.com/reference/get-unit.md
+  - https://api.doorloop.com/reference/get-units.md
+  - https://api.doorloop.com/reference/get-user.md
+  - https://api.doorloop.com/reference/get-users.md
+  - https://api.doorloop.com/reference/get-vendor-bill.md
+  - https://api.doorloop.com/reference/get-vendor-bills.md
+  - https://api.doorloop.com/reference/get-vendor-credit.md
+  - https://api.doorloop.com/reference/get-vendor-credits.md
+  - https://api.doorloop.com/reference/get-vendor.md
+  - https://api.doorloop.com/reference/get-vendors.md
+  - https://api.doorloop.com/reference/post-account.md
+  - https://api.doorloop.com/reference/post-communication.md
+  - https://api.doorloop.com/reference/post-expense.md
+  - https://api.doorloop.com/reference/post-files.md
+  - https://api.doorloop.com/reference/post-lease-charge.md
+  - https://api.doorloop.com/reference/post-lease-credit.md
+  - https://api.doorloop.com/reference/post-lease-payment.md
+  - https://api.doorloop.com/reference/post-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/post-leases-full.md
+  - https://api.doorloop.com/reference/post-leases-move-in.md
+  - https://api.doorloop.com/reference/post-leases-move-out.md
+  - https://api.doorloop.com/reference/post-notes.md
+  - https://api.doorloop.com/reference/post-owner.md
+  - https://api.doorloop.com/reference/post-task-update.md
+  - https://api.doorloop.com/reference/post-task.md
+  - https://api.doorloop.com/reference/post-tenant.md
+  - https://api.doorloop.com/reference/post-vendor-bill.md
+  - https://api.doorloop.com/reference/post-vendor-credit.md
+  - https://api.doorloop.com/reference/post-vendor.md
+  - https://api.doorloop.com/reference/put-account.md
+  - https://api.doorloop.com/reference/put-communication.md
+  - https://api.doorloop.com/reference/put-expense.md
+  - https://api.doorloop.com/reference/put-file.md
+  - https://api.doorloop.com/reference/put-lease-charge.md
+  - https://api.doorloop.com/reference/put-lease-credit.md
+  - https://api.doorloop.com/reference/put-lease-payment.md
+  - https://api.doorloop.com/reference/put-note.md
+  - https://api.doorloop.com/reference/put-owner.md
+  - https://api.doorloop.com/reference/put-task.md
+  - https://api.doorloop.com/reference/put-tenant.md
+  - https://api.doorloop.com/reference/put-unit.md
+  - https://api.doorloop.com/reference/put-vendor-bill.md
+  - https://api.doorloop.com/reference/put-vendor-credit.md
+  - https://api.doorloop.com/reference/put-vendor.md
+  merge:
+    pages: 96
+    deduped: 446
+    conflicts_kept_first: 0

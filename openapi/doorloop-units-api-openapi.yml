@@ -1,0 +1,384 @@
+openapi: 3.2.0
+info:
+  title: DoorLoop API Reference Units API
+  version: '1.0'
+  summary: This is the DoorLoop API
+  description: It does some pretty cool stuff and gives you complete access to DoorLoop's data
+  license:
+    name: Terms and Conditions
+    url: https://www.doorloop.com/legal/terms
+  contact:
+    name: DoorLoop Inc.
+    url: www.doorloop.com
+    email: support@doorloop.com
+  termsOfService: https://www.doorloop.com/legal/terms
+servers:
+- url: https://app.doorloop.com/api
+  description: Production
+tags:
+- name: Units
+paths:
+  /units:
+    get:
+      summary: List all Units
+      tags:
+      - Units
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/unit'
+        '400':
+          description: Bad Request
+      operationId: get-units
+      description: Lists all Units
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filters by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_owner
+        description: Filter by Owner Id
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Unit Name
+      - schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          - all
+        in: query
+        name: filter_active
+        description: Which units to return by status. Without this parameter only active units are returned. Use all for active and inactive units together, or false for only the inactive ones.
+      security:
+      - Key: []
+  /units/{unitId}:
+    parameters:
+    - schema:
+        type: string
+      name: unitId
+      in: path
+      required: true
+      description: The Unit Id
+    put:
+      summary: Update a Unit
+      operationId: put-unit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unit'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Units
+      description: 'Updates a Unit.
+
+
+        This endpoint replaces the stored Unit rather than patching it. Retrieve the Unit first, apply your changes to the object you got back, and send the whole object. Any property you leave out of the body is cleared, including the nested "listing" and "rentalApplicationListing" objects.
+
+
+        Two properties behave in ways that are easy to get wrong:
+
+
+        * "addressSameAsProperty" defaults to true when omitted. If the Unit has its own address, send it explicitly as false or the address will be replaced by the property address.
+
+        * "rentalApplicationListing.activeListing" is forced to true whenever "listing.activeListing" or "listing.companySiteListingOnly" is true. A Unit that is publicly listed always accepts rental applications, so applications cannot be closed on their own.
+
+
+        To take a Unit off the market entirely, set "listing.activeListing", "listing.companySiteListingOnly" and "rentalApplicationListing.activeListing" all to false in the same request.'
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/unit'
+        description: The complete Unit object, as returned by Retrieve a Unit, with your changes applied.
+    get:
+      summary: Retrieve a Unit
+      tags:
+      - Units
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unit'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-unit
+      description: Retrieves a Unit
+      parameters: []
+      security:
+      - Key: []
+components:
+  schemas:
+    address:
+      title: address
+      x-stoplight:
+        id: a6vhbqoeituyk
+      type: object
+      description: ''
+      properties:
+        street1:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+        lat:
+          type: string
+        lng:
+          type: string
+    picture:
+      title: picture
+      x-stoplight:
+        id: pep1xv4l41v6m
+      type: object
+      properties:
+        rank:
+          type: integer
+          description: Represents the index of this picture in ascending order
+        url:
+          type: string
+          description: The URL of the picture
+    unit:
+      title: unit
+      x-stoplight:
+        id: j9hclsxdesa9a
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        active:
+          type: boolean
+        address:
+          $ref: '#/components/schemas/address'
+        addressSameAsProperty:
+          type: boolean
+          description: If set to true, the address of this unit will be the same as the property it is linked to and the value in the "address" property will be ignored.
+        name:
+          type: string
+          maxLength: 255
+        beds:
+          type: number
+          minimum: 0
+        baths:
+          type: number
+          minimum: 0
+          description: The number of bathrooms. Fractions are allowed, for example 2.5.
+        size:
+          type: number
+          minimum: 0
+          description: The size of the unit in square feet.
+        marketRent:
+          type: number
+          minimum: 0
+          description: The internal market rent of the unit, used in reports such as the rent roll. The rent advertised in a listing is listing.rent.
+        property:
+          $ref: '#/components/schemas/mongoId'
+        pictures:
+          type: array
+          items:
+            $ref: '#/components/schemas/picture'
+        description:
+          type: string
+          maxLength: 1000
+        listing:
+          type: object
+          description: 'The advertised listing of the unit: whether it is published to listing partners or the company site, with the advertised rent, deposit, date available and contact. It is separate from rentalApplicationListing, which controls whether the unit accepts rental applications.'
+          properties:
+            activeListing:
+              type: boolean
+            dateAvailable:
+              type: string
+              pattern: YYYY-MM-DD
+            rent:
+              type: number
+            deposit:
+              type: number
+            contact:
+              type: string
+              description: Reference to the User Id who is the listing contact person. The user's contact information (Phone number, Email address) will be posted
+            leaseLength:
+              type: string
+              maxLength: 100
+            companySiteListingOnly:
+              type: boolean
+              description: When true the Unit is published only to your company site and not to the syndicated listing partners. It still counts as listed, so it keeps rental applications open.
+        rentalApplicationListing:
+          type: object
+          description: Controls whether the Unit accepts rental applications. Forced active while "listing.activeListing" or "listing.companySiteListingOnly" is true.
+          properties:
+            activeListing:
+              type: boolean
+            dateAvailable:
+              type: string
+              pattern: YYYY-MM-DD
+            rent:
+              type: number
+        amenities:
+          type: array
+          description: Please refer to the MITS standard for a list of possible values
+          items:
+            type: string
+      required:
+      - name
+      - property
+    mongoId:
+      type: string
+      title: mongoId
+      x-stoplight:
+        id: 40j7qlmpihfdj
+      pattern: /^[a-f\d]{24}$/i
+      examples:
+      - 507f191e810c19729de860ea
+      example: 00000020f51bb4362eee2a4d
+  securitySchemes:
+    Key:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Bearer token. Create a key under Settings -> API access; it is a JWT. Example: `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.<payload>.<signature>`'
+x-stoplight:
+  id: cz75kvx8cjg25
+x-provenance:
+  method: searched
+  source: https://api.doorloop.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://api.doorloop.com/reference/delete-account.md
+  - https://api.doorloop.com/reference/delete-communication.md
+  - https://api.doorloop.com/reference/delete-expense.md
+  - https://api.doorloop.com/reference/delete-file.md
+  - https://api.doorloop.com/reference/delete-lease-charge.md
+  - https://api.doorloop.com/reference/delete-lease-credits-leasecreditid.md
+  - https://api.doorloop.com/reference/delete-lease-payment.md
+  - https://api.doorloop.com/reference/delete-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/delete-note.md
+  - https://api.doorloop.com/reference/delete-owner.md
+  - https://api.doorloop.com/reference/delete-task.md
+  - https://api.doorloop.com/reference/delete-tenant.md
+  - https://api.doorloop.com/reference/delete-vendor-bill.md
+  - https://api.doorloop.com/reference/delete-vendor-credit.md
+  - https://api.doorloop.com/reference/delete-vendor.md
+  - https://api.doorloop.com/reference/download-file.md
+  - https://api.doorloop.com/reference/get-account.md
+  - https://api.doorloop.com/reference/get-accounts.md
+  - https://api.doorloop.com/reference/get-communication.md
+  - https://api.doorloop.com/reference/get-communications.md
+  - https://api.doorloop.com/reference/get-current-user.md
+  - https://api.doorloop.com/reference/get-expense.md
+  - https://api.doorloop.com/reference/get-expenses.md
+  - https://api.doorloop.com/reference/get-file.md
+  - https://api.doorloop.com/reference/get-files.md
+  - https://api.doorloop.com/reference/get-lease-charge.md
+  - https://api.doorloop.com/reference/get-lease-charges.md
+  - https://api.doorloop.com/reference/get-lease-credit.md
+  - https://api.doorloop.com/reference/get-lease-credits.md
+  - https://api.doorloop.com/reference/get-lease-payment.md
+  - https://api.doorloop.com/reference/get-lease-payments.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/get-lease-tenants.md
+  - https://api.doorloop.com/reference/get-lease.md
+  - https://api.doorloop.com/reference/get-leases.md
+  - https://api.doorloop.com/reference/get-note.md
+  - https://api.doorloop.com/reference/get-notes.md
+  - https://api.doorloop.com/reference/get-owner.md
+  - https://api.doorloop.com/reference/get-owners.md
+  - https://api.doorloop.com/reference/get-properties.md
+  - https://api.doorloop.com/reference/get-property-group.md
+  - https://api.doorloop.com/reference/get-property-groups.md
+  - https://api.doorloop.com/reference/get-property.md
+  - https://api.doorloop.com/reference/get-reports-balance-sheet.md
+  - https://api.doorloop.com/reference/get-reports-cash-flow-statement.md
+  - https://api.doorloop.com/reference/get-reports-profit-and-loss.md
+  - https://api.doorloop.com/reference/get-reports-rent-roll.md
+  - https://api.doorloop.com/reference/get-task.md
+  - https://api.doorloop.com/reference/get-tasks.md
+  - https://api.doorloop.com/reference/get-tenant.md
+  - https://api.doorloop.com/reference/get-tenants.md
+  - https://api.doorloop.com/reference/get-unit.md
+  - https://api.doorloop.com/reference/get-units.md
+  - https://api.doorloop.com/reference/get-user.md
+  - https://api.doorloop.com/reference/get-users.md
+  - https://api.doorloop.com/reference/get-vendor-bill.md
+  - https://api.doorloop.com/reference/get-vendor-bills.md
+  - https://api.doorloop.com/reference/get-vendor-credit.md
+  - https://api.doorloop.com/reference/get-vendor-credits.md
+  - https://api.doorloop.com/reference/get-vendor.md
+  - https://api.doorloop.com/reference/get-vendors.md
+  - https://api.doorloop.com/reference/post-account.md
+  - https://api.doorloop.com/reference/post-communication.md
+  - https://api.doorloop.com/reference/post-expense.md
+  - https://api.doorloop.com/reference/post-files.md
+  - https://api.doorloop.com/reference/post-lease-charge.md
+  - https://api.doorloop.com/reference/post-lease-credit.md
+  - https://api.doorloop.com/reference/post-lease-payment.md
+  - https://api.doorloop.com/reference/post-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/post-leases-full.md
+  - https://api.doorloop.com/reference/post-leases-move-in.md
+  - https://api.doorloop.com/reference/post-leases-move-out.md
+  - https://api.doorloop.com/reference/post-notes.md
+  - https://api.doorloop.com/reference/post-owner.md
+  - https://api.doorloop.com/reference/post-task-update.md
+  - https://api.doorloop.com/reference/post-task.md
+  - https://api.doorloop.com/reference/post-tenant.md
+  - https://api.doorloop.com/reference/post-vendor-bill.md
+  - https://api.doorloop.com/reference/post-vendor-credit.md
+  - https://api.doorloop.com/reference/post-vendor.md
+  - https://api.doorloop.com/reference/put-account.md
+  - https://api.doorloop.com/reference/put-communication.md
+  - https://api.doorloop.com/reference/put-expense.md
+  - https://api.doorloop.com/reference/put-file.md
+  - https://api.doorloop.com/reference/put-lease-charge.md
+  - https://api.doorloop.com/reference/put-lease-credit.md
+  - https://api.doorloop.com/reference/put-lease-payment.md
+  - https://api.doorloop.com/reference/put-note.md
+  - https://api.doorloop.com/reference/put-owner.md
+  - https://api.doorloop.com/reference/put-task.md
+  - https://api.doorloop.com/reference/put-tenant.md
+  - https://api.doorloop.com/reference/put-unit.md
+  - https://api.doorloop.com/reference/put-vendor-bill.md
+  - https://api.doorloop.com/reference/put-vendor-credit.md
+  - https://api.doorloop.com/reference/put-vendor.md
+  merge:
+    pages: 96
+    deduped: 446
+    conflicts_kept_first: 0

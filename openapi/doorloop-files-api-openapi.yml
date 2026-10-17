@@ -1,0 +1,372 @@
+openapi: 3.2.0
+info:
+  title: DoorLoop API Reference Files API
+  version: '1.0'
+  summary: This is the DoorLoop API
+  description: It does some pretty cool stuff and gives you complete access to DoorLoop's data
+  license:
+    name: Terms and Conditions
+    url: https://www.doorloop.com/legal/terms
+  contact:
+    name: DoorLoop Inc.
+    url: www.doorloop.com
+    email: support@doorloop.com
+  termsOfService: https://www.doorloop.com/legal/terms
+servers:
+- url: https://app.doorloop.com/api
+  description: Production
+tags:
+- name: Files
+paths:
+  /files:
+    get:
+      summary: List all Files
+      tags:
+      - Files
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/file'
+      operationId: get-files
+      description: Lists all Files
+      security:
+      - Key: []
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_resourceId
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_from
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_createdAt_to
+        description: 'Format: YYYY-MM-DD'
+      - schema:
+          type: string
+        in: query
+        name: filter_createdBy
+      - schema:
+          type: string
+        in: query
+        name: filter_tags
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by File Name or Notes
+    post:
+      summary: Upload a File
+      operationId: post-files
+      responses:
+        '200':
+          description: OK
+      description: Upoads a File
+      security:
+      - Key: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/file'
+              - type: object
+                properties:
+                  file:
+                    description: The binary file data. Max file size 50MB.
+                    type: array
+                    items:
+                      type: string
+                required:
+                - file
+        description: ''
+      tags:
+      - Files
+  /files/{fileId}:
+    parameters:
+    - schema:
+        type: string
+      name: fileId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a File
+      tags:
+      - Files
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+      operationId: get-file
+      description: Retrieves a File Metadata
+      security:
+      - Key: []
+    put:
+      summary: Update a File
+      operationId: put-file
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Files
+      description: Updates a File Metadata
+    delete:
+      summary: Delete a File
+      operationId: delete-file
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      tags:
+      - Files
+      description: Deletes a File
+      security:
+      - Key: []
+  /files/{fileId}/download:
+    parameters:
+    - schema:
+        type: string
+      name: fileId
+      in: path
+      required: true
+    get:
+      summary: Download a File
+      tags:
+      - Files
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file'
+      operationId: download-file
+      description: Downloads a File
+      security:
+      - Key: []
+components:
+  schemas:
+    file:
+      title: file
+      x-stoplight:
+        id: 1125csq7d6u3b
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          description: The name of the file. Must be a valid unix file name.
+          maxLength: 255
+        notes:
+          type: string
+        linkedResource:
+          $ref: '#/components/schemas/fileLinkedResource'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/mongoId'
+        size:
+          type: number
+        mimeType:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+        downloadUrl:
+          type: string
+          description: Read Only. References the URL from which this file can be downloaded
+      required:
+      - name
+      - linkedResource
+    fileLinkedResource:
+      title: fileLinkedResource
+      x-stoplight:
+        id: tdd2wdxg0yyjm
+      type: object
+      description: ''
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/mongoId'
+        resourceType:
+          type: string
+          enum:
+          - TENANT
+          - OWNER
+          - VENDOR
+          - PROPERTY
+          - UNIT
+          - LEASE
+          - LEASE_DRAFT
+          - TASK
+          - RENTAL_APPLICATION
+          - BILL
+          - BILL_PAYMENT
+          - VENDOR_CREDIT
+          - NOTE
+          - INSURANCE_POLICY
+          - COMMUNICATION
+      required:
+      - resourceId
+      - resourceType
+    mongoId:
+      type: string
+      title: mongoId
+      x-stoplight:
+        id: 40j7qlmpihfdj
+      pattern: /^[a-f\d]{24}$/i
+      examples:
+      - 507f191e810c19729de860ea
+      example: 00000020f51bb4362eee2a4d
+  securitySchemes:
+    Key:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Bearer token. Create a key under Settings -> API access; it is a JWT. Example: `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.<payload>.<signature>`'
+x-stoplight:
+  id: cz75kvx8cjg25
+x-provenance:
+  method: searched
+  source: https://api.doorloop.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://api.doorloop.com/reference/delete-account.md
+  - https://api.doorloop.com/reference/delete-communication.md
+  - https://api.doorloop.com/reference/delete-expense.md
+  - https://api.doorloop.com/reference/delete-file.md
+  - https://api.doorloop.com/reference/delete-lease-charge.md
+  - https://api.doorloop.com/reference/delete-lease-credits-leasecreditid.md
+  - https://api.doorloop.com/reference/delete-lease-payment.md
+  - https://api.doorloop.com/reference/delete-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/delete-note.md
+  - https://api.doorloop.com/reference/delete-owner.md
+  - https://api.doorloop.com/reference/delete-task.md
+  - https://api.doorloop.com/reference/delete-tenant.md
+  - https://api.doorloop.com/reference/delete-vendor-bill.md
+  - https://api.doorloop.com/reference/delete-vendor-credit.md
+  - https://api.doorloop.com/reference/delete-vendor.md
+  - https://api.doorloop.com/reference/download-file.md
+  - https://api.doorloop.com/reference/get-account.md
+  - https://api.doorloop.com/reference/get-accounts.md
+  - https://api.doorloop.com/reference/get-communication.md
+  - https://api.doorloop.com/reference/get-communications.md
+  - https://api.doorloop.com/reference/get-current-user.md
+  - https://api.doorloop.com/reference/get-expense.md
+  - https://api.doorloop.com/reference/get-expenses.md
+  - https://api.doorloop.com/reference/get-file.md
+  - https://api.doorloop.com/reference/get-files.md
+  - https://api.doorloop.com/reference/get-lease-charge.md
+  - https://api.doorloop.com/reference/get-lease-charges.md
+  - https://api.doorloop.com/reference/get-lease-credit.md
+  - https://api.doorloop.com/reference/get-lease-credits.md
+  - https://api.doorloop.com/reference/get-lease-payment.md
+  - https://api.doorloop.com/reference/get-lease-payments.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/get-lease-tenants.md
+  - https://api.doorloop.com/reference/get-lease.md
+  - https://api.doorloop.com/reference/get-leases.md
+  - https://api.doorloop.com/reference/get-note.md
+  - https://api.doorloop.com/reference/get-notes.md
+  - https://api.doorloop.com/reference/get-owner.md
+  - https://api.doorloop.com/reference/get-owners.md
+  - https://api.doorloop.com/reference/get-properties.md
+  - https://api.doorloop.com/reference/get-property-group.md
+  - https://api.doorloop.com/reference/get-property-groups.md
+  - https://api.doorloop.com/reference/get-property.md
+  - https://api.doorloop.com/reference/get-reports-balance-sheet.md
+  - https://api.doorloop.com/reference/get-reports-cash-flow-statement.md
+  - https://api.doorloop.com/reference/get-reports-profit-and-loss.md
+  - https://api.doorloop.com/reference/get-reports-rent-roll.md
+  - https://api.doorloop.com/reference/get-task.md
+  - https://api.doorloop.com/reference/get-tasks.md
+  - https://api.doorloop.com/reference/get-tenant.md
+  - https://api.doorloop.com/reference/get-tenants.md
+  - https://api.doorloop.com/reference/get-unit.md
+  - https://api.doorloop.com/reference/get-units.md
+  - https://api.doorloop.com/reference/get-user.md
+  - https://api.doorloop.com/reference/get-users.md
+  - https://api.doorloop.com/reference/get-vendor-bill.md
+  - https://api.doorloop.com/reference/get-vendor-bills.md
+  - https://api.doorloop.com/reference/get-vendor-credit.md
+  - https://api.doorloop.com/reference/get-vendor-credits.md
+  - https://api.doorloop.com/reference/get-vendor.md
+  - https://api.doorloop.com/reference/get-vendors.md
+  - https://api.doorloop.com/reference/post-account.md
+  - https://api.doorloop.com/reference/post-communication.md
+  - https://api.doorloop.com/reference/post-expense.md
+  - https://api.doorloop.com/reference/post-files.md
+  - https://api.doorloop.com/reference/post-lease-charge.md
+  - https://api.doorloop.com/reference/post-lease-credit.md
+  - https://api.doorloop.com/reference/post-lease-payment.md
+  - https://api.doorloop.com/reference/post-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/post-leases-full.md
+  - https://api.doorloop.com/reference/post-leases-move-in.md
+  - https://api.doorloop.com/reference/post-leases-move-out.md
+  - https://api.doorloop.com/reference/post-notes.md
+  - https://api.doorloop.com/reference/post-owner.md
+  - https://api.doorloop.com/reference/post-task-update.md
+  - https://api.doorloop.com/reference/post-task.md
+  - https://api.doorloop.com/reference/post-tenant.md
+  - https://api.doorloop.com/reference/post-vendor-bill.md
+  - https://api.doorloop.com/reference/post-vendor-credit.md
+  - https://api.doorloop.com/reference/post-vendor.md
+  - https://api.doorloop.com/reference/put-account.md
+  - https://api.doorloop.com/reference/put-communication.md
+  - https://api.doorloop.com/reference/put-expense.md
+  - https://api.doorloop.com/reference/put-file.md
+  - https://api.doorloop.com/reference/put-lease-charge.md
+  - https://api.doorloop.com/reference/put-lease-credit.md
+  - https://api.doorloop.com/reference/put-lease-payment.md
+  - https://api.doorloop.com/reference/put-note.md
+  - https://api.doorloop.com/reference/put-owner.md
+  - https://api.doorloop.com/reference/put-task.md
+  - https://api.doorloop.com/reference/put-tenant.md
+  - https://api.doorloop.com/reference/put-unit.md
+  - https://api.doorloop.com/reference/put-vendor-bill.md
+  - https://api.doorloop.com/reference/put-vendor-credit.md
+  - https://api.doorloop.com/reference/put-vendor.md
+  merge:
+    pages: 96
+    deduped: 446
+    conflicts_kept_first: 0

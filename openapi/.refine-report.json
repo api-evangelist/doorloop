@@ -1,0 +1,61 @@
+{
+  "provider": "doorloop",
+  "sources": [
+    "doorloop-api-reference-openapi.yml"
+  ],
+  "outputs": [
+    "doorloop-accounts-api-openapi.yml",
+    "doorloop-communications-api-openapi.yml",
+    "doorloop-expenses-api-openapi.yml",
+    "doorloop-files-api-openapi.yml",
+    "doorloop-lease-charges-api-openapi.yml",
+    "doorloop-lease-credits-api-openapi.yml",
+    "doorloop-lease-payments-api-openapi.yml",
+    "doorloop-lease-returned-payments-api-openapi.yml",
+    "doorloop-leases-api-openapi.yml",
+    "doorloop-notes-api-openapi.yml",
+    "doorloop-owners-api-openapi.yml",
+    "doorloop-portfolios-api-openapi.yml",
+    "doorloop-properties-api-openapi.yml",
+    "doorloop-reports-api-openapi.yml",
+    "doorloop-tasks-api-openapi.yml",
+    "doorloop-tenants-api-openapi.yml",
+    "doorloop-units-api-openapi.yml",
+    "doorloop-users-api-openapi.yml",
+    "doorloop-vendor-bills-api-openapi.yml",
+    "doorloop-vendor-credits-api-openapi.yml",
+    "doorloop-vendors-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/doorloop-api-reference-openapi.yml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (0 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "doorloop-api-reference-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Accounts",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Communications",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Expenses",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Files",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Lease Charges",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Lease Credits",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Lease Payments",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Lease Returned Payments",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Leases",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Notes",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Owners",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Portfolios",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Properties",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Reports",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Tasks",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Tenants",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Units",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Users",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Vendor Bills",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Vendor Credits",
+    "doorloop-api-reference-openapi.yml: declared missing tag: Vendors",
+    "apis.yml register: written (+21 apis, 21 total)"
+  ],
+  "skipped": []
+}

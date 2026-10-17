@@ -1,0 +1,637 @@
+openapi: 3.2.0
+info:
+  title: DoorLoop API Reference Tenants API
+  version: '1.0'
+  summary: This is the DoorLoop API
+  description: It does some pretty cool stuff and gives you complete access to DoorLoop's data
+  license:
+    name: Terms and Conditions
+    url: https://www.doorloop.com/legal/terms
+  contact:
+    name: DoorLoop Inc.
+    url: www.doorloop.com
+    email: support@doorloop.com
+  termsOfService: https://www.doorloop.com/legal/terms
+servers:
+- url: https://app.doorloop.com/api
+  description: Production
+tags:
+- name: Tenants
+paths:
+  /tenants:
+    parameters: []
+    get:
+      summary: Retrieve all Tenants
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/tenant'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-tenants
+      description: 'Retrieves all Tenants.
+
+        In DoorLoop there are 2 types of Tenants:
+
+        if (type = LEASE_TENANT): This tenant has been associated with a lease.
+
+        if (type = PROSPECT_TENANT): This tenant has not been associated with a leasa and is considered a "Prospect".'
+      parameters:
+      - schema:
+          type: string
+        in: query
+        name: filter_group
+        description: Filter by Portfolio Id
+      - schema:
+          type: string
+        in: query
+        name: filter_property
+        description: Filter by Property Id
+      - schema:
+          type: string
+        in: query
+        name: filter_lease
+        description: Filter by Lease Id
+      - schema:
+          type: string
+        in: query
+        name: filter_text
+        description: Filter by Tenant Name / Email
+      - schema:
+          type: string
+        in: query
+        name: filter_unit
+        description: Filter by Unit Id
+      - schema:
+          type: string
+          enum:
+          - LEASE_TENANT
+          - PROSPECT_TENANT
+        in: query
+        name: filter_type
+        description: Filter by Tenant Type
+      security:
+      - Key: []
+      tags:
+      - Tenants
+    post:
+      summary: Create a Prospect
+      operationId: post-tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tenant'
+        '400':
+          description: Bad Request
+      description: 'Creates a Prospect.
+
+        In DoorLoop there are 2 types of Tenants:
+
+        if (type = LEASE_TENANT): This tenant has been associated with a lease.
+
+        if (type = PROSPECT_TENANT): This tenant has not been associated with a leasa and is considered a "Prospect".
+
+
+        All Tenants are created as a PROSPECT_TENANT, and their type changes once they are associated with a lease.'
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tenant'
+      tags:
+      - Tenants
+  /tenants/{tenantId}:
+    parameters:
+    - schema:
+        type: string
+      name: tenantId
+      in: path
+      required: true
+    get:
+      summary: Retrieve a Tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tenant'
+              examples: {}
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-tenant
+      description: 'Retrieves a Tenant.
+
+        In DoorLoop there are 2 types of Tenants:
+
+        if (type = LEASE_TENANT): This tenant has been associated with a lease.
+
+        if (type = PROSPECT_TENANT): This tenant has not been associated with a leasa and is considered a "Prospect".'
+      parameters: []
+      security:
+      - Key: []
+      tags:
+      - Tenants
+    put:
+      summary: Update a Tenant
+      operationId: put-tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tenant'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Updates a Tenant
+      security:
+      - Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tenant'
+      tags:
+      - Tenants
+    delete:
+      summary: Delete a Tenant
+      operationId: delete-tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tenant'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      description: Deletes a Tenant
+      security:
+      - Key: []
+      tags:
+      - Tenants
+components:
+  schemas:
+    phone:
+      title: phone
+      x-stoplight:
+        id: 9kqyepto63cpi
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Home
+          - Work
+          - Mobile
+          - Fax
+          - Other
+        number:
+          type: string
+          maxLength: 50
+      required:
+      - type
+      - number
+    tenant:
+      allOf:
+      - $ref: '#/components/schemas/person'
+      - type: object
+        properties:
+          dependants:
+            type: array
+            items:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                middleName:
+                  type: string
+                lastName:
+                  type: string
+                dateOfBirth:
+                  type: string
+                relationship:
+                  type: string
+          pets:
+            type: array
+            items:
+              type: object
+              properties:
+                petType:
+                  type: string
+                weight:
+                  type: number
+                age:
+                  type: integer
+                color:
+                  type: string
+                  maxLength: 100
+                breed:
+                  type: string
+                  maxLength: 100
+                name:
+                  type: string
+                  maxLength: 100
+                gender:
+                  type: string
+                  maxLength: 100
+                isSpayedOrNeutered:
+                  type: boolean
+                isServiceAnimal:
+                  type: boolean
+                notes:
+                  type: string
+                  maxLength: 1000
+          vehicles:
+            type: array
+            items:
+              type: object
+              properties:
+                make:
+                  type: string
+                  maxLength: 100
+                model:
+                  type: string
+                  maxLength: 100
+                year:
+                  type: integer
+                  minimum: 1950
+                  maximum: 2050
+                color:
+                  type: string
+                  maxLength: 50
+                licensePlatae:
+                  type: string
+                  maxLength: 20
+                state:
+                  type: string
+                  maxLength: 20
+                notes:
+                  type: string
+                  maxLength: 1000
+          emergencyContacts:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                relationship:
+                  type: string
+                  maxLength: 100
+                email:
+                  type: string
+                  maxLength: 100
+                phone:
+                  type: string
+                  maxLength: 100
+          prospectInfo:
+            type: object
+            properties:
+              assignedToUser:
+                type: string
+                description: The User Id this Prospect is assigned to
+              status:
+                type: string
+                enum:
+                - NEW
+                - CONTACT_ATTEMPTED
+                - CONTACT_MADE
+                - SHOWING_SCHEDULED
+                - SHOWING_COMPLETED
+                - APPLICATION_SENT
+                - APPLICATION_SUBMITTED
+                - LEASE_OFFER_MADE
+                - LEASE_OFFER_ACCEPTED
+                - LEASE_SENT_FOR_SIGNATURE
+                - CLOSED_MOVED_IN
+                - CLOSED_LOST
+              interests:
+                type: array
+                description: Represents all the properties and/or units this prospect is interested moving into
+                items:
+                  type: object
+                  properties:
+                    property:
+                      type: string
+                      description: Reference the Property Id
+                    unit:
+                      type: string
+                      description: Reference the Unit Id
+              leadSource:
+                type: string
+                description: References to the Tag Id
+              minBathrooms:
+                type: number
+                minimum: 0
+              minBedrooms:
+                type: number
+                minimum: 0
+              maxRent:
+                type: number
+                minimum: 0
+              expectedMoveInDate:
+                type: string
+                description: 'Format: YYYY-MM-DD'
+              creditScore:
+                type: integer
+              monthlyIncome:
+                type: number
+              campaignSource:
+                type: string
+              campaignMedium:
+                type: string
+              campaignName:
+                type: string
+              campaignContent:
+                type: string
+              campaignTerm:
+                type: string
+              nextTaskDate:
+                type: string
+                description: 'Read Only. Format: YYYY-MM-DD'
+          portalInfo:
+            type: object
+            properties:
+              allowAccess:
+                type: boolean
+              lastSeenAt:
+                type: string
+                description: 'Read Only. Format: YYYY-MM-DD'
+              loginEmail:
+                type: string
+                maxLength: 255
+              status:
+                type: string
+                description: Read Only
+                enum:
+                - ACTIVE
+                - INACTIVE
+                - INVITED
+              invitationLastSentAt:
+                type: string
+                description: 'Read Only. Format: YYYY-MM-DD'
+          type:
+            type: string
+            enum:
+            - LEASE_TENANT
+            - PROSPECT_TENANT
+    mongoId:
+      type: string
+      title: mongoId
+      x-stoplight:
+        id: 40j7qlmpihfdj
+      pattern: /^[a-f\d]{24}$/i
+      examples:
+      - 507f191e810c19729de860ea
+      example: 00000020f51bb4362eee2a4d
+    email:
+      title: email
+      x-stoplight:
+        id: 33vnq3pmvuy4l
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Primary
+          - Secondary
+          - Personal
+          - Work
+          - Other
+        address:
+          type: string
+      required:
+      - type
+      - address
+    person:
+      title: person
+      x-stoplight:
+        id: w8ihhyv3ctmy8
+      type: object
+      description: ''
+      properties:
+        id:
+          $ref: '#/components/schemas/mongoId'
+        name:
+          type: string
+          description: Read Only
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        gender:
+          type: string
+          enum:
+          - MALE
+          - FEMALE
+          - PREFER_NOT_TO_SAY
+        fullName:
+          type: string
+          description: Read Only
+        dateOfBirth:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+        timezone:
+          type: string
+        company:
+          type: string
+        companyName:
+          type: string
+        jobTitle:
+          type: string
+        notes:
+          type: string
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/phone'
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/email'
+        primaryAddress:
+          $ref: '#/components/schemas/address'
+        pictureUrl:
+          type: string
+        ? ''
+        : type: string
+      required:
+      - firstName
+      - lastName
+    address:
+      title: address
+      x-stoplight:
+        id: a6vhbqoeituyk
+      type: object
+      description: ''
+      properties:
+        street1:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+        lat:
+          type: string
+        lng:
+          type: string
+  securitySchemes:
+    Key:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Bearer token. Create a key under Settings -> API access; it is a JWT. Example: `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.<payload>.<signature>`'
+x-stoplight:
+  id: cz75kvx8cjg25
+x-provenance:
+  method: searched
+  source: https://api.doorloop.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://api.doorloop.com/reference/delete-account.md
+  - https://api.doorloop.com/reference/delete-communication.md
+  - https://api.doorloop.com/reference/delete-expense.md
+  - https://api.doorloop.com/reference/delete-file.md
+  - https://api.doorloop.com/reference/delete-lease-charge.md
+  - https://api.doorloop.com/reference/delete-lease-credits-leasecreditid.md
+  - https://api.doorloop.com/reference/delete-lease-payment.md
+  - https://api.doorloop.com/reference/delete-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/delete-note.md
+  - https://api.doorloop.com/reference/delete-owner.md
+  - https://api.doorloop.com/reference/delete-task.md
+  - https://api.doorloop.com/reference/delete-tenant.md
+  - https://api.doorloop.com/reference/delete-vendor-bill.md
+  - https://api.doorloop.com/reference/delete-vendor-credit.md
+  - https://api.doorloop.com/reference/delete-vendor.md
+  - https://api.doorloop.com/reference/download-file.md
+  - https://api.doorloop.com/reference/get-account.md
+  - https://api.doorloop.com/reference/get-accounts.md
+  - https://api.doorloop.com/reference/get-communication.md
+  - https://api.doorloop.com/reference/get-communications.md
+  - https://api.doorloop.com/reference/get-current-user.md
+  - https://api.doorloop.com/reference/get-expense.md
+  - https://api.doorloop.com/reference/get-expenses.md
+  - https://api.doorloop.com/reference/get-file.md
+  - https://api.doorloop.com/reference/get-files.md
+  - https://api.doorloop.com/reference/get-lease-charge.md
+  - https://api.doorloop.com/reference/get-lease-charges.md
+  - https://api.doorloop.com/reference/get-lease-credit.md
+  - https://api.doorloop.com/reference/get-lease-credits.md
+  - https://api.doorloop.com/reference/get-lease-payment.md
+  - https://api.doorloop.com/reference/get-lease-payments.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payment.md
+  - https://api.doorloop.com/reference/get-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/get-lease-tenants.md
+  - https://api.doorloop.com/reference/get-lease.md
+  - https://api.doorloop.com/reference/get-leases.md
+  - https://api.doorloop.com/reference/get-note.md
+  - https://api.doorloop.com/reference/get-notes.md
+  - https://api.doorloop.com/reference/get-owner.md
+  - https://api.doorloop.com/reference/get-owners.md
+  - https://api.doorloop.com/reference/get-properties.md
+  - https://api.doorloop.com/reference/get-property-group.md
+  - https://api.doorloop.com/reference/get-property-groups.md
+  - https://api.doorloop.com/reference/get-property.md
+  - https://api.doorloop.com/reference/get-reports-balance-sheet.md
+  - https://api.doorloop.com/reference/get-reports-cash-flow-statement.md
+  - https://api.doorloop.com/reference/get-reports-profit-and-loss.md
+  - https://api.doorloop.com/reference/get-reports-rent-roll.md
+  - https://api.doorloop.com/reference/get-task.md
+  - https://api.doorloop.com/reference/get-tasks.md
+  - https://api.doorloop.com/reference/get-tenant.md
+  - https://api.doorloop.com/reference/get-tenants.md
+  - https://api.doorloop.com/reference/get-unit.md
+  - https://api.doorloop.com/reference/get-units.md
+  - https://api.doorloop.com/reference/get-user.md
+  - https://api.doorloop.com/reference/get-users.md
+  - https://api.doorloop.com/reference/get-vendor-bill.md
+  - https://api.doorloop.com/reference/get-vendor-bills.md
+  - https://api.doorloop.com/reference/get-vendor-credit.md
+  - https://api.doorloop.com/reference/get-vendor-credits.md
+  - https://api.doorloop.com/reference/get-vendor.md
+  - https://api.doorloop.com/reference/get-vendors.md
+  - https://api.doorloop.com/reference/post-account.md
+  - https://api.doorloop.com/reference/post-communication.md
+  - https://api.doorloop.com/reference/post-expense.md
+  - https://api.doorloop.com/reference/post-files.md
+  - https://api.doorloop.com/reference/post-lease-charge.md
+  - https://api.doorloop.com/reference/post-lease-credit.md
+  - https://api.doorloop.com/reference/post-lease-payment.md
+  - https://api.doorloop.com/reference/post-lease-reversed-payments.md
+  - https://api.doorloop.com/reference/post-leases-full.md
+  - https://api.doorloop.com/reference/post-leases-move-in.md
+  - https://api.doorloop.com/reference/post-leases-move-out.md
+  - https://api.doorloop.com/reference/post-notes.md
+  - https://api.doorloop.com/reference/post-owner.md
+  - https://api.doorloop.com/reference/post-task-update.md
+  - https://api.doorloop.com/reference/post-task.md
+  - https://api.doorloop.com/reference/post-tenant.md
+  - https://api.doorloop.com/reference/post-vendor-bill.md
+  - https://api.doorloop.com/reference/post-vendor-credit.md
+  - https://api.doorloop.com/reference/post-vendor.md
+  - https://api.doorloop.com/reference/put-account.md
+  - https://api.doorloop.com/reference/put-communication.md
+  - https://api.doorloop.com/reference/put-expense.md
+  - https://api.doorloop.com/reference/put-file.md
+  - https://api.doorloop.com/reference/put-lease-charge.md
+  - https://api.doorloop.com/reference/put-lease-credit.md
+  - https://api.doorloop.com/reference/put-lease-payment.md
+  - https://api.doorloop.com/reference/put-note.md
+  - https://api.doorloop.com/reference/put-owner.md
+  - https://api.doorloop.com/reference/put-task.md
+  - https://api.doorloop.com/reference/put-tenant.md
+  - https://api.doorloop.com/reference/put-unit.md
+  - https://api.doorloop.com/reference/put-vendor-bill.md
+  - https://api.doorloop.com/reference/put-vendor-credit.md
+  - https://api.doorloop.com/reference/put-vendor.md
+  merge:
+    pages: 96
+    deduped: 446
+    conflicts_kept_first: 0
