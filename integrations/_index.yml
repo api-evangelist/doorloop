@@ -470,5 +470,5 @@
     - connectors/applications/doorloop
     vendor_link: https://www.doorloop.com/
     builder: Fivetran
-  status: pending-generation
+  status: not-a-workflow
   arazzo: null
