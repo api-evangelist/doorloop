@@ -151,6 +151,8 @@ apis:
   humanURL: https://api.doorloop.com/reference/introduction
   baseURL: https://api.doorloop.com
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -229,6 +231,8 @@ apis:
   humanURL: https://api.doorloop.com/reference/introduction
   baseURL: https://api.doorloop.com
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -438,6 +442,8 @@ apis:
   humanURL: https://api.doorloop.com/reference/introduction
   baseURL: https://api.doorloop.com
   tags:
+  - Portfolio
+  tags_raw:
   - Portfolios
   properties:
   - type: OpenAPI
@@ -516,6 +522,8 @@ apis:
   humanURL: https://api.doorloop.com/reference/introduction
   baseURL: https://api.doorloop.com
   tags:
+  - Task
+  tags_raw:
   - Tasks
   properties:
   - type: OpenAPI
@@ -594,6 +602,8 @@ apis:
   humanURL: https://api.doorloop.com/reference/introduction
   baseURL: https://api.doorloop.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
