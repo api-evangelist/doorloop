@@ -108,6 +108,57 @@
   relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
+- slug: doorloop-zapier
+  label: Zapier
+  partner: zapier
+  partner_name: Zapier
+  type: marketplace
+  marketplace: zapier-directory
+  channel: ipaas-listing
+  evidence: https://zapier.com/apps/doorloop/integrations
+  source: edge
+  relationship: ipaas-bridge
+  contract_reference:
+    register: Zapier app directory (zapier.com/api/v4/apps)
+    spec_file: null
+    role: ipaas-connector:zapier
+    registered_name: DoorLoop
+    matched_domain: doorloop.com
+    matched_by: domain
+    detected_by: sweep-workflow-automation.py
+    detected: '2026-10-15'
+    signal_note: one edge per (provider, platform); actions, triggers and usage counts are context, never read
+    app_slug: doorloop
+    beta: false
+    builder: unknown (not in the directory record)
+  status: not-a-workflow
+  arazzo: null
+- slug: doorloop-fivetran
+  label: Fivetran
+  partner: fivetran
+  partner_name: Fivetran
+  type: marketplace
+  marketplace: fivetran-connectors
+  channel: elt-connector
+  evidence: https://fivetran.com/docs/connectors/applications/doorloop
+  source: edge
+  relationship: ipaas-bridge
+  contract_reference:
+    register: Fivetran connectors (fivetran.com/docs/connectors, docs-sitemap.xml + Partner-Built program)
+    spec_file: null
+    role: elt-connector:fivetran
+    registered_name: DoorLoop
+    matched_domain: doorloop.com
+    matched_by: domain
+    detected_by: sweep-data-integration.py
+    detected: '2026-10-18'
+    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
+    connector_paths:
+    - connectors/applications/doorloop
+    vendor_link: https://www.doorloop.com/
+    builder: Fivetran
+  status: not-a-workflow
+  arazzo: null
 - slug: doorloop-monday-com
   label: monday.com
   partner: monday-com
@@ -420,55 +471,4 @@
   source: edge
   relationship: ipaas-bridge
   status: pending-partner-spec
-  arazzo: null
-- slug: doorloop-zapier
-  label: Zapier
-  partner: zapier
-  partner_name: Zapier
-  type: marketplace
-  marketplace: zapier-directory
-  channel: ipaas-listing
-  evidence: https://zapier.com/apps/doorloop/integrations
-  source: edge
-  relationship: ipaas-bridge
-  contract_reference:
-    register: Zapier app directory (zapier.com/api/v4/apps)
-    spec_file: null
-    role: ipaas-connector:zapier
-    registered_name: DoorLoop
-    matched_domain: doorloop.com
-    matched_by: domain
-    detected_by: sweep-workflow-automation.py
-    detected: '2026-10-15'
-    signal_note: one edge per (provider, platform); actions, triggers and usage counts are context, never read
-    app_slug: doorloop
-    beta: false
-    builder: unknown (not in the directory record)
-  status: not-a-workflow
-  arazzo: null
-- slug: doorloop-fivetran
-  label: Fivetran
-  partner: fivetran
-  partner_name: Fivetran
-  type: marketplace
-  marketplace: fivetran-connectors
-  channel: elt-connector
-  evidence: https://fivetran.com/docs/connectors/applications/doorloop
-  source: edge
-  relationship: ipaas-bridge
-  contract_reference:
-    register: Fivetran connectors (fivetran.com/docs/connectors, docs-sitemap.xml + Partner-Built program)
-    spec_file: null
-    role: elt-connector:fivetran
-    registered_name: DoorLoop
-    matched_domain: doorloop.com
-    matched_by: domain
-    detected_by: sweep-data-integration.py
-    detected: '2026-10-18'
-    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
-    connector_paths:
-    - connectors/applications/doorloop
-    vendor_link: https://www.doorloop.com/
-    builder: Fivetran
-  status: not-a-workflow
   arazzo: null
