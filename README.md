@@ -64,38 +64,168 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-DoorLoop is property management software with a REST API for managing properties, units, leases, rent collection, maintenance requests, accounting, and tenant communication. The API provides two-way access to read and write data across nearly every DoorLoop feature.
+DoorLoop is property management software with a REST API for managing properties, units, leases, rent collection, maintenance requests, accounting, and tenant communication. The API provides two-way access to read and write data across nearly every DoorLoop feature, with predictable resource-oriented URLs, JSON-encoded request and response bodies, and standard HTTP response codes. API access is included on the Premium plan.
 
-## API
+**Areas:** Property Management · Real Estate · Leases · Rent Collection · Maintenance · Accounting · Tenant Communication
 
-- **Base URL:** https://api.doorloop.com
-- **Reference:** https://api.doorloop.com/reference/introduction
-- **Authentication:** API key via Zapier & API Keys in company settings
-- **Format:** JSON request/response bodies
-- **Query Support:** OData queries for filtering and pagination
-- **Access:** Premium plan only
+## DoorLoop on APIs.io
 
-## Plans
+Everything profiled for DoorLoop is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/doorloop/](https://apis.io/providers/doorloop/)** — or go straight to one of the APIs or properties below.
 
-| Plan | Monthly (Yearly) | Monthly | API Access |
-|------|-----------------|---------|------------|
-| Starter | $69/mo | $99/mo | No |
-| Pro | $149/mo | $189/mo | No |
-| Premium | $209/mo | $239/mo | Yes |
-| Enterprise | Custom | Custom | Yes |
+### APIs (21)
 
-All plans: $3/unit/month. Enterprise pricing for 300+ units.
+- [DoorLoop Accounts API](https://apis.io/apis/doorloop/doorloop-accounts-api/) — The Accounts API from DoorLoop — 2 operation(s) for accounts.
+- [DoorLoop Communications API](https://apis.io/apis/doorloop/doorloop-communications-api/) — The Communications API from DoorLoop — 2 operation(s) for communications.
+- [DoorLoop Expenses API](https://apis.io/apis/doorloop/doorloop-expenses-api/) — The Expenses API from DoorLoop — 2 operation(s) for expenses.
+- [DoorLoop Files API](https://apis.io/apis/doorloop/doorloop-files-api/) — The Files API from DoorLoop — 3 operation(s) for files.
+- [DoorLoop Lease Charges API](https://apis.io/apis/doorloop/doorloop-lease-charges-api/) — The Lease Charges API from DoorLoop — 2 operation(s) for lease charges.
+- [DoorLoop Lease Credits API](https://apis.io/apis/doorloop/doorloop-lease-credits-api/) — The Lease Credits API from DoorLoop — 2 operation(s) for lease credits.
+- [DoorLoop Lease Payments API](https://apis.io/apis/doorloop/doorloop-lease-payments-api/) — The Lease Payments API from DoorLoop — 2 operation(s) for lease payments.
+- [DoorLoop Lease Returned Payments API](https://apis.io/apis/doorloop/doorloop-lease-returned-payments-api/) — The Lease Returned Payments API from DoorLoop — 2 operation(s) for lease returned payments.
+- [DoorLoop Leases API](https://apis.io/apis/doorloop/doorloop-leases-api/) — The Leases API from DoorLoop — 6 operation(s) for leases.
+- [DoorLoop Notes API](https://apis.io/apis/doorloop/doorloop-notes-api/) — The Notes API from DoorLoop — 2 operation(s) for notes.
+- [DoorLoop Owners API](https://apis.io/apis/doorloop/doorloop-owners-api/) — The Owners API from DoorLoop — 2 operation(s) for owners.
+- [DoorLoop Portfolios API](https://apis.io/apis/doorloop/doorloop-portfolios-api/) — The Portfolios API from DoorLoop — 2 operation(s) for portfolios.
+- [DoorLoop Properties API](https://apis.io/apis/doorloop/doorloop-properties-api/) — The Properties API from DoorLoop — 2 operation(s) for properties.
+- [DoorLoop Reports API](https://apis.io/apis/doorloop/doorloop-reports-api/) — The Reports API from DoorLoop — 4 operation(s) for reports.
+- [DoorLoop Tasks API](https://apis.io/apis/doorloop/doorloop-tasks-api/) — The Tasks API from DoorLoop — 3 operation(s) for tasks.
+- [DoorLoop Tenants API](https://apis.io/apis/doorloop/doorloop-tenants-api/) — The Tenants API from DoorLoop — 2 operation(s) for tenants.
+- [DoorLoop Units API](https://apis.io/apis/doorloop/doorloop-units-api/) — The Units API from DoorLoop — 2 operation(s) for units.
+- [DoorLoop Users API](https://apis.io/apis/doorloop/doorloop-users-api/) — The Users API from DoorLoop — 3 operation(s) for users.
+- [DoorLoop Vendor Bills API](https://apis.io/apis/doorloop/doorloop-vendor-bills-api/) — The Vendor Bills API from DoorLoop — 2 operation(s) for vendor bills.
+- [DoorLoop Vendor Credits API](https://apis.io/apis/doorloop/doorloop-vendor-credits-api/) — The Vendor Credits API from DoorLoop — 2 operation(s) for vendor credits.
+- [DoorLoop Vendors API](https://apis.io/apis/doorloop/doorloop-vendors-api/) — The Vendors API from DoorLoop — 2 operation(s) for vendors.
 
-## Links
+### Published properties
 
-- Website: https://www.doorloop.com
-- API Docs: https://api.doorloop.com/reference/introduction
-- Pricing: https://www.doorloop.com/pricing
-- Blog: https://www.doorloop.com/blogs/doorloop
-- Status: https://status.doorloop.com
-- LinkedIn: https://linkedin.com/company/doorloop/
-- X: https://x.com/doorloopapp
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs.json
+#### MCP servers (1)
 
-This repository contains an [APIs.json](apis.yml) profile for DoorLoop, cataloging the provider following the APIs.json 0.19 specification.
+Model Context Protocol servers that expose the API to agents.
+
+- [doorloop](https://apis.io/servers/doorloop/doorloop/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Doorloop Agentic Access](https://apis.io/agentic-access/doorloop/doorloop-agentic-access/)
+
+#### JSON Schema (6)
+
+The data models the API reads and writes.
+
+- [fullLeaseCreateRequest](https://apis.io/schemas/doorloop/doorloop-full-lease-create-request/)
+- [Lease-Payment](https://apis.io/schemas/doorloop/doorloop-lease-payment/)
+- [property](https://apis.io/schemas/doorloop/doorloop-property/)
+- [task](https://apis.io/schemas/doorloop/doorloop-task/)
+- [tenant](https://apis.io/schemas/doorloop/doorloop-tenant/)
+- [unit](https://apis.io/schemas/doorloop/doorloop-unit/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Doorloop Context](https://apis.io/jsonld/doorloop/doorloop-context/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [DoorLoop API Rules](https://apis.io/rules/doorloop/doorloop-rules/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Doorloop Authentication](https://apis.io/security/doorloop/doorloop-authentication/)
+- [Doorloop Domain Security](https://apis.io/security/doorloop/doorloop-domain-security/)
+- [Doorloop Vulnerability Disclosure](https://apis.io/security/doorloop/doorloop-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Doorloop Plans Pricing](https://apis.io/plans/doorloop/doorloop-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Doorloop Rate Limits](https://apis.io/rate-limits/doorloop/doorloop-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Doorloop Finops](https://apis.io/finops/doorloop/doorloop-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.doorloop.com)
+- [Documentation](https://api.doorloop.com/reference/introduction)
+- [Pricing](https://www.doorloop.com/pricing)
+- [Support](https://support.doorloop.com/en/)
+- [Blog](https://www.doorloop.com/blogs/doorloop)
+- [Security](https://www.doorloop.com/security)
+- [Terms of service](https://www.doorloop.com/legal/terms)
+- [Privacy policy](https://www.doorloop.com/legal/privacy)
+- [Status](https://status.doorloop.com)
+
+## API Evangelist rating
+
+**Kin Score 51.6** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 76.7 |
+| Contract quality | 69.3 |
+| Contract governance | 22.0 |
+| Operational transparency | 31.6 |
+| Developer ergonomics | 25.0 |
+| Access clarity | 52.6 |
+
+**Agent readiness 36.6** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | verified |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 30.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/doorloop/](https://apis.io/providers/doorloop/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for DoorLoop: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/doorloop/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
